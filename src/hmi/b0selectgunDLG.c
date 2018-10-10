@@ -8,10 +8,13 @@
 #define ID_BUTTON_1 (GUI_ID_USER + 0x03)
 #define ID_IMAGE_0  (GUI_ID_USER + 0x04)
 #define ID_BUTTON_2 (GUI_ID_USER + 0x05)
+#define ID_TEXT_0 (GUI_ID_USER + 0x06)
+
 #define ID_Timerstateflash 1
 static WM_HTIMER _timerstateflash;
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "selectgun", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
+    { TEXT_CreateIndirect, "cardId", ID_TEXT_0, 417, 7, 240, 30, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "gunA", ID_BUTTON_0, 137, 200, 213, 76, 0, 0x0, 10 },
     { BUTTON_CreateIndirect, "gunB", ID_BUTTON_1, 454, 200, 213, 76, 0, 0x0, 10 },
     { BUTTON_CreateIndirect, "quit", ID_BUTTON_2, 52, 404, 171, 59, 0, 0x0, 10 },
@@ -44,8 +47,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
     char s[10];
     switch (pMsg->MsgId) {
     case WM_INIT_DIALOG:        
+        TEXT_SetTextColor(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), GUI_WHITE);
+        TEXT_SetFont(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), &fontwryhcg30e);
         selectGunButton(pMsg);
         hItem = WM_GetDialogItem(pMsg->hWin, ID_BUTTON_2);
+        TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), Temprfid_pkg.strCardID);
         BUTTON_SetSkin(hItem, SKIN_buttonquit);
         BUTTON_SetUserData(hItem, "canPress", 10);
         break;
