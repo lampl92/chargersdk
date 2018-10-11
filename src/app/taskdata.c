@@ -317,7 +317,7 @@ void vTaskEVSEData(void *pvParameters)
 #else
                 xEventGroupSetBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless);   
 #endif
-                if (pCON->order.ucCardStatus == 0)//普通用户
+                if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) == defSignalEVSE_State_Network_Logined)
                 {
                     uxBitsData = xEventGroupWaitBits(pCON->status.xHandleEventOrder, defEventBitOrderUseless, pdTRUE, pdTRUE, 0);
                     if ((uxBitsData & defEventBitOrderUseless) == defEventBitOrderUseless)
@@ -344,10 +344,9 @@ void vTaskEVSEData(void *pvParameters)
                         }
                     }
                 }
-                else if(pCON->order.ucCardStatus == 1)//白名单用户
+                else
                 {
-                    printf_safe("CON%d WhiteList Order OK.....................\n", pCON->info.ucCONID);
-                    pCON->order.ucPayStatus = 1;
+                    printf_safe("CON%d Order(NoPay) OK.....................\n", pCON->info.ucCONID);
                     pCON->order.statOrder = STATE_ORDER_STORE;
                     break;
                 }
