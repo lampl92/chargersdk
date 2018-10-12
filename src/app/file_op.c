@@ -213,8 +213,6 @@ int GetFileCrc32(char *path, uint32_t *pulCrc32)
     int fd;
     int res = 0;
     uint8_t pbuff[1024];
-    uint32_t fsize;
-    struct yaffs_stat st;
     uint32_t br;
     uint32_t ulCrc32 = 0xFFFFFFFF;
     uint32_t ulCrc32Table[256] = { 0 };
@@ -224,13 +222,11 @@ int GetFileCrc32(char *path, uint32_t *pulCrc32)
     if (fd < 0)
     {
         res = yaffs_get_error();
+        if (res != 0)
+        {
+            return 0;
+        }
     }
-    if (res != 0)
-    {
-        return 0;
-    }
-    yaffs_stat(path, &st);
-    fsize = st.st_size;
     crc32_init(ulCrc32Table);
     br = yaffs_read(fd, (void *)pbuff, sizeof(pbuff));
     while (br)
