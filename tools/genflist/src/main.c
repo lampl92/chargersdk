@@ -3,6 +3,7 @@
 #include <string.h>
 #include "cJSON.h"
 #include "crc32.h"
+#include <dir.h>
 
 typedef struct _flist_t
 {
@@ -12,7 +13,7 @@ typedef struct _flist_t
     char localpath[256];
     char ftpdir[256];
     int status;
-}flist_t;
+} flist_t;
 cJSON *GetCfgObj(char *path)
 {
     FILE *fd = NULL;
@@ -20,7 +21,7 @@ cJSON *GetCfgObj(char *path)
     uint32_t fsize;
 
     cJSON *jsCfgObj = NULL;
-    fd = fopen(path, "r");
+    fd = fopen(path, "rb+");
     if(fd == NULL)
     {
         return NULL;
@@ -44,7 +45,7 @@ void get_ver_num(char *vernum)
     int maj,min,patch;
     FILE *fp_ver = NULL;
 
-    fp_ver = fopen("../../../src/app/evse_version.h", "r");
+    fp_ver = fopen("../../../src/app/evse_version.h", "rb+");
     fseek(fp_ver, 0, SEEK_END);
     size_ver = ftell(fp_ver);
     fseek(fp_ver, 0, SEEK_SET);
@@ -65,12 +66,14 @@ void gen_flist_item(char *path, flist_t *pflist)
 
     //filename": "homeRfidStateN.dta",
     _splitpath(path, drive, dir, fname, ext);
-    sprintf(pflist->filename, "%s.%s",fname, ext);
+    //printf("test split :%s%s%s%s\n", drive,dir,fname,ext);
+    sprintf(pflist->filename, "%s%s",fname, ext);
     //size_byte": 2976,
-    fp = fopen(path, "r");
+    fp = fopen(path, "rb+");
     fseek(fp, 0, SEEK_END);
     pflist->size_byte = ftell(fp);
     fseek(fp, 0, SEEK_SET);
+    printf("size = %d\n", pflist->size_byte);
     //crc32": "1dec0d51",
     GetFileCrc32(fp, &pflist->crc32);
     //localpath": "/nand/resource/",
@@ -88,22 +91,58 @@ void dump_flist(flist_t *pflist)
     printf("ftpdir:%s\n", pflist->ftpdir);
     printf("status:%d\n", pflist->status);
 }
-void addFlist(cJSON *jsFlist)
+void addFlist(cJSON *jsFlist, flist_t *pflist)
 {
+    cJSON *jsFlistArray;
+    cJSON *jsArrItem;
+    char str_crc32[16] = {0};
 
+    sprintf(str_crc32, "%08x", pflist->crc32);
+    jsArrItem = cJSON_CreateObject();
+    cJSON_AddItemToObject(jsArrItem, "filename", cJSON_CreateString(pflist->filename));
+    cJSON_AddItemToObject(jsArrItem, "size_byte", cJSON_CreateNumber(pflist->size_byte));
+    cJSON_AddItemToObject(jsArrItem, "crc32", cJSON_CreateString(str_crc32));
+    cJSON_AddItemToObject(jsArrItem, "localpath", cJSON_CreateString(pflist->localpath));
+    cJSON_AddItemToObject(jsArrItem, "ftpdir", cJSON_CreateString(pflist->ftpdir));
+    cJSON_AddItemToObject(jsArrItem, "status", cJSON_CreateNumber(pflist->status));
+
+    jsFlistArray = cJSON_GetObjectItem(jsFlist, "flist");
+    cJSON_AddItemToArray(jsFlistArray, jsArrItem);
 }
-//genflist -c <binpath>
+ void get_cmd_path(char* cmd, char* cmdpath)
+ {
+    char drive[64];
+    char dir[2048];
+    char fname[512];
+    char ext[64];
+
+    _splitpath(cmd, drive, dir, fname, ext);
+    sprintf(cmdpath, "%s%s", drive,dir);
+ }
+//genflist <binpath>
 int main(int argc, char* argv[])
 {
-    FILE *fp_json = NULL;
-
-
+    FILE *fp;
     cJSON *jsFlist;
-    cJSON *jsFlistItem;
     int isNewFw = 0;
     char ver_num[16] = {0};
     flist_t flist;
+    char *templ = "{\"ftp\":{\"server\":\"s.dpcpower.com\",\"port\":21,\"user\":\"dpcpower\",\"pass\":\"dpcpower\"},\"flist\":[]}";
+    char cmdpath[2048] = {0};
+    char chpath[2048] = {0};
 
+    get_cmd_path(argv[0], cmdpath);
+    printf("cmd path :%s\n", cmdpath);
+    chdir(cmdpath);
+
+    system("pause");
+    if(argc == 1)
+    {
+        fp = fopen("./flist_templete.json", "wb+");
+        fwrite(templ,1, strlen(templ), fp);
+        fclose(fp);
+        return 0;
+    }
     for(int i = 1; i < argc; i++)
     {
         if(strstr(argv[i], "new_fw") != NULL)
@@ -136,7 +175,8 @@ int main(int argc, char* argv[])
         gen_flist_item(argv[1], &flist);
         sprintf(flist.localpath, "/nand/upgrade/");
         sprintf(flist.ftpdir, "%s/upgrade", ver_num);
-        dump_flist(&flist);
+        //dump_flist(&flist);
+        addFlist(jsFlist, &flist);
     }
     else
     {
@@ -145,9 +185,21 @@ int main(int argc, char* argv[])
             gen_flist_item(argv[i], &flist);
             sprintf(flist.localpath, "/nand/resource/");
             sprintf(flist.ftpdir, "resource");
-            dump_flist(&flist);
+            //dump_flist(&flist);
+            addFlist(jsFlist, &flist);
         }
     }
+
+    char *pbuff;
+
+    pbuff = cJSON_Print(jsFlist);
+    fp = fopen("./flist.json", "wb+");
+    fwrite(pbuff, 1, strlen(pbuff), fp);
+    close(fp);
+
+    printf("jsflist:\n\n%s\n\n", pbuff);
+    free(pbuff);
+    cJSON_Delete(jsFlist);
 
     printf("Hello world!\n");
     system("pause");
