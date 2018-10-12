@@ -28,6 +28,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="cJSON.h" />
+		<Unit filename="crc32.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="crc32.h" />
 		<Unit filename="enc_dec.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />

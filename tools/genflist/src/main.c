@@ -129,13 +129,14 @@ int main(int argc, char* argv[])
     flist_t flist;
     char *templ = "{\"ftp\":{\"server\":\"s.dpcpower.com\",\"port\":21,\"user\":\"dpcpower\",\"pass\":\"dpcpower\"},\"flist\":[]}";
     char cmdpath[2048] = {0};
-    char chpath[2048] = {0};
+    char pathcwd[2048] = {0};
 
     get_cmd_path(argv[0], cmdpath);
-    printf("cmd path :%s\n", cmdpath);
     chdir(cmdpath);
+    getcwd(pathcwd,sizeof(pathcwd));
+    printf("pathcwd:%s\n", pathcwd);
+    printf("cmdpath %s\n", cmdpath);
 
-    system("pause");
     if(argc == 1)
     {
         fp = fopen("./flist_templete.json", "wb+");
@@ -197,11 +198,11 @@ int main(int argc, char* argv[])
     fwrite(pbuff, 1, strlen(pbuff), fp);
     close(fp);
 
-    printf("jsflist:\n\n%s\n\n", pbuff);
+    //printf("jsflist:\n\n%s\n\n", pbuff);
     free(pbuff);
     cJSON_Delete(jsFlist);
 
-    printf("Hello world!\n");
-    system("pause");
+    //printf("Hello world!\n");
+    //system("pause");
     return 0;
 }
