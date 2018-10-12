@@ -19,4 +19,3 @@ VisualGDBCache
 CodeDB
 *.old
 *.old00
-tools/genflist/bin/*.json
