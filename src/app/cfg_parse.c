@@ -67,10 +67,16 @@ static cJSON *cfgobj_scan(cJSON *pCfgObj, char *str_key)
 #endif
         str_n = strchr(p, ':');
         if (str_n != NULL)
-        {
-            str_n = str_n + 1;      //":0" => "0"
+        {             
+            // p....str_n[0]
+            // ↓    ↓
+            //"array:0" => "array" 
+            str_n[0]  = '\0';       
+            // ......str_n+1
+            //       ↓
+            //"array:0"
+            str_n = str_n + 1;     
             n = atoi(str_n);
-            p[strlen(p) - 2] = '\0';    //"array:0" => "array"
             pSubObj = cJSON_GetObjectItem(pRootObj, p);
             if (pSubObj == NULL)
             {
