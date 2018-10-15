@@ -256,4 +256,15 @@ uint32_t StrCrc32ToUint32(char *strCrc32)
     return crc32_orig;
 }
 
+void *utils_memfrob(void *s, size_t n)
+{
+    char *p = (char *) s;
+
+    while (n-- > 0)
+        *p++ ^= 42;
+
+    return s;
+}
+
 char *strdup(const char *s) __attribute__((alias("utils_strdup")));
+char *memfrob(const char *s) __attribute__((alias("utils_memfrob")));

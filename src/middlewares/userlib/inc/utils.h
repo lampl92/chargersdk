@@ -68,4 +68,5 @@ int utils_abs(int num);
 void crc32_init(uint32_t *pulCrc32Table);
 void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32Table);
 uint32_t StrCrc32ToUint32(char *strCrc32);
+void *utils_memfrob(void *s, size_t n);
 #endif

@@ -331,7 +331,6 @@ ErrorCode_t cfgobj_set_string(cJSON *pCfgObj, char *setval, char *fmt, ...)
 
     return cfgobj_set(pCfgObj, (void *)setval, str, ParamTypeString);
 }
-
 /** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
  *
  * @param path uint8_t*
@@ -433,7 +432,8 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
         *perrcode = ERR_FILE_RW;
         goto exit_read;
     }
-
+    /*去混淆*/
+    utils_memfrob(rbuff, fsize);
     /*json解析*/
     jsCfgObj = cJSON_Parse(rbuff);
     if(jsCfgObj == NULL)

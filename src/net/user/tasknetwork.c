@@ -213,7 +213,9 @@ static void netStateFTP(net_device_t *net_dev)
     if (res == 1)
     {
         taskappSuspend();
-        while (parse_flist(pathDownloadList, &ftpcfg, &flist) == ERR_NO)
+        char pathLocalFlist[64] = { 0 };
+        sprintf(pathLocalFlist, "/nand/download/%s", pechProto->info.ftp.strNewFileName);
+        while (parse_flist(pathLocalFlist, &ftpcfg, &flist) == ERR_NO)
         {
             res = ftp_download_file(&ftpcfg, net_dev);
             if (res != 1)
@@ -258,7 +260,7 @@ static void netStateFTP(net_device_t *net_dev)
             }
             yaffs_unlink(filepath);//删除下载文件
         }
-        yaffs_unlink(pathDownloadList);
+        yaffs_unlink(pathLocalFlist);
 
         pechProto->info.ftp.ucDownloadStart = 0;
         cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStart, "%s", jnFtpDownloadStart);
