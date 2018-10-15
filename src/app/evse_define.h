@@ -200,8 +200,9 @@
 ////////////////////////////////////////////
 /*EVSE Signal Pool*/
     //ulSignalState
-#define defSignalEVSE_State_Network_Online      BIT_0//
-#define defSignalEVSE_State_Network_Logined     BIT_1//
+#define defSignalEVSE_State_Network_Link        BIT_0// 链路通
+#define defSignalEVSE_State_Network_Online      BIT_1// 连接服务器
+#define defSignalEVSE_State_Network_Logined     BIT_2// 登陆服务器
     //ulSignalAlarm
 #define defSignalEVSE_Alarm_Scram                BIT_0//
 #define defSignalEVSE_Alarm_Knock                BIT_1//

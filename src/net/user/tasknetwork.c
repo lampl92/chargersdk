@@ -81,11 +81,17 @@ void netChangeState(net_device_t *net_dev, net_state new_state)
     
     switch (new_state)
     {
+    case NET_STATE_CONNECT:
+        pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Link;
+        break;
     case NET_STATE_TCP_ON:
         pEVSE->status.ulSignalState |= defSignalEVSE_State_Network_Online;
         break;
     case NET_STATE_DISCONNECT:
         pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
+        break;
+    case NET_STATE_ERR:
+        pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Link;
         break;
     default:
         break;
