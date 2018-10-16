@@ -432,8 +432,7 @@ cJSON *GetCfgObj(char *path, ErrorCode_t *perrcode)
         *perrcode = ERR_FILE_RW;
         goto exit_read;
     }
-    /*去混淆*/
-    utils_memfrob(rbuff, fsize);
+
     /*json解析*/
     jsCfgObj = cJSON_Parse(rbuff);
     if(jsCfgObj == NULL)
