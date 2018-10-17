@@ -19,3 +19,5 @@ VisualGDBCache
 CodeDB
 *.old
 *.old00
+genflist.layout
+frobflist.layout
