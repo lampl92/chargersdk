@@ -447,7 +447,178 @@ exit_parse:
 exit:
     return jsCfgObj;
 }
+#include "cipher/aes.h"
+#include "cipher_mode/cbc.h"
+int cfg_aes_encrypt(char *input, int inputSize, const char *key, char *output)
+{
+    unsigned char iv[16] = { 0 }; 
+    char *temp;
+    int pendLen;
+    AesContext aes_ctx;
+    
+    temp = (char *)malloc(inputSize + 16);
+    memset(temp, 0, inputSize + 16);
+    memcpy(temp, input, inputSize);
+    if (inputSize % 16 == 0)
+    {
+        pendLen = 0;
+    }
+    else
+    {
+        pendLen = 16 - inputSize % 16;
+        memset(temp + inputSize, 0, pendLen);
+    }
+    
+    aesInit(&aes_ctx, key, 16);
+    cbcEncrypt(&aesCipherAlgo, &aes_ctx, iv, temp, output, inputSize + pendLen);
+    free(temp);
+    return inputSize + pendLen;
+}
+/** @brief aes cbc 解密
+ *
+ * @param input char*       密文
+ * @param inputSize int    密文长度
+ * @param key const char*   16位Key
+ * @param output char*      明文
+ * @return void
+ *
+ */
+void cfg_aes_decrypt(char *input, int inputSize, const char *key, char *output)
+{
+    unsigned char iv[16] = { 0 }; 
+    AesContext aes_ctx;
+    
+    aesInit(&aes_ctx, key, 16);
+    cbcDecrypt(&aesCipherAlgo, &aes_ctx, iv, input, output, inputSize);
+}
+/** @brief 保存jsCfgObj到配置文件,设置完毕后删除cJSON指针
+ *
+ * @param path uint8_t*
+ * @param jsCfgObj cJSON*
+ * @return ErrorCode_t
+ *
+ */
+ErrorCode_t SetCfgObj_enc(char *path, cJSON *jsCfgObj, int DoNotDeleteObj)
+{
+    int fd;
+    char *pbuff;
+    char *pbuff_enc;
+    uint32_t len;
+    uint32_t len_enc;
+    uint32_t bw;
+    ErrorCode_t errcode;
 
+    pbuff = NULL;
+    errcode = ERR_NO;
+    
+    pbuff = cJSON_Print(jsCfgObj);
+    len = strlen(pbuff);
+    if (pbuff == NULL)
+    {
+        errcode = ERR_SET_SERIALIZATION;
+        goto exit;
+    }
+    /*加密*/
+    pbuff_enc = malloc(len + 16);
+    memset(pbuff_enc, 0, len + 16);
+    len_enc = cfg_aes_encrypt(pbuff, len, "20170630qianqian", pbuff_enc);
+    fd = yaffs_open(path, O_CREAT | O_TRUNC | O_RDWR, S_IWRITE | S_IREAD);
+    if (fd < 0)
+    {
+        ThrowFSCode(yaffs_get_error(), path, "SetCfgObj()-open");
+        errcode = ERR_FILE_NO;
+        goto exit;
+    }
+    bw = yaffs_write(fd, pbuff_enc, len_enc);
+    if (len_enc != bw)
+    {
+        ThrowFSCode(yaffs_get_error(), path, "SetCfgObj()-write");
+        errcode = ERR_FILE_RW;
+        goto exit_write;
+    }
+exit_write:
+    yaffs_close(fd);
+    free(pbuff);
+    free(pbuff_enc);
+exit:
+    if (DoNotDeleteObj == 0x5555)
+    {
+    }
+    else
+    {
+        cJSON_Delete(jsCfgObj);
+    }
+    return errcode;
+}
+
+/** @brief 获取配置文件cJSON结构体,注意使用完成后需要调用cJSON_Delete对cJSON指针进行释放
+ *
+ * @param path uint8_t* 配置文件存放位置
+ * @param perrcode ErrorCode_t* 返回错误代码
+ * @return cJSON* 返回cJSON指针
+ *
+ */
+cJSON *GetCfgObj_dec(char *path, ErrorCode_t *perrcode)
+{
+    int fd;
+    char *rbuff;
+    char *rbuff_dec;
+    uint32_t fsize;
+    struct yaffs_stat st;
+    uint32_t  br;    //byte read
+
+    cJSON *jsCfgObj = NULL;
+    int i;
+    *perrcode = ERR_NO;
+    /*读取文件*/
+    fd = yaffs_open(path, O_RDWR, 0);
+    if (fd < 0)
+    {
+        ThrowFSCode(yaffs_get_error(), path, "GetCfgObj-open");
+        *perrcode = ERR_FILE_NO;
+        goto exit;
+    }
+    yaffs_stat(path, &st);
+    fsize = st.st_size;
+    if (fsize == 0)//预防fsize为0导致程序错误
+    {
+        yaffs_close(fd);
+        yaffs_unlink(path);
+        NVIC_SystemReset();
+        //Goodbye!!!
+    }
+    rbuff = (char *)malloc(fsize * sizeof(char));
+    rbuff_dec = (char *)malloc(fsize * sizeof(char));
+    if (rbuff == NULL)
+    {
+        *perrcode = ERR_MEMORY;
+        goto exit;
+    }
+    br = yaffs_read(fd, rbuff, fsize);
+    if (fsize != br)
+    {
+        ThrowFSCode(yaffs_get_error(), path, "GetCfgObj-read");
+        *perrcode = ERR_FILE_RW;
+        goto exit_read;
+    }
+
+    /*解密*/
+    cfg_aes_decrypt(rbuff, fsize, "20170630qianqian", rbuff_dec);
+    /*json解析*/
+    jsCfgObj = cJSON_Parse(rbuff_dec);
+    if (jsCfgObj == NULL)
+    {
+        *perrcode = ERR_FILE_PARSE;
+        goto exit_parse;
+    }
+exit_read:
+exit_parse:
+    yaffs_close(fd);
+    free(rbuff);
+    free(rbuff_dec);
+exit:
+    return jsCfgObj;
+}
 ErrorCode_t cfg_get_uint8(char *path, uint8_t *retval, char *fmt, ...)
 {
     char str[MAX_STRING_LEN] = { 0 };

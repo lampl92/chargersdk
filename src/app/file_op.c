@@ -38,7 +38,14 @@ ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
     int i = 0;
     uint8_t status = 0;
     
-    jsRoot = GetCfgObj(path, &errcode);
+    if (strstr(path, "json") != NULL)
+    {
+        jsRoot = GetCfgObj(path, &errcode);
+    }
+    else if(strstr(path, "nosj") != NULL)
+    {
+        jsRoot = GetCfgObj_dec(path, &errcode);
+    }
     if (jsRoot == NULL)
     {
         return errcode;
@@ -77,7 +84,14 @@ ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
             continue;
         }
     }
-    errcode = SetCfgObj(path, jsRoot, 0);
+    if (strstr(path, "json") != NULL)
+    {
+        errcode = SetCfgObj(path, jsRoot, 0);
+    }
+    else if (strstr(path, "nosj") != NULL)
+    {
+        errcode = SetCfgObj_enc(path, jsRoot, 0);
+    }
     return errcode;
 }
 
