@@ -407,7 +407,7 @@ void vTaskEVSERemote(void *pvParameters)
                 RemoteIF_SendHeart(pEVSE, pechProto);
             }
 
-            RemoteIF_RecvHeart(pEVSE, pechProto, &network_res);
+            errcode = RemoteIF_RecvHeart(pEVSE, pechProto, &network_res);
             if(network_res != 1)
             {
                 if ((time(NULL) - last_heart_stamp) * 1000 / (pechProto->info.ulHeartBeatCyc_ms + 5000) >= 3)//心跳丢失3个进行重连
@@ -415,6 +415,15 @@ void vTaskEVSERemote(void *pvParameters)
                     printf_safe("\n\nHeart LOST!!!!\n\n");
                     remotestat = REMOTE_ERROR;
                     break;
+                }
+                if (errcode == ERR_REMOTE_TIMEOUT)
+                {
+                    printf_safe("\n\nRemote timeout, reset uart");
+                    if (ifconfig.info.ucAdapterSel == 2)
+                    {
+                        uart_close(pModem->uart_handle);
+                        pModem->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BAND, MODEM_UART_DATA, MODEM_UART_PARI, MODEM_UART_STOP);
+                    }
                 }
             }
             else
