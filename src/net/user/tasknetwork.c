@@ -93,6 +93,9 @@ void netChangeState(net_device_t *net_dev, net_state new_state)
     case NET_STATE_ERR:
         pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Link;
         break;
+    case NET_STATE_FTPServer:
+        pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
+        break;
     default:
         break;
     }
