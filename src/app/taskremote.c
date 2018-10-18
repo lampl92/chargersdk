@@ -410,7 +410,7 @@ void vTaskEVSERemote(void *pvParameters)
             errcode = RemoteIF_RecvHeart(pEVSE, pechProto, &network_res);
             if(network_res != 1)
             {
-                if ((time(NULL) - last_heart_stamp) * 1000 / (pechProto->info.ulHeartBeatCyc_ms + 5000) >= 3)//心跳丢失3个进行重连
+                if ((time(NULL) - last_heart_stamp) * 1000 / (pechProto->info.ulHeartBeatCyc_ms) >= 3)//心跳丢失12个进行重连
                 {
                     printf_safe("\n\nHeart LOST!!!!\n\n");
                     remotestat = REMOTE_ERROR;

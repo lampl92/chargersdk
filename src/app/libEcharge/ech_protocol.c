@@ -75,7 +75,6 @@ static ErrorCode_t GetProtoCfg(void *pvProto, void *pvCfgObj)
     cfgobj_get_uint32(jsCfgObj, &pProto->info.ulOptSN, "%s", jnProtoOptSN);
     cfgobj_get_uint8(jsCfgObj, &pProto->info.ucProtoVer, "%s", jnProtoProtoVer);
     cfgobj_get_uint32(jsCfgObj, &pProto->info.ulHeartBeatCyc_ms, "%s", jnProtoHeartBeatCyc_ms);
-    pProto->info.ulHeartBeatCyc_ms -= 5000;
     cfgobj_get_uint32(jsCfgObj, &pProto->info.ulStatusCyc_ms, "%s", jnProtoStatusCyc_ms);
     cfgobj_get_uint32(jsCfgObj, &pProto->info.ulRTDataCyc_ms, "%s", jnProtoRTDataCyc_ms);
     cfgobj_get_uint8(jsCfgObj, &pProto->info.ucResetAct, "%s", jnProtoResetAct);
