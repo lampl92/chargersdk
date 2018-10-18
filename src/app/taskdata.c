@@ -430,9 +430,6 @@ void vTaskEVSEData(void *pvParameters)
                 {
                     switch (1 << i)
                     {
-                    case defSignalEVSE_State_Network_Online: 
-                        AddEVSELogObj(jsEVSELogObj, 0, defLogLevelState, (pEVSE->status.ulSignalState >> i) & 1, "Online");
-                        break;
                     case defSignalEVSE_State_Network_Logined: 
                         AddEVSELogObj(jsEVSELogObj, 0, defLogLevelState, (pEVSE->status.ulSignalState >> i) & 1, "Login");
                         break;
