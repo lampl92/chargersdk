@@ -82,6 +82,7 @@ typedef struct
 typedef enum
 {
     DS_MODEM_OFF,
+    DS_MODEM_OPEN,
     DS_MODEM_ON,
     DS_MODEM_ERR,
     DS_MODEM_PPP_Diag,

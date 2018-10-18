@@ -78,8 +78,9 @@
 #define defEventBitRemoteError          BIT_0
 
 /*------xHandleEventTCP*/
-#define defEventBitPPPDiagOK            BIT_9
-#define defEventBitPPPClosed            BIT_10
+#define defEventBitPPPModemInit         BIT_0
+#define defEventBitPPPDiagOK            BIT_1
+#define defEventBitPPPClosed            BIT_2
 
 /*------xHandleEventHMI*/
 #define defEventBitHMITimeOutToRFID         BIT_0

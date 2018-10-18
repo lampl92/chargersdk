@@ -69,7 +69,6 @@ error_t net_ppp_init(void *pvnet_dev)
     //PPP初始化
     pppGetDefaultSettings(&pppSettings);
     pppSettings.interface = interface;
-    pppSettings.accm = 0x00000000;
     pppSettings.authProtocol = PPP_AUTH_PROTOCOL_PAP | PPP_AUTH_PROTOCOL_CHAP_MD5;
     error = pppInit(&pppContext, &pppSettings);
     if (error)
@@ -84,7 +83,8 @@ error_t net_ppp_init(void *pvnet_dev)
         TRACE_ERROR("配置接口 %s 失败!code = %d\r\n", interface->name, error);
         return error;
     }
-    xBits = xEventGroupWaitBits(xHandleEventTCP, defEventBitPPPDiagOK, pdTRUE, pdTRUE, 60000);
+    xEventGroupSetBits(xHandleEventTCP, defEventBitPPPModemInit);
+    xBits = xEventGroupWaitBits(xHandleEventTCP, defEventBitPPPDiagOK, pdTRUE, pdTRUE, 30000);
     if ((xBits & defEventBitPPPDiagOK) == defEventBitPPPDiagOK)
     {
         error = pppConnect(interface);

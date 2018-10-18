@@ -194,6 +194,13 @@ void Modem_Poll(DevModem_t *pModem)
         switch (pModem->state)
         {
         case DS_MODEM_OFF:
+            uxBits = xEventGroupWaitBits(xHandleEventTCP, defEventBitPPPModemInit, pdTRUE, pdTRUE, 100);
+            if ((uxBits & defEventBitPPPModemInit) == defEventBitPPPModemInit)
+            {
+                pModem->state = DS_MODEM_OPEN;
+            }
+            break;
+        case DS_MODEM_OPEN:
             ret = pModem->open(pModem);
             if (ret == DR_MODEM_OK)
             {
@@ -229,6 +236,7 @@ void Modem_Poll(DevModem_t *pModem)
             ret = pModem->diag_PPP(pModem);
             if (ret == DR_MODEM_OK)
             {
+                xEventGroupClearBits(xHandleEventTCP, defEventBitPPPClosed);//防止tasknetwork等待超时后发送close后ppp又拨通.导致close事件在ppp_on中错误执行
                 xEventGroupSetBits(xHandleEventTCP, defEventBitPPPDiagOK);
                 pModem->state = DS_MODEM_PPP_On;
             }
@@ -507,6 +515,7 @@ void Modem_Poll(DevModem_t *pModem)
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
             uart_close(pModem->uart_handle);
             pModem->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BAND, MODEM_UART_DATA, MODEM_UART_PARI, MODEM_UART_STOP);
+#if 0
             ret = pModem->soft_reset(pModem);
             if(ret == DR_MODEM_OK)
             {
@@ -516,6 +525,9 @@ void Modem_Poll(DevModem_t *pModem)
             {
                 pModem->state = DS_MODEM_OFF;
             }
+#else            pModem->state = DS_MODEM_OFF;
+            pModem->keyoff(pModem);
+#endif
             break;
         default:
             break;
