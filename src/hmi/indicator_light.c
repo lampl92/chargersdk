@@ -13,13 +13,13 @@ typedef enum
 
 LED_State led_state;
 /** @brief
- *  µ∆π‚øÿ÷∆
+ *  ÁÅØÂÖâÊéßÂà∂
  * @param
  * @param
  * @return
  *
  */
-static void Led_Show()//∑œ∆˙
+static void Led_Show()//Â∫üÂºÉ
 {
     CON_t *pCON;
     uint8_t ledSignalPool;
@@ -29,7 +29,7 @@ static void Led_Show()//∑œ∆˙
     pCON = CONGetHandle(0);
 
     led_signal = 0;
-    /**< ÷√ŒªÀµ√˜”–π ’œ¥Ê‘⁄…¡À∏∫Ïµ∆ */
+    /**< ÁΩÆ‰ΩçËØ¥ÊòéÊúâÊïÖÈöúÂ≠òÂú®Èó™ÁÉÅÁ∫¢ÁÅØ */
     if (bittest(winCreateFlag, 1))
     {
         bitset(led_signal, 0);
@@ -39,11 +39,11 @@ static void Led_Show()//∑œ∆˙
         switch (pCON->state)
         {
         case STATE_CON_IDLE:
-            /**< ø’œ–◊¥Ã¨ */
+            /**< Á©∫Èó≤Áä∂ÊÄÅ */
             bitset(led_signal, 1);
             break;
         case STATE_CON_CHARGING:
-            /**< ≥‰µÁπ˝≥Ã÷– */
+            /**< ÂÖÖÁîµËøáÁ®ã‰∏≠ */
             bitset(led_signal, 2);
             break;
         default:
@@ -52,19 +52,19 @@ static void Led_Show()//∑œ∆˙
                 if (pCON->status.xCPState == CP_6V_PWM
                     || pCON->status.xCPState == CP_6V)
                 {
-                    /**< µ»¥˝≥µ∂À≤Â«π */
+                    /**< Á≠âÂæÖËΩ¶Á´ØÊèíÊû™ */
                     bitset(led_signal, 3);
                 }
                 else if (pCON->status.xCPState == CP_9V_PWM
                     || pCON->status.xCPState == CP_9V)
                 {
-                    /**< S1Œ¥±’∫œ */
+                    /**< S1Êú™Èó≠Âêà */
                     bitset(led_signal, 4);
                 }
             }
             else
             {
-                /**< Œ¥÷™◊¥Ã¨ */
+                /**< Êú™Áü•Áä∂ÊÄÅ */
                 bitset(led_signal, 5);
             }
             break;
@@ -105,10 +105,10 @@ static void Led_Show()//∑œ∆˙
 }
 
 /**
-*µ∆π‚øÿ÷∆–¬
+*ÁÅØÂÖâÊéßÂà∂Êñ∞
 *
 */
-static void ledShow1()//∑œ∆˙
+static void ledShow1()//Â∫üÂºÉ
 {
     int i;
     CON_t *pCON;
@@ -119,7 +119,7 @@ static void ledShow1()//∑œ∆˙
     {
         pCON = CONGetHandle(i);
         led_signal[i] = 0;
-        /**< ÷√ŒªÀµ√˜”–π ’œ¥Ê‘⁄…¡À∏∫Ïµ∆ */
+        /**< ÁΩÆ‰ΩçËØ¥ÊòéÊúâÊïÖÈöúÂ≠òÂú®Èó™ÁÉÅÁ∫¢ÁÅØ */
         if (pCON->status.ulSignalAlarm != 0 ||
             pCON->status.ulSignalFault != 0 ||
             pEVSE->status.ulSignalAlarm != 0 ||
@@ -147,11 +147,11 @@ static void ledShow1()//∑œ∆˙
             switch (pCON->state)
             {
             case STATE_CON_IDLE:
-                /**< ø’œ–◊¥Ã¨ */
+                /**< Á©∫Èó≤Áä∂ÊÄÅ */
                 bitset(led_signal[i], 1);
                 break;
             case STATE_CON_CHARGING:
-                /**< ≥‰µÁπ˝≥Ã÷– */
+                /**< ÂÖÖÁîµËøáÁ®ã‰∏≠ */
                 bitset(led_signal[i], 2);
                 break;
             default:
@@ -160,19 +160,19 @@ static void ledShow1()//∑œ∆˙
                     if (pCON->status.xCPState == CP_6V_PWM
                         || pCON->status.xCPState == CP_6V)
                     {
-                        /**< µ»¥˝≥µ∂À≤Â«π */
+                        /**< Á≠âÂæÖËΩ¶Á´ØÊèíÊû™ */
                         bitset(led_signal[i], 3);
                     }
                     else if (pCON->status.xCPState == CP_9V_PWM
                         || pCON->status.xCPState == CP_9V)
                     {
-                        /**< S1Œ¥±’∫œ */
+                        /**< S1Êú™Èó≠Âêà */
                         bitset(led_signal[i], 4);
                     }
                 }
                 else
                 {
-                    /**< Œ¥÷™◊¥Ã¨ */
+                    /**< Êú™Áü•Áä∂ÊÄÅ */
                     bitset(led_signal[i], 5);
                 }
                 break;
@@ -182,7 +182,7 @@ static void ledShow1()//∑œ∆˙
    
     for (i = 0; i < 2; i++)
     {
-        ledSignalPool[i] = led_signalold[i] ^ led_signal[i]; //”–±‰ªØ‘ÚledSignalPool≤ªŒ™0
+        ledSignalPool[i] = led_signalold[i] ^ led_signal[i]; //ÊúâÂèòÂåñÂàôledSignalPool‰∏ç‰∏∫0
         if (ledSignalPool[i] != 0)
         {
             ledSignalPool[i] = ledSignalPool[i] & led_signal[i];
@@ -223,19 +223,15 @@ static void signal_error(CON_t *pCON, int i)
 {
 
 #if EVSE_USING_NET
-//    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
-//    {
-//        led_state = State_red_blue_replace;
-//    }
-	if((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Link) != defSignalEVSE_State_Network_Link)
-	{
-		led_state = State_red_blue_replace;
-	}
+//	if((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Link) != defSignalEVSE_State_Network_Link)
+//	{
+//		led_state = State_red_blue_replace;
+//	}
 #endif
     if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
     pCON->status.ulSignalFault != 0 ||
     (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
-    (pEVSE->status.ulSignalFault & ~defSignalEVSE_Fault_RFID) != 0)//∆¡±ŒŒ¬∂»∏ÊæØ£¨—œ÷ÿ∏ÊæØ≤≈œ‘ æ
+    (pEVSE->status.ulSignalFault & ~defSignalEVSE_Fault_RFID) != 0)//Â±èËîΩÊ∏©Â∫¶ÂëäË≠¶Ôºå‰∏•ÈáçÂëäË≠¶ÊâçÊòæÁ§∫
     {
         if ((pCON->status.ulSignalAlarm != 0)&&\
             (pCON->status.ulSignalFault == 0)&&\
@@ -292,12 +288,12 @@ static void ledShow(int j)
     for (i = 0; i < j; i++)
     {
         pCON = CONGetHandle(i);
-        if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)//‘⁄≥‰µÁ÷–
+        if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)//Âú®ÂÖÖÁîµ‰∏≠
         {
             led_state = State_green_breath;
             signal_error(pCON, i);
         }
-        else//≤ª‘⁄≥‰µÁ÷– 
+        else//‰∏çÂú®ÂÖÖÁîµ‰∏≠ 
         {
             led_state = State_green_keep_on;
             if (pCON->status.xPlugState == PLUG)
@@ -305,13 +301,13 @@ static void ledShow(int j)
                 if (pCON->status.xCPState == CP_6V_PWM
                     || pCON->status.xCPState == CP_6V)
                 {
-                    /**< µ»¥˝≥µ∂À≤Â«π */
+                    /**< Á≠âÂæÖËΩ¶Á´ØÊèíÊû™ */
                     led_state = State_green_flicker;
                 }
                 else if (pCON->status.xCPState == CP_9V_PWM
                     || pCON->status.xCPState == CP_9V)
                 {
-                    /**< S1Œ¥±’∫œ */
+                    /**< S1Êú™Èó≠Âêà */
                     led_state = State_blue_keep_on;
                 }
             }
@@ -349,7 +345,7 @@ static void ledShow(int j)
     }
 }
 
-//∏˘æ›«π ˝¡øµƒ≤ªÕ¨≤…”√≤ªÕ¨µƒµ∆π‚øÿ÷∆
+//Ê†πÊçÆÊû™Êï∞ÈáèÁöÑ‰∏çÂêåÈááÁî®‰∏çÂêåÁöÑÁÅØÂÖâÊéßÂà∂
 void ledcontrl()
 {
     led_state = State_green_keep_on;
