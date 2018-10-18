@@ -539,7 +539,7 @@ DR_MODEM_e UC15_init(void *pvModem)
         }
         modem_delayms(1000);
     } while (pModem->status.eSimStat != CPIN_READY);
-#if 1
+#if 0
     timeout = 0;
     do
     {
