@@ -515,19 +515,27 @@ void Modem_Poll(DevModem_t *pModem)
             pEVSE->status.ulSignalState &= ~defSignalEVSE_State_Network_Online;
             uart_close(pModem->uart_handle);
             pModem->uart_handle = uart_open(MODEM_UARTx, MODEM_UART_BAND, MODEM_UART_DATA, MODEM_UART_PARI, MODEM_UART_STOP);
-#if 0
-            ret = pModem->soft_reset(pModem);
-            if(ret == DR_MODEM_OK)
+            #include "tasknetwork.h"
+            static uint32_t delay_time;
+            delay_time = get_reconnect_delay_time_ms();
+            printf_safe("delay_time_s:%ds\n", delay_time/1000);
+            if (delay_time <= 5000)
             {
-                pModem->state = DS_MODEM_ON;
+                ret = pModem->soft_reset(pModem);
+                if (ret == DR_MODEM_OK)
+                {
+                    pModem->state = DS_MODEM_ON;
+                }
+                else
+                {
+                    pModem->state = DS_MODEM_OFF;
+                }
             }
             else
             {
                 pModem->state = DS_MODEM_OFF;
+                pModem->keyoff(pModem);
             }
-#else            pModem->state = DS_MODEM_OFF;
-            pModem->keyoff(pModem);
-#endif
             break;
         default:
             break;

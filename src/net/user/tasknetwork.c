@@ -35,6 +35,10 @@ void flush_reconnect_time(void)
     delay_ms = 1000;
     start_delay_ms = 0;
 }
+uint32_t get_reconnect_delay_time_ms(void)
+{
+    return delay_ms;
+}
 uint32_t get_reconnect_remain_time(void)
 {
     if (start_delay_ms != 0)
