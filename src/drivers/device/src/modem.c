@@ -195,7 +195,11 @@ void Modem_Poll(DevModem_t *pModem)
         {
         case DS_MODEM_OFF:
             ret = pModem->open(pModem);
-            if (ret != DR_MODEM_OK)
+            if (ret == DR_MODEM_OK)
+            {
+                pModem->state = DS_MODEM_ON;
+            }
+            else
             {
                 pModem->keyoff(pModem); 
             }

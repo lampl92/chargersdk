@@ -765,7 +765,6 @@ DR_MODEM_e M26_open(void *pvModem)
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 1);
     if (ret == DR_MODEM_OK)
     {
-        pModem->state = DS_MODEM_ON;
         return ret;
     }
     else
@@ -773,7 +772,6 @@ DR_MODEM_e M26_open(void *pvModem)
         ret = M26_quit(pModem);
         if (ret == DR_MODEM_OK)
         {
-            pModem->state = DS_MODEM_ON;
             return ret;
         }
     }
@@ -784,11 +782,11 @@ DR_MODEM_e M26_open(void *pvModem)
         timeout++;
         if (timeout > timeoutMax)
         {
+            ret = DR_MODEM_TIMEOUT;
             return ret;
         }
         modem_send_at("AT\r");
         ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 1);
-        pModem->state = DS_MODEM_ON;
     }
 
     return ret;
