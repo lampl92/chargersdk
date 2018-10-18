@@ -16,6 +16,7 @@ void *utils_memfrob(void *s, size_t n)
 int main(int argc, char *argv[])
 {
     FILE *fp = NULL;
+    FILE *fp_o = NULL;
     char *rbuff;
     char *rbuff_o;
     uint32_t fsize;
@@ -36,11 +37,6 @@ int main(int argc, char *argv[])
     if(rbuff[0] == '{' || rbuff[0] == '[')
     {
         fsize_w = aes_encrypt(rbuff, fsize, rbuff_o);
-            printf("frob1 \n");
-    for(int i = 0; i< fsize_w; i++)
-        printf("%c", rbuff_o[i]);
-
-    printf("\n");
     }
     else
     {
@@ -48,24 +44,25 @@ int main(int argc, char *argv[])
         aes_decrypt(rbuff, rbuff_o, fsize_w);
     }
 
-    //utils_memfrob(rbuff, fsize);
-    /*
-    printf("frob1 \n");
-    for(int i = 0; i< fsize; i++)
-        printf("%c", rbuff[i]);
+    char *path_o_ext;
+    if(strstr(argv[1], "json")!=NULL)
+    {
+        path_o_ext = strstr(argv[1], "json");
+        strcpy(path_o_ext, "nosj");
+        fp_o = fopen(argv[1], "wb+");
+        fwrite(rbuff_o, 1, fsize_w, fp_o);
+    }
+    else if(strstr(argv[1], "nosj")!=NULL)
+    {
+        path_o_ext = strstr(argv[1], "nosj");
+        strcpy(path_o_ext, "json");
+        fp_o = fopen(argv[1], "wb+");
+        fwrite(rbuff_o, 1, fsize_w, fp_o);
+    }
 
-    printf("\n");
-    aes_decrypt(rbuff, fsize);
-    printf("frob2 \n");
-    for(int i = 0; i< fsize; i++)
-        printf("%c", rbuff[i]);
-        */
-
-    fseek(fp, 0, SEEK_SET);
-    fwrite(rbuff_o, 1, fsize_w, fp);
-
+    fclose(fp_o);
     fclose(fp);
     free(rbuff);
-    system("pause");
+    free(rbuff_o);
     return 0;
 }
