@@ -478,7 +478,6 @@ DR_MODEM_e UC15_open(void *pModem)
     ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 1);
     if (ret == DR_MODEM_OK)
     {
-        ((DevModem_t*)pModem)->state = DS_MODEM_ON;
         return ret;
     }
     else
@@ -486,7 +485,6 @@ DR_MODEM_e UC15_open(void *pModem)
         ret = UC15_quit(pModem);
         if (ret == DR_MODEM_OK)
         {
-            ((DevModem_t*)pModem)->state = DS_MODEM_ON;
             return ret;
         }
     }
@@ -501,7 +499,6 @@ DR_MODEM_e UC15_open(void *pModem)
         }
         modem_send_at("AT\r");
         ret = modem_get_at_reply(reply, sizeof(reply) - 1, "OK", 1);
-        ((DevModem_t*)pModem)->state = DS_MODEM_ON;
     }
 
     return ret;
