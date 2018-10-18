@@ -127,7 +127,7 @@ int main(int argc, char* argv[])
     int isNewFw = 0;
     char ver_num[16] = {0};
     flist_t flist;
-    char *templ = "{\"ftp\":{\"server\":\"s.dpcpower.com\",\"port\":21,\"user\":\"dpcpower\",\"pass\":\"dpcpower\"},\"flist\":[]}";
+    char *templ = "{\"ftp\":{\"server\":\"ftp.dpcpower.com\",\"port\":21,\"user\":\"dpcpower\",\"pass\":\"dpcpower\"},\"flist\":[]}";
     char cmdpath[2048] = {0};
     char pathcwd[2048] = {0};
 
