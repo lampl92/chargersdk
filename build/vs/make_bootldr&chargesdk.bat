@@ -1,4 +1,3 @@
-call make_bootldr.bat
 call make_chargesdk.bat
 SET source=.\Release
 del %source%\bootldr^&chargesdk.bin
