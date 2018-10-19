@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
     }
     for(int i = 1; i < argc; i++)
     {
-        if(strstr(argv[i], "new_fw") != NULL || strstr(argv[i], "bootldr") != NULL)
+        if(strstr(argv[i], "new_fw") != NULL || strstr(argv[i], "new_boot") != NULL)
         {
             isNewFw = 1;
         }
