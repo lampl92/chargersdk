@@ -20,19 +20,28 @@
 #include "stringName.h"
 
 #include "bsp_cpu_flash.h"
+#include "utils.h"
 
-#define BOOTLDR_ADDRESS         0x0
+#define BOOTLDR_ADDRESS         0x08000000
 
 int upgrade_bootldr(void)
 {
     char strFindName[256] = { 0 };
     char filepath[256] = { 0 };
     char strCrc32[16] = { 0 };
+    char ch_crc32[9] = { 0 };
+    ul2uc ul2ucCrc32;
     uint8_t *pucBinBuffer;
     uint32_t size;
     uint32_t crc32_calc, crc32_orig;
     if (find_file(pathUpgradeDir, "new_boot", strFindName) == 1)
     {
+        for (int i = 0; i < 8; i++)
+        {
+            ch_crc32[i] = strFindName[i + 9];
+        }
+        StrToHex(ch_crc32, ul2ucCrc32.ucVal, strlen(ch_crc32));
+        crc32_orig = utils_ntohl(ul2ucCrc32.ulVal);
         sprintf(filepath, "%s%s", pathUpgradeDir, strFindName);
         pucBinBuffer = GetFileBuffer(filepath, &size);
         if (pucBinBuffer != NULL && size > 0)
@@ -44,6 +53,7 @@ int upgrade_bootldr(void)
             {
                 printf_safe("Get Crc32 Err!\n");
                 free(pucBinBuffer);
+                yaffs_unlink(filepath);
             }
             else
             {
