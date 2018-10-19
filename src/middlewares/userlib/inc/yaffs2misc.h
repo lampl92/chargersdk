@@ -1,5 +1,8 @@
 #ifndef YAFFS2MISC_H
 #define YAFFS2MISC_H
+
+#include "ydirectenv.h"
+
 int dump_file_data(char *fn);
 void dump_file(const char *fn);
 void dump_directory_tree(const char *dname);
