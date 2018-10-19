@@ -69,6 +69,7 @@ error_t net_ppp_init(void *pvnet_dev)
     //PPP初始化
     pppGetDefaultSettings(&pppSettings);
     pppSettings.interface = interface;
+    pppSettings.accm = 0x00000000;
     pppSettings.authProtocol = PPP_AUTH_PROTOCOL_PAP | PPP_AUTH_PROTOCOL_CHAP_MD5;
     error = pppInit(&pppContext, &pppSettings);
     if (error)
