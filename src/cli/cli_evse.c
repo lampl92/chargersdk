@@ -249,6 +249,7 @@ void cli_evseinfo_fnt(int argc, char **argv)
         printf_safe("QRCode  :      %s\n", pCON->info.strQRCode);
     }
     printf_safe("Version:%s\n", xSysconf.strVersion);
+    printf_safe("Bootldr:%s\n", xSysconf.strBootldrCrc32);
 }
 
 
