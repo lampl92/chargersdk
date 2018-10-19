@@ -166,7 +166,7 @@ uint8_t bsp_WriteCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpSrc, uint32_t _ulS
 	uint8_t ucRet;
     FLASH_EraseInitTypeDef EraseInitStruct;
 
-    uint32_t FirstSector = 0, NbOfSectors = 0, Address = 0;
+    uint32_t FirstSector = 0, LastSector = 0, NbOfSectors = 0, Address = 0;
     uint32_t SectorError = 0;
 
 	/* 如果偏移地址超过芯片容量，则不改写输出缓冲区 */
@@ -187,9 +187,9 @@ uint8_t bsp_WriteCpuFlash(uint32_t _ulFlashAddr, uint8_t *_ucpSrc, uint32_t _ulS
 
   /* Get the 1st sector to erase */
     FirstSector = GetSector(_ulFlashAddr);
+    LastSector = GetSector(_ulFlashAddr + _ulSize);
     /* Get the number of sector to erase from 1st sector*/
-    NbOfSectors = GetSector(ADDR_FLASH_SECTOR_11  +  GetSectorSize(ADDR_FLASH_SECTOR_11) - 1) - FirstSector + 1;
-
+    NbOfSectors = GetSector(ADDR_FLASH_SECTOR[LastSector]  +  GetSectorSize(LastSector) - 1) - FirstSector + 1;
       /* Fill EraseInit structure*/
     EraseInitStruct.TypeErase = FLASH_TYPEERASE_SECTORS;
     EraseInitStruct.VoltageRange = FLASH_VOLTAGE_RANGE_3;
