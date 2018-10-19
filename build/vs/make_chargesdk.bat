@@ -28,13 +28,13 @@ set crc32_app=%_crc32:~34,8%
 
 md .\Release\chargesdk\%folder1%\%folder3%\upgrade
 
-copy /y %path_bootldr% .\Release\chargesdk\%folder1%\%folder3%\upgrade\bootldr_%crc32_bootldr%
+copy /y %path_bootldr% .\Release\chargesdk\%folder1%\%folder3%\upgrade\new_boot_%crc32_bootldr%
 copy /y %path_bootldr% .\Release\bootldr.bin
 
 copy /y %path_app% .\Release\chargesdk\%folder1%\%folder3%\upgrade\new_fw_%crc32_app%
 copy /y %path_app% .\Release\chargesdk.bin
 
-%genflist%  ..\..\..\build\vs\Release\chargesdk\%folder1%\%folder3%\upgrade\bootldr_%crc32_bootldr%
+%genflist%  ..\..\..\build\vs\Release\chargesdk\%folder1%\%folder3%\upgrade\new_boot_%crc32_bootldr%
 %genflist%  ..\..\..\build\vs\Release\chargesdk\%folder1%\%folder3%\upgrade\new_fw_%crc32_app%
 
 move /y ..\..\tools\genflist\bin\flist.json .\Release\chargesdk\%folder1%\%folder3%
