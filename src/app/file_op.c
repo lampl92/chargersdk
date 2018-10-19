@@ -8,6 +8,7 @@
 #include "stringName.h"
 #include "errorcode.h"
 #include "file_op.h"
+#include "sysinit.h"
 #include "utils.h"
 
 void file_config_reset(void)
@@ -75,6 +76,15 @@ ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
         {
             strcpy(ftp->strNewVersion, flist->strFtpdir);
             strcpy(ftp->strNewFileName, flist->strFilename);
+            if (strstr(ftp->strNewFileName, "bootldr.bin") != NULL)
+            {
+                if (strcmp(flist->strCrc32, xSysconf.strBootldrCrc32) == 0)
+                {
+                    status = 0;
+                    cfgobj_set_uint8(jsRoot, &status, "flist:%d.status", i);
+                    continue;
+                }
+            }
             status = 0;
             cfgobj_set_uint8(jsRoot, &status, "flist:%d.status", i);
             break;
@@ -93,6 +103,56 @@ ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
         errcode = SetCfgObj_enc(path, jsRoot, 0);
     }
     return errcode;
+}
+int set_crc32_tmp_file(char *path, char *strCrc32)
+{
+    int fd;
+    int bw;
+    if (strlen(strCrc32) == 0)
+    {
+        return -1;
+    }
+    fd = yaffs_open(path, O_CREAT | O_TRUNC | O_RDWR, S_IWRITE | S_IREAD);
+    if (fd < 0)
+    {
+        ThrowFSCode(yaffs_get_error(), path, "set_crc32_tmp()-open");
+        return -2;
+    }
+    bw = yaffs_write(fd, strCrc32, strlen(strCrc32));
+    if (strlen(strCrc32) != bw)
+    {
+        ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-write");
+        yaffs_close(fd);
+        return -3;
+    }
+    yaffs_close(fd);
+    return 0;
+}
+
+int get_crc32_tmp_file(char *path, char *strCrc32)
+{
+    int fd;
+    int rb;
+    if (strCrc32 == NULL)
+    {
+        return -1;
+    }
+    memset(strCrc32, 0, 9);
+    fd = yaffs_open(path, O_RDWR, S_IWRITE | S_IREAD);
+    if (fd < 0)
+    {
+        //ThrowFSCode(yaffs_get_error(), path, "get_upgrade_tmp()-open");
+        return - 2;
+    }
+    rb = yaffs_read(fd, strCrc32, 8);
+    if (8 != rb)
+    {
+        //ThrowFSCode(yaffs_get_error(), path, "set_upgrade_tmp()-read");
+        yaffs_close(fd);
+        return -3;
+    }
+    yaffs_close(fd);
+    return 0;
 }
 
 uint8_t set_tmp_file(char *path, char *flg)

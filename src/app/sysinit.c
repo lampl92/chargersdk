@@ -7,7 +7,6 @@
 #include "cfg_sys.h"
 #include "cfg_parse.h"
 #include "yaffs2misc.h"
-#include "evse_version.h"
 #include "ifconfig.h"
 #include "interface_network.h"
 #include "utils.h"
@@ -125,7 +124,8 @@ void sys_Init(void)
     
     SysCfgInit(&xSysconf);
     xSysconf.GetSysCfg((void *)&xSysconf, NULL);
-    sprintf(xSysconf.strVersion, "%s.%s.%s", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
+    extern int upgrade_bootldr(void);
+    upgrade_bootldr();
 #endif
     /*---------------------------------------------------------------------------/
     /                               NET初始化

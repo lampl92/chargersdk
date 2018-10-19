@@ -137,6 +137,7 @@
     <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE7953.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE79xx_Data.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp.c" />
+    <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_cpu_flash.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_dwt.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_gpio.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\bsp_nand_flash.c" />
@@ -171,6 +172,8 @@
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma2d.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c" />
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash.c" />
+    <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ex.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_iwdg.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc.c" />

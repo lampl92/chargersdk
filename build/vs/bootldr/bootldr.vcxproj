@@ -85,7 +85,6 @@
     <Xml Include="stm32.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\app\cfg_parse.c" />
     <ClCompile Include="..\..\..\src\app\cfg_sys.c" />
     <ClCompile Include="..\..\..\src\app\errorcode.c" />
     <ClCompile Include="..\..\..\src\app\factorycfg.c" />

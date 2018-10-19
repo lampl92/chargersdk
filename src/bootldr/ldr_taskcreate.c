@@ -102,12 +102,12 @@ void vTaskInit(void *pvParameters)
     
     char cli_std[1];
     uint32_t cli_std_len;
-    char strFindName[256];
+    char strFindName[256] = { 0 };
     
     uint32_t crc32_calc, crc32_orig;
     char ch_crc32[9] = { 0 };
     ul2uc ul2ucCrc32;
-    char filepath[64 + 1];
+    char filepath[64 + 1] = { 0 };
     int i;
     
     AppObjCreate();

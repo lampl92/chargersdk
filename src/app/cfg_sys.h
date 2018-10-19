@@ -40,6 +40,7 @@ typedef struct
 typedef struct
 {
     char strVersion[64 + 1];
+    char strBootldrCrc32[64 + 1];
     uint32_t ulDispSleepTime_s;
     Calibrate_t xCalibrate;
     UpgradeFlag_t xUpFlag;

@@ -23,5 +23,8 @@ int GetFileCrc32(char *path, uint32_t *pulCrc32);
 int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32);
 void file_config_reset(void);
 void file_log_reset(void);
+int get_crc32_tmp_file(char *path, char *strCrc32);
+int set_crc32_tmp_file(char *path, char *strCrc32);
+
 
 #endif

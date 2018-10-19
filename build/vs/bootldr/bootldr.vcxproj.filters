@@ -257,9 +257,6 @@
     </Xml>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\app\cfg_parse.c">
-      <Filter>Source files\app</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\app\cfg_sys.c">
       <Filter>Source files\app</Filter>
     </ClCompile>

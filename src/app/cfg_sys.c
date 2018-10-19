@@ -2,6 +2,8 @@
 #include "cJSON.h"
 #include "stringName.h"
 #include "cfg_parse.h"
+#include "evse_version.h"
+#include "file_op.h"
 #include <string.h>
 
 static ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
@@ -26,7 +28,8 @@ static ErrorCode_t GetSysCfg(void *pvSysconf, void *pvCfgObj)
     {
         jsCfgObj = (cJSON *)pvCfgObj;
     }
-    
+    sprintf(pSysconf->strVersion, "%s.%s.%s", EVSE_MAJOR, EVSE_MINOR, EVSE_PATCH);
+    get_crc32_tmp_file(pathBootldrCrc32Tmp, pSysconf->strBootldrCrc32);
     cfgobj_get_uint8(jsCfgObj, &pSysconf->xUpFlag.chargesdk_bin, "%s", jnSysChargersdk_bin);
     cfgobj_get_uint32(jsCfgObj, &pSysconf->xUpFlag.chargesdk_bin_crc32, "%s", jnSysChargersdk_bin_crc32);
     cfgobj_get_uint8(jsCfgObj, &pSysconf->xUpFlag.evse_cfg, "%s", jnSysEvse_cfg);

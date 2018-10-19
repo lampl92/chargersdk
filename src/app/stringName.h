@@ -220,10 +220,10 @@
 #define pathDownloadDir     "/nand/download/"
 #define pathResourceDir     "/nand/resource/"
 
-#define pathDownloadList      "/nand/download/flist.json"
+#define pathDownloadList    "/nand/download/flist.json"
 #define pathUpgradeTmp      "/nand/upgrade/upgrade.tmp"
-#define pathBmpCheckTmp      "/nand/resource/bmpcheck.tmp"
-
+#define pathBmpCheckTmp     "/nand/resource/bmpcheck.tmp"
+#define pathBootldrCrc32Tmp "/nand/system/bootldr_crc32.tmp"
 
 #define jnEVSESN        "EVSESN"
 #define jnEVSEID        "EVSEID"

@@ -267,6 +267,9 @@ static void netStateFTP(net_device_t *net_dev)
             yaffs_unlink(filepath);//删除下载文件
         }
         yaffs_unlink(pathLocalFlist);
+        
+        extern int upgrade_bootldr(void);
+        upgrade_bootldr();
 
         pechProto->info.ftp.ucDownloadStart = 0;
         cfg_set_uint8(pathFTPCfg, &pechProto->info.ftp.ucDownloadStart, "%s", jnFtpDownloadStart);
