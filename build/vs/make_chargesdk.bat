@@ -2,6 +2,7 @@ set path_bootldr=".\bootldr\Release\bootldr.bin"
 set path_app=".\chargesdk\Release\chargesdk.bin"
 set crc32sum=..\..\tools\crc32sum.exe
 set genflist=..\..\tools\genflist\bin\genflist.exe
+set frobflist=..\..\tools\frobflist\bin\frobflist.exe
 
 set dd=%date:~8,2%
 set mm=%date:~5,2%
@@ -38,3 +39,4 @@ copy /y %path_app% .\Release\chargesdk.bin
 %genflist%  ..\..\..\build\vs\Release\chargesdk\%folder1%\%folder3%\upgrade\new_fw_%crc32_app%
 
 move /y ..\..\tools\genflist\bin\flist.json .\Release\chargesdk\%folder1%\%folder3%
+%frobflist% .\Release\chargesdk\%folder1%\%folder3%\flist.json
