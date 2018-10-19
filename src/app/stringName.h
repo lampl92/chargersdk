@@ -22,17 +22,6 @@
 #define pathNetCfg          "/nand/system/ifconfig.cfg"
 #define pathMeterCfg        "/nand/system/meter.cfg"
 
-typedef enum _filelist
-{
-    FLIST_BIN = 1,
-    FLIST_EVSE_CFG,
-    FLIST_PROTO_CFG,
-    FLIST_SYS_CFG,
-    FLIST_BLACKLIST_CFG,
-    FLIST_WHITELIST_CFG,
-    FLIST_AD_BMP
-}filelist_e;
-
 /**************reource************************/
 //**********************
 //公用图片路径
