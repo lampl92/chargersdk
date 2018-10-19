@@ -76,7 +76,7 @@ ErrorCode_t parse_flist(char *path, EchFtpCfg_t *ftp, flist_t *flist)
         {
             strcpy(ftp->strNewVersion, flist->strFtpdir);
             strcpy(ftp->strNewFileName, flist->strFilename);
-            if (strstr(ftp->strNewFileName, "bootldr.bin") != NULL)
+            if (strstr(ftp->strNewFileName, "new_boot") != NULL)
             {
                 if (strcmp(flist->strCrc32, xSysconf.strBootldrCrc32) == 0)
                 {
