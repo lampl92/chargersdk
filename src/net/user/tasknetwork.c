@@ -203,7 +203,6 @@ static void netStateFTP(net_device_t *net_dev)
 {
     uint32_t crc32_calc, crc32_orig;
     char ch_crc32[9] = { 0 };
-    filelist_e filelist;
     ul2uc ul2ucCrc32;
     char filepath[64 + 1];
     char filepath_rename[64 + 1];

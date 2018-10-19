@@ -21,7 +21,6 @@
 #define pathBlackList       "/nand/system/blacklist.cfg"
 #define pathNetCfg          "/nand/system/ifconfig.cfg"
 #define pathMeterCfg        "/nand/system/meter.cfg"
-#define pathBin             "/nand/system/chargesdk.bin.new"
 
 typedef enum _filelist
 {
