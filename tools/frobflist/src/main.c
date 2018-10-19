@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
         path_o_ext = strstr(argv[1], "nosj");
         strcpy(path_o_ext, "json");
         fp_o = fopen(argv[1], "wb+");
+        fsize_w = strlen(rbuff_o);
         fwrite(rbuff_o, 1, fsize_w, fp_o);
     }
 
