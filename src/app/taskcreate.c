@@ -147,7 +147,7 @@ EventGroupHandle_t xHandleEventDiag = NULL;
 EventGroupHandle_t xHandleEventRemote = NULL;
 EventGroupHandle_t xHandleEventHMI  = NULL;
 EventGroupHandle_t xHandleEventTCP   = NULL;
-
+EventGroupHandle_t xHandleEventSys   = NULL;
 //下面的Event在相应结构体中定义
 //pRFIDDev->xHandleEventGroupRFID
 //pCON->status.xHandleEventCharge;
@@ -264,6 +264,7 @@ void AppObjCreate (void)
     xHandleEventRemote = xEventGroupCreate();
     xHandleEventHMI = xEventGroupCreate();
     xHandleEventTCP = xEventGroupCreate();
+    xHandleEventSys = xEventGroupCreate();
 
     xHandleQueueRfidPkg = xQueueCreate(defMaxCON, sizeof(RfidQPkg_t));
     xHandleQueueUserChargeCondition = xQueueCreate(defMaxCON, sizeof(UserChargeCondition_t));
