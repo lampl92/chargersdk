@@ -1547,7 +1547,6 @@ static uint8_t Value_Check()
             if ((strlen(result_input) > 0) && (strlen(result_input) <= 64))
             {                
                 cfg_set_string(pathEVSECfg, result_input, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnQRCode);
-                //pCon->info.SetCONCfg(pCon, jnQRCode, result_input, ParamTypeString);
                 memset(pCon->info.strQRCode, '\0', sizeof(pCon->info.strQRCode));
                 strncpy(pCon->info.strQRCode, result_input, sizeof(pCon->info.strQRCode));
                 //            GUI_QR_Delete(qr_hmem);
@@ -1587,7 +1586,6 @@ static uint8_t Value_Check()
                 pCon->info.dVolatageUpperLimits = tmpDouble;
                 cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnVolatageUpperLimits);
             }
-            //pCon->info.SetCONCfg(pCon, jnVolatageUpperLimits, &tmpDouble, ParamTypeDouble);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID2);
             break;
         case 23:    // 100 - highest
@@ -1597,12 +1595,10 @@ static uint8_t Value_Check()
                 pCon->info.dVolatageLowerLimits = tmpDouble;
                 cfg_set_double(pathEVSECfg, &tmpDouble, "%s:%d.%s", jnCONArray, pCon->info.ucCONID, jnVolatageLowerLimits);
             }
-            //pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID3);
             break;
         case 24://电流上限
             //tmpDouble = atof(result_input);
-            //pCon->info.SetCONCfg(pCon, jnVolatageLowerLimits, &tmpDouble, ParamTypeDouble);
             WM_SendMessageNoPara(htmpChild, MSG_MANAGERSETID4);
             break;
         case 25:

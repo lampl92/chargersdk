@@ -74,70 +74,6 @@ static int GetSignalPool(void *pvDev, uint32_t block, uint32_t bit)
     }
 }
 #endif
-/*---------------------------------------------------------------------------*/
-/*                               设置充电接口信息到配置文件                    */
-/*---------------------------------------------------------------------------*/
-
-static ErrorCode_t SetCONCfg(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type)
-{
-    cJSON *jsEVSECfgObj;
-    cJSON *jsCONArray;
-    cJSON *jsCONObj;
-    cJSON *jsItem;
-    ErrorCode_t errcode;
-    CON_t *pCON;
-    uint8_t ucCONID;
-
-
-    errcode = ERR_NO;
-    pCON = (CON_t *)pvCON;
-    ucCONID = pCON->info.ucCONID;
-    jsEVSECfgObj = GetCfgObj(pathEVSECfg, &errcode);
-    if(jsEVSECfgObj == NULL)
-    {
-        return errcode;
-    }
-    jsCONArray = cJSON_GetObjectItem(jsEVSECfgObj, jnCONArray);
-    jsCONObj = cJSON_GetArrayItem(jsCONArray, ucCONID);
-    jsItem = jsCONObj->child;
-    do
-    {
-        if(strcmp(jsItem->string, jnItemString) == 0)
-        {
-            switch(type)
-            {
-            case ParamTypeU8:
-                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateNumber(*((uint8_t *)pvCfgParam)));
-                break;
-            case ParamTypeU16:
-                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateNumber(*((uint16_t *)pvCfgParam)));
-                break;
-            case ParamTypeU32:
-                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateNumber(*((uint32_t *)pvCfgParam)));
-                break;
-            case ParamTypeDouble:
-                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateNumber(*((double *)pvCfgParam)));
-                break;
-            case ParamTypeString:
-                cJSON_ReplaceItemInObject(jsCONObj, jnItemString, cJSON_CreateString((char *)pvCfgParam));
-                break;
-            case ParamTypeList:
-                break;
-            default:
-                break;
-            }
-            break;//退出while循环
-        }
-        else
-        {
-            jsItem = jsItem->next;
-        }
-    }
-    while(jsItem != NULL);
-    errcode = SetCfgObj(pathEVSECfg, jsEVSECfgObj, 0);
-
-    return errcode;
-}
 
 /*---------------------------------------------------------------------------*/
 /*                              从文件获取充电接口信息                         */
@@ -1182,7 +1118,6 @@ CON_t *CONCreate(uint8_t ucCONID )
     pCON->status.ucLoadPercent = 100;
     
     pCON->info.GetCONCfg = GetCONCfg;
-    pCON->info.SetCONCfg = SetCONCfg;
     
     pCON->status.xHandleEventCharge    = xEventGroupCreate();
     pCON->status.xHandleEventOrder     = xEventGroupCreate();

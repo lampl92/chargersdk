@@ -80,7 +80,6 @@ typedef struct _CONInfo
     char strQRCode[defQRCodeLength];
 
     pCONGetCfg_ft GetCONCfg;
-    ErrorCode_t(*SetCONCfg)(void *pvCON, char *jnItemString, void *pvCfgParam, uint8_t type);
 } CONInfo_t;
 typedef struct _CONAppoint
 {
