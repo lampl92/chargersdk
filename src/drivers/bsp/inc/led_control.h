@@ -11,6 +11,7 @@
 #define led_red      0
 #define led_green    1
 #define led_blue     2
+#define led_yellow   3
 
 #define LED2_B_RUN  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_2,GPIO_PIN_SET)
 #define LED2_B_OFF  HAL_GPIO_WritePin(GPIOH, GPIO_PIN_2,GPIO_PIN_RESET)

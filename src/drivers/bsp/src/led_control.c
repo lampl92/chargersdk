@@ -188,7 +188,96 @@ void led_ctrl_b(uint8_t num, uint16_t state)
         }
     }
 }
+void led_ctrl_y(uint8_t num, uint16_t state)
+{
+    if (num == 1)
+    {
+        if (state == keep_on)
+        {
+            flag_flicker_r_1 = 0;
+            flag_breath_r_1 = 0;
+            flag_satuse_r_1 = 1;
+            
+            flag_flicker_g_1 = 0;
+            flag_breath_g_1 = 0;
+            flag_satuse_g_1 = 1;
+        }
+        else if (state == keep_off)
+        {
+            flag_satuse_r_1 = 0;
+            flag_flicker_r_1 = 0;
+            flag_breath_r_1 = 0;
+            
+            flag_satuse_g_1 = 0;
+            flag_flicker_g_1 = 0;
+            flag_breath_g_1 = 0;
+        }
+        else if (state == breath)
+        {
+            flag_breath_r_1 = 1;
+            flag_flicker_r_1 = 0;
+            flag_satuse_r_1 = 0;
+            
+            flag_breath_g_1 = 1;
+            flag_flicker_g_1 = 0;
+            flag_satuse_g_1 = 0;
+        }
+        else if (state == flicker)
+        {
+            flag_flicker_r_1 = 1;
+            flag_breath_r_1 = 0;
+            flag_satuse_r_1 = 0;
+            
+            flag_flicker_g_1 = 1;
+            flag_breath_g_1 = 0;
+            flag_satuse_g_1 = 0;
+        }
+    }
+    else if (num == 2)
+    {
 
+        if (state == keep_on)
+        {
+            flag_satuse_r_2 = 1;
+            flag_breath_r_2 = 0;
+            flag_flicker_r_2 = 0;
+            
+            flag_satuse_g_2 = 1;
+            flag_breath_g_2 = 0;
+            flag_flicker_g_2 = 0;
+        }
+        else if (state == keep_off)
+        {
+            flag_satuse_r_2 = 0;
+            flag_breath_r_2 = 0;
+            flag_flicker_r_2 = 0;
+            
+            flag_satuse_g_2 = 0;
+            flag_breath_g_2 = 0;
+            flag_flicker_g_2 = 0;
+        }
+        else if (state == breath)
+        {
+            flag_breath_r_2 = 1;
+            flag_flicker_r_2 = 0;
+            flag_satuse_r_2 = 0;
+            
+            flag_breath_g_2 = 1;
+            flag_flicker_g_2 = 0;
+            flag_satuse_g_2 = 0;
+        }
+        else if (state == flicker)
+        {
+            flag_breath_r_2 = 0;
+            flag_flicker_r_2 = 1;
+            flag_satuse_r_2 = 0;
+            
+            flag_breath_g_2 = 0;
+            flag_flicker_g_2 = 1;
+            flag_satuse_g_2 = 0;
+        }
+    }
+}
 void led_breath_r(void)
 {
     if (flag_breath_r_1 == 1)
@@ -335,19 +424,29 @@ void led_ctrl(uint8_t num, uint8_t colour, uint8_t state)
     {
         led_ctrl_g(num, keep_off);
         led_ctrl_b(num, keep_off);
+        led_ctrl_y(num, keep_off);
         led_ctrl_r(num, state);
     }
     else if (colour == led_green)
     {
         led_ctrl_r(num, keep_off);
         led_ctrl_b(num, keep_off);
+        led_ctrl_y(num, keep_off);
         led_ctrl_g(num, state);
     }
     else if (colour == led_blue)
     {
         led_ctrl_r(num, keep_off);
         led_ctrl_g(num, keep_off);
+        led_ctrl_y(num, keep_off);
         led_ctrl_b(num, state);
+    }
+    else if (colour == led_yellow)
+    {
+        led_ctrl_r(num, keep_off);
+        led_ctrl_g(num, keep_off);
+        led_ctrl_b(num, keep_off);
+        led_ctrl_y(num, state);
     }
 }
 void led_flicker_out(void)
