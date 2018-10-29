@@ -59,7 +59,7 @@
     <NMakePreprocessorDefinitions>__VisualGDB_CFG_Debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeIncludeSearchPath>.;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\arm-eabi\thumb\fpu\cortex_m4;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\backward;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include-fixed;$(TOOLCHAIN_ROOT)\arm-eabi\sys-include;$(TOOLCHAIN_ROOT)\arm-eabi\include;..\..\..\src\app;..\..\..\src\cli;..\..\..\src\drivers\hal\CMSIS_RTOS;..\..\..\src\drivers\hal\CMSIS\Include;..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\..\src\drivers\bsp\inc;..\..\..\src\drivers\device\inc;..\..\..\src\os\FreeRTOS;..\..\..\src\os\FreeRTOS\Source\include;..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F;..\..\..\src\middlewares\tinysh;..\..\..\src\middlewares\STemWin\inc;..\..\..\src\middlewares\STemWin\Config;..\..\..\src\middlewares\STemWin\Demo;..\..\..\src\middlewares\STemWin\BMP;..\..\..\src\middlewares\STemWin\SIF;..\..\..\src\middlewares\userlib\inc;..\..\..\src\middlewares\cJSON;..\..\..\src\middlewares\gdsl-1.8\src;..\..\..\src\middlewares\gdsl-1.8\src\examples;..\..\..\src\hmi;..\..\..\src\hmi\lcd;..\..\..\src\middlewares\yaffs2;..\..\..\src\middlewares\yaffs2\direct;..\..\..\src\middlewares\yaffs2\direct\nanddrv;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer;..\..\..\src\net\user;..\..\..\src\middlewares\unzip101e;..\..\..\src\middlewares\libmodbus-3.1.4\src;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
+    <NMakeIncludeSearchPath>.;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\arm-eabi\thumb\fpu\cortex_m4;$(TOOLCHAIN_ROOT)\arm-eabi\include\c++\7.2.0\backward;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include;$(TOOLCHAIN_ROOT)\lib\gcc\arm-eabi\7.2.0\include-fixed;$(TOOLCHAIN_ROOT)\arm-eabi\sys-include;$(TOOLCHAIN_ROOT)\arm-eabi\include;..\..\..\src\app;..\..\..\src\cli;..\..\..\src\drivers\hal\CMSIS_RTOS;..\..\..\src\drivers\hal\CMSIS\Include;..\..\..\src\drivers\hal\CMSIS\Device\ST\STM32F4xx\Include;..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc;..\..\..\src\drivers\bsp\inc;..\..\..\src\drivers\device\inc;..\..\..\src\os\FreeRTOS;..\..\..\src\os\FreeRTOS\Source\include;..\..\..\src\os\FreeRTOS\Source\portable\GCC\ARM_CM4F;..\..\..\src\middlewares\tinysh;..\..\..\src\middlewares\STemWin\inc;..\..\..\src\middlewares\STemWin\Config;..\..\..\src\middlewares\STemWin\Demo;..\..\..\src\middlewares\STemWin\BMP;..\..\..\src\middlewares\STemWin\SIF;..\..\..\src\middlewares\userlib\inc;..\..\..\src\middlewares\cJSON;..\..\..\src\middlewares\gdsl-1.8\src;..\..\..\src\middlewares\gdsl-1.8\src\examples;..\..\..\src\hmi;..\..\..\src\hmi\lcd;..\..\..\src\middlewares\yaffs2;..\..\..\src\middlewares\yaffs2\direct;..\..\..\src\middlewares\yaffs2\direct\nanddrv;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\common;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_tcp;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_crypto;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\cyclone_ssl;..\..\..\src\net\CycloneTCP_SSL_Crypto_Open_1_8_0\customer;..\..\..\src\net\user;..\..\..\src\middlewares\libmodbus-3.1.4\src;$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
     <NMakeForcedIncludes>$(ProjectDir)\gcc_Release.h;$(VISUALGDB_DIR)\gcc_compat.h;$(BSP_ROOT)stm32_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
     <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)"  "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
@@ -130,7 +130,6 @@
     <ClCompile Include="..\..\..\src\cli\cli_rtos.c" />
     <ClCompile Include="..\..\..\src\cli\cli_yaffs2.c" />
     <ClCompile Include="..\..\..\src\cli\cli_ymodem.c" />
-    <ClCompile Include="..\..\..\src\cli\cli_zip.c" />
     <ClCompile Include="..\..\..\src\cli\tofile.c" />
     <ClCompile Include="..\..\..\src\cli\ymodem.c" />
     <ClCompile Include="..\..\..\src\drivers\bsp\src\ADE7953.c" />
@@ -253,20 +252,6 @@
     <ClCompile Include="..\..\..\src\middlewares\STemWin\GUI_X\GUI_X_Touch_Analog.c" />
     <ClCompile Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.c" />
     <ClCompile Include="..\..\..\src\middlewares\tinysh\tinysh.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\adler32.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\crc32.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\deflate.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inffast.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inflate.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\inftrees.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\ioapi.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\miniunz.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\minizip.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\mztools.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\trees.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\unzip.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\zip.c" />
-    <ClCompile Include="..\..\..\src\middlewares\unzip101e\zutil.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\ring_buffer.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_list.c" />
     <ClCompile Include="..\..\..\src\middlewares\userlib\src\userlib_queue.c" />
@@ -807,13 +792,6 @@
     <ClInclude Include="..\..\..\src\middlewares\STemWin\SIF\siffontcreate.h" />
     <ClInclude Include="..\..\..\src\middlewares\STemWin\XBF\xbffontcreate.h" />
     <ClInclude Include="..\..\..\src\middlewares\tinysh\tinysh.h" />
-    <ClInclude Include="..\..\..\src\middlewares\unzip101e\crypt.h" />
-    <ClInclude Include="..\..\..\src\middlewares\unzip101e\ioapi.h" />
-    <ClInclude Include="..\..\..\src\middlewares\unzip101e\iowin32.h" />
-    <ClInclude Include="..\..\..\src\middlewares\unzip101e\mztools.h" />
-    <ClInclude Include="..\..\..\src\middlewares\unzip101e\unzip.h" />
-    <ClInclude Include="..\..\..\src\middlewares\unzip101e\zconf.h" />
-    <ClInclude Include="..\..\..\src\middlewares\unzip101e\zip.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_list.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\userlib_queue.h" />
     <ClInclude Include="..\..\..\src\middlewares\userlib\inc\utils.h" />

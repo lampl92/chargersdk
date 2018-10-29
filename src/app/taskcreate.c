@@ -15,7 +15,6 @@
 #include "interface.h"
 #include "cli_main.h"
 #include "timercallback.h"
-#include "gprs_m26.h"
 #include "bsp.h"
 #include "modem.h"
 #include "GUI_backstage.h"
