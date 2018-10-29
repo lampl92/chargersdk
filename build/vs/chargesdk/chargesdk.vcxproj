@@ -74,7 +74,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\..\..\doc\readme.md" />
-    <None Include="..\..\..\src\drivers\device\src\quectel_uc15.c" />
     <None Include="chargesdk-Debug.vgdbsettings" />
     <None Include="chargesdk-Release.vgdbsettings" />
     <None Include="debug.mak" />
@@ -161,7 +160,7 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\meter_acrel.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\meter_ADE7953.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\modem.c" />
-    <ClCompile Include="..\..\..\src\drivers\device\src\quectel_m26.c" />
+    <ClCompile Include="..\..\..\src\drivers\device\src\modem_quectel.c" />
     <ClCompile Include="..\..\..\src\drivers\device\src\RFIDReader_mt626.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\CMSIS_RTOS\cmsis_os.c" />
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c" />
@@ -537,7 +536,6 @@
     <ClInclude Include="..\..\..\src\drivers\bsp\inc\user_app.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\buzzer.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\card_m1.h" />
-    <ClInclude Include="..\..\..\src\drivers\device\inc\gprs_m26.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\led.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\meter.h" />
     <ClInclude Include="..\..\..\src\drivers\device\inc\modem.h" />

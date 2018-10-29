@@ -541,9 +541,6 @@
       <Filter>Make files</Filter>
     </None>
     <None Include="chargersdk_flash.lds" />
-    <None Include="..\..\..\src\drivers\device\src\quectel_uc15.c">
-      <Filter>Source files\drivers\device\src</Filter>
-    </None>
     <None Include="..\..\..\doc\readme.md" />
   </ItemGroup>
   <ItemGroup>
@@ -1833,9 +1830,6 @@
     <ClCompile Include="..\..\..\src\cli\cli_log.c">
       <Filter>Source files\cli</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\drivers\device\src\quectel_m26.c">
-      <Filter>Source files\drivers\device\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\net\user\net_ppp.c">
       <Filter>Source files\net\user</Filter>
     </ClCompile>
@@ -1949,6 +1943,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ex.c">
       <Filter>Source files\drivers\hal\STM32F4xx_HAL_Driver\Src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\drivers\device\src\modem_quectel.c">
+      <Filter>Source files\drivers\device\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -68,6 +68,7 @@
 #define defOrderTmpCyc              10000     //充电订单临时文件更新时间
 #define defStoreLogCyc              5000      //无故障时间, 开始存储Log
 #define defStoreOrderCyc            5000      //无订单时间, 开始存储Order
+#define defPPPTimeOut               30000     //PPP建立超时时间
 
 /* 单位：s */
 #define defStartChargeTimeOut_s     20

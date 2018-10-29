@@ -61,6 +61,10 @@ typedef struct
 {
     char strAPN[16 + 1];
     char strATD[32 + 1];
+    char pppAuthUser[32 + 1];
+    char pppAuthPass[32 + 1];
+    uint32_t pppACCM;
+    uint32_t pppAuthProto;
     uint8_t ucContext;
     uint8_t ucTPMode;
     char strICCID[20 + 1];

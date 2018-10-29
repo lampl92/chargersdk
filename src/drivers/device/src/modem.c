@@ -20,8 +20,7 @@
 
 #include "yaffsfs.h"
 
-#include "quectel_m26.h"
-#include "quectel_uc15.h"
+#include "modem_quectel.h"
 
 #include "ppp/ppp_hdlc.h"
 
@@ -69,14 +68,7 @@ DevModem_t *DevModemCreate(void)
 {
     DevModem_t *pMod = NULL;
     
-    if (xSysconf.xModule.use_gprs == 2)
-    {
-        pMod = M26Create();
-    }
-    else if (xSysconf.xModule.use_gprs == 3)
-    {
-        //pMod = UC15Create();
-    }
+    pMod = QuectelCreate();
     
     return pMod;
 }
@@ -209,6 +201,7 @@ void Modem_Poll(DevModem_t *pModem)
             else
             {
                 pModem->keyoff(pModem); 
+                pModem->state = DS_MODEM_ERR;
             }
             break;
         case DS_MODEM_ON:
@@ -236,9 +229,13 @@ void Modem_Poll(DevModem_t *pModem)
             ret = pModem->diag_PPP(pModem);
             if (ret == DR_MODEM_OK)
             {
-                xEventGroupClearBits(xHandleEventTCP, defEventBitPPPClosed);//防止tasknetwork等待超时后发送close后ppp又拨通.导致close事件在ppp_on中错误执行
+                xEventGroupClearBits(xHandleEventTCP, defEventBitPPPClosed); //防止tasknetwork等待超时后发送close后ppp又拨通.导致close事件在ppp_on中错误执行
                 xEventGroupSetBits(xHandleEventTCP, defEventBitPPPDiagOK);
                 pModem->state = DS_MODEM_PPP_On;
+            }
+            else
+            {
+                pModem->state = DS_MODEM_ERR;
             }
             break;
         case DS_MODEM_PPP_On:

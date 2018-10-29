@@ -10,6 +10,7 @@
 #include "ppp/ppp.h"
 #include "ppp/ppp_hdlc.h"
 #include "drivers/uart/stm32f4x9_uart_driver.h"
+#include "modem.h"
 #include "debug.h"
 
 PppContext pppContext;
@@ -66,28 +67,33 @@ error_t net_ppp_init(void *pvnet_dev)
     //初始化ppp uart,在netConfigInterface中会调用init, 因此要先初始化
     netSetUartDriver(interface, &stm32f4x9UartDriver);
 
-    //PPP初始化
-    pppGetDefaultSettings(&pppSettings);
-    pppSettings.interface = interface;
-    pppSettings.accm = 0x00000000;
-    pppSettings.authProtocol = PPP_AUTH_PROTOCOL_PAP | PPP_AUTH_PROTOCOL_CHAP_MD5;
-    error = pppInit(&pppContext, &pppSettings);
-    if (error)
-    {
-        TRACE_ERROR("PPP初始化失败!code = %d\r\n", error);
-        return error;
-    }
-    //初始化网路接口
-    error = netConfigInterface(interface);
-    if (error)
-    {
-        TRACE_ERROR("配置接口 %s 失败!code = %d\r\n", interface->name, error);
-        return error;
-    }
     xEventGroupSetBits(xHandleEventTCP, defEventBitPPPModemInit);
     xBits = xEventGroupWaitBits(xHandleEventTCP, defEventBitPPPDiagOK, pdTRUE, pdTRUE, 30000);
     if ((xBits & defEventBitPPPDiagOK) == defEventBitPPPDiagOK)
     {
+        //PPP初始化
+        pppGetDefaultSettings(&pppSettings);
+        pppSettings.interface = interface;
+        pppSettings.accm = pModem->info.pppACCM;
+        pppSettings.authProtocol = pModem->info.pppAuthProto;
+        error = pppInit(&pppContext, &pppSettings);
+        if (error)
+        {
+            TRACE_ERROR("PPP初始化失败!code = %d\r\n", error);
+            return error;
+        }
+        //初始化网路接口
+        error = netConfigInterface(interface);
+        if (error)
+        {
+            TRACE_ERROR("配置接口 %s 失败!code = %d\r\n", interface->name, error);
+            return error;
+        }
+        if (strlen(pModem->info.pppAuthUser) != 0 || strlen(pModem->info.pppAuthPass) != 0)
+        {
+            pppSetAuthInfo(interface, pModem->info.pppAuthUser, pModem->info.pppAuthPass);
+        }
+        pppSetTimeout(interface, defPPPTimeOut);
         error = pppConnect(interface);
         if (error)
         {
