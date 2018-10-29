@@ -509,7 +509,6 @@ void vTaskEVSERemote(void *pvParameters)
                         if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 20)
                         {
                             pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_FAIL;
-                            pCON->order.statOrder = STATE_ORDER_IDLE;
                         }
                     }
                     break;
@@ -540,7 +539,6 @@ void vTaskEVSERemote(void *pvParameters)
                     else
                     {
                         RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 4);//4， 其他错误
-                        
                     }
                     pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_IDLE;
                     break;
