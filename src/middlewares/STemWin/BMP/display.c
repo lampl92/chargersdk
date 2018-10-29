@@ -31,14 +31,17 @@
 
 int nums_picture = 0;
 
-#define IS_BMP_OK(_fun)   do{                                           \
-                                                            int _macro_errcode = _fun;         \
-                                                            if(_macro_errcode == -1)                  \
-                                                            {                                       \
-                                                                gui_halt();  \
-                                                            }                                       \
-                                                            nums_picture++;\
-                                                        }while(0);
+#define IS_BMP_OK(_fun)            \
+    do                             \
+    {                              \
+        int _macro_errcode = _fun; \
+        if (_macro_errcode == -1)  \
+        {                          \
+            gui_halt();            \
+        }                          \
+        nums_picture++;            \
+    } while (0);
+
 #pragma region MyRegion
 p_inf *HomeImage;
 p_inf *SignalImage0;
@@ -83,7 +86,7 @@ p_inf *DtaFileCheckboxDisable;
 GUI_BITMAP BitmapCheckboxChosen;
 GUI_BITMAP BitmapCheckboxNotChosen;
 GUI_BITMAP BitmapCheckboxDisable;
-GUI_BITMAP BitmapBeijing;			  
+GUI_BITMAP BitmapBeijing;
 #pragma endregion
 
 #pragma region MyRegion
@@ -178,7 +181,7 @@ GUI_BITMAP Bitmapcardinforeadycharging;
 
         //提示信息页图片
         GUI_BITMAP Bitmapchargedoneinfo;
-        GUI_BITMAP Bitmapcharginginfo;				  
+        GUI_BITMAP Bitmapcharginginfo;
 #pragma endregion
 
 #pragma region MyRegion
@@ -220,9 +223,9 @@ GUI_MEMDEV_Handle MemdevSelectGunBack;
 GUI_MEMDEV_Handle MemdevSelectGunAbottonNotpress;
 GUI_MEMDEV_Handle MemdevSelectGunBbottonNotpress;
 GUI_MEMDEV_Handle MemdevSelectGunAbottonPress;
-GUI_MEMDEV_Handle MemdevSelectGunBbottonPress;		
+GUI_MEMDEV_Handle MemdevSelectGunBbottonPress;
 GUI_MEMDEV_Handle MemdevSelectGunAbottonDisable;
-GUI_MEMDEV_Handle MemdevSelectGunBbottonDisable;	
+GUI_MEMDEV_Handle MemdevSelectGunBbottonDisable;
 
 //选模式
 GUI_MEMDEV_Handle Memdevselectpatternback;
@@ -246,7 +249,7 @@ GUI_MEMDEV_Handle Memdevselectpatternkeyboardpress;
 
 //提示信息页图片
 GUI_MEMDEV_Handle Memdevchargedoneinfo;
-GUI_MEMDEV_Handle Memdevcharginginfo;	
+GUI_MEMDEV_Handle Memdevcharginginfo;
 
 //公用图片“退出”
 GUI_MEMDEV_Handle MemdevQuit;
@@ -308,7 +311,7 @@ p_inf * readPicInf(char *pfilepath)
     char fOptResult;//接受文件操作返回值（也就是返回结果）
     p_inf *infReturn;//图片信息结构体，最后作为返回值
     struct yaffs_stat st;
-   
+
     fileDescriptor = yaffs_open(pfilepath, O_RDONLY, 0);
     if (fileDescriptor < 0)
     {
@@ -317,7 +320,7 @@ p_inf * readPicInf(char *pfilepath)
     }
     yaffs_stat(pfilepath, &st);
     infReturn = (p_inf *)malloc(sizeof(p_inf));
-    if (infReturn == NULL) 
+    if (infReturn == NULL)
     {
         goto INFRETURN_MALLOC_ERR;
     }
@@ -327,7 +330,7 @@ p_inf * readPicInf(char *pfilepath)
     {
         goto INFRETURN_PFILESTRING_MALLOC_ERR;
     }
- 
+
     readByteResult = yaffs_read(fileDescriptor, infReturn->pfilestring, infReturn->pfilesize);
     if (readByteResult != infReturn->pfilesize)
     {
@@ -363,11 +366,11 @@ GUI_MEMDEV_Handle createMemdev(char *pfilepath)
     GUI_HMEM hMem;
     GUI_MEMDEV_Handle hMemBMP;
     uint32_t readByteResult;//作为f_read的最后一个参数，接受读到了多少个字节
-    struct yaffs_stat st;    
+    struct yaffs_stat st;
     char *_acBuffer;
     GUI_LOGPALETTE Palette;
     GUI_BITMAP bitmaptmp;
-    
+
     yaffs_stat(pfilepath, &st);
     fileDescriptor = yaffs_open(pfilepath, O_RDONLY, 0);
     if (fileDescriptor < 0)
@@ -379,7 +382,7 @@ GUI_MEMDEV_Handle createMemdev(char *pfilepath)
     hMem = GUI_ALLOC_AllocZero(st.st_size);
     /* 将申请到内存的句柄转换成指针类型 */
     _acBuffer = GUI_ALLOC_h2p(hMem);
- 
+
     readByteResult = yaffs_read(fileDescriptor, _acBuffer, st.st_size);
     if (readByteResult != st.st_size)
     {
@@ -388,10 +391,10 @@ GUI_MEMDEV_Handle createMemdev(char *pfilepath)
     }
 
     GUI_CreateBitmapFromStream565(&bitmaptmp, &Palette, _acBuffer);
-    
+
     XSize = bitmaptmp.XSize;
     YSize = bitmaptmp.YSize;
-    
+
     hMemBMP = GUI_MEMDEV_CreateEx(0, 0, XSize, YSize, GUI_MEMDEV_NOTRANS);
     GUI_MEMDEV_Select(hMemBMP);
     GUI_DrawBitmap(&bitmaptmp, 0, 0);
@@ -404,7 +407,7 @@ GUI_MEMDEV_Handle createMemdev(char *pfilepath)
 
 void createGUI_BITMAP()
 {
-    GUI_LOGPALETTE Palette;	
+    GUI_LOGPALETTE Palette;
     DtaFileCheckboxChosen = readPicInf(pathCheckboxDta);
     DtaFileCheckboxNotChosen = readPicInf(pathCheckboxNotDta);
     DtaFileCheckboxDisable = readPicInf(pathCheckboxDisable);
@@ -424,7 +427,7 @@ void createGUI_BITMAP()
     BitmapSelectGunBack = readDtafile(pathSelectGunBack);
     BitmapSelectGunBbottonNotpress = readDtafile(pathSelectGunBbottonNotpress);
     BitmapSelectGunBbottonPress = readDtafile(pathSelectGunBbottonPress);
-        
+
     //选择充电模式页图片读取
     Bitmapselectpatternback = readDtafile(pathselectpatternback);
     Bitmapselectpatternelectricnumber = readDtafile(pathselectpatternelectricnumber);
@@ -441,9 +444,9 @@ void createGUI_BITMAP()
     Bitmapselectpatternunitdu = readDtafile(pathselectpatternunitdu);
     Bitmapselectpatternunitfen = readDtafile(pathselectpatternunitfen);
     Bitmapselectpatternunitno = readDtafile(pathselectpatternunitno);
-        
+
     BitmapKeyboardback = readDtafile(pathKeyboardback);
-        
+
     BitmapKeyboard0 = readDtafile(pathKeyboard0);
     BitmapKeyboard1 = readDtafile(pathKeyboard1);
     BitmapKeyboard2 = readDtafile(pathKeyboard2);
@@ -473,7 +476,7 @@ void createGUI_BITMAP()
     BitmapKeyboardescpress = readDtafile(pathKeyboardescpress);
     BitmapKeyboardokpress = readDtafile(pathKeyboardokpress);
     BitmapKeyboardpointpress = readDtafile(pathKeyboardpointpress);
-        
+
     //卡信息页图片
     //Bitmapcardinfoarrears = readDtafile(pathcardinfoarrears);
 //    Bitmapcardinfoback = readDtafile(pathcardinfoback);
@@ -481,7 +484,7 @@ void createGUI_BITMAP()
 //    Bitmapcardinfoget = readDtafile(pathcardinfoget);
 //    Bitmapcardinfoplug = readDtafile(pathcardinfoplug);
     //Bitmapcardinfounregister = readDtafile(pathcardinfounregister);
-        
+
     //主页图片读取
     Bitmaphomeback = readDtafile(pathhomeback);
     BitmaphomegunAchargedone = readDtafile(pathhomegunAchargedone);
@@ -495,14 +498,14 @@ void createGUI_BITMAP()
     Bitmaphomegunlookinfo = readDtafile(pathhomegunlookinfo);
     Bitmaphomegunscancode = readDtafile(pathhomegunscancode);
     Bitmaphomegunlookinfopress = readDtafile(pathhomegunlookinfopress);
-    Bitmaphomegunscancodepress = readDtafile(pathhomegunscancodepress);   
+    Bitmaphomegunscancodepress = readDtafile(pathhomegunscancodepress);
     Bitmaphomesignal0 = readDtafile(pathhomesignal0);
     Bitmaphomesignal1 = readDtafile(pathhomesignal1);
     Bitmaphomesignal2 = readDtafile(pathhomesignal2);
     Bitmaphomesignal3 = readDtafile(pathhomesignal3);
-        
+
     Bitmapchargedoneinfo = readDtafile(pathchargedoneinfo);
-    Bitmapcharginginfo = readDtafile(pathcharginginfo);		
+    Bitmapcharginginfo = readDtafile(pathcharginginfo);
 }
 
 //返回-1时出错
@@ -544,13 +547,13 @@ int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
     GUI_QR_GetInfo(qr_hmem, &QR_info_struct);
     qr_coefficient = QR_info_struct.Width;
     GUI_QR_Delete(qr_hmem);
-    
+
     qr_hmem = GUI_QR_Create(pText, 180/qr_coefficient, GUI_QR_ECLEVEL_L, 0);
     GUI_QR_GetInfo(qr_hmem, &QR_info_struct);
     memx =  GUI_MEMDEV_GetXSize(mem);
     memy = GUI_MEMDEV_GetYSize(mem);
     GUI_MEMDEV_Select(mem);
-    //GUI_SetColor(GUI_WHITE);             
+    //GUI_SetColor(GUI_WHITE);
     GUI_SetBkColor(GUI_WHITE);
     //GUI_FillRect((memx - QR_info_struct.Size) / 2, (48 + (200 - QR_info_struct.Size) / 2), QR_info_struct.Size, QR_info_struct.Size);
     int cx0, cy0, cx1, cy1;
@@ -566,7 +569,7 @@ int createQRinMemdev(const char * pText, GUI_MEMDEV_Handle mem)
     qrx = (memx - QR_info_struct.Size) / 2;
     qry = 50+(200 - QR_info_struct.Size) / 2;
     GUI_QR_Draw(qr_hmem, qrx, qry);
-    GUI_MEMDEV_Select(0);  
+    GUI_MEMDEV_Select(0);
     GUI_QR_Delete(qr_hmem);
     return 0;
 }
@@ -583,7 +586,7 @@ void gui_halt(void)
         if (flg == 3)//有文件并且设置过3
         {
             printf_safe("缺少图片，暂停GUI\n");
-            
+
             vTaskSuspend(xHandleTaskEVSERemote);
             vTaskSuspend(xHandleTaskEVSERFID);
             vTaskSuspend(xHandleTaskEVSECharge);
@@ -624,7 +627,7 @@ void gui_halt(void)
 
 int createStartUpMemdev(void)
 {
-    CON_t *pCON;  
+    CON_t *pCON;
     //单枪6个文件,双枪7个
     IS_BMP_OK(Memdevcardinfoback = createMemdev(pathcardinfoback));
     IS_BMP_OK(Memdevcardinfostartup = createMemdev(pathcardinfostartup));
@@ -644,7 +647,7 @@ int createStartUpMemdev(void)
         IS_BMP_OK(MemdevhomegunAfree = createMemdev(pathhomegunAfree));
         pCON = CONGetHandle(0);
         createQRinMemdev(pCON->info.strQRCode, MemdevhomegunAfree);
-    
+
         IS_BMP_OK(MemdevhomegunBfree = createMemdev(pathhomegunBfree));
         pCON = CONGetHandle(1);
         createQRinMemdev(pCON->info.strQRCode, MemdevhomegunBfree);
@@ -653,8 +656,8 @@ int createStartUpMemdev(void)
 }
 
 int creatememdev(void)
-{   
-    CON_t *pCON;   
+{
+    CON_t *pCON;
     GUI_RECT h;
     //主页存储
     if (pEVSE->info.ucTotalCON == 1)
@@ -663,21 +666,21 @@ int creatememdev(void)
         IS_BMP_OK(Memdevhomeback = createMemdev(pathhomebacksingle));
         IS_BMP_OK(MemdevhomegunAchargedone = createMemdev(pathhomegunchargedonesingle));
         IS_BMP_OK(MemdevhomegunAcharging = createMemdev(pathhomegunchargingsingle));
-        IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunerrorsingle)); 
-        
+        IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunerrorsingle));
+
         IS_BMP_OK(Memdevcardinfopleasepluga = createMemdev(pathcardinfopleaseplug));
     }
     else
     {
-        //28个文件    
+        //28个文件
         IS_BMP_OK(Memdevhomeback = createMemdev(pathhomeback));
         IS_BMP_OK(MemdevhomegunAchargedone = createMemdev(pathhomegunAchargedone));
         IS_BMP_OK(MemdevhomegunAcharging = createMemdev(pathhomegunAcharging));
-        IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunAerror);) 
+        IS_BMP_OK(MemdevhomegunAerror = createMemdev(pathhomegunAerror);)
         IS_BMP_OK(MemdevhomegunBchargedone = createMemdev(pathhomegunBchargedone));
         IS_BMP_OK(MemdevhomegunBcharging = createMemdev(pathhomegunBcharging));
         IS_BMP_OK(MemdevhomegunBerror = createMemdev(pathhomegunBerror));
-        
+
          //选枪
         IS_BMP_OK(MemdevSelectGunBack = createMemdev(pathSelectGunBack));
         IS_BMP_OK(MemdevSelectGunAbottonNotpress = createMemdev(pathSelectGunAbottonNotpress));
@@ -686,7 +689,7 @@ int creatememdev(void)
         IS_BMP_OK(MemdevSelectGunBbottonPress = createMemdev(pathSelectGunBbottonPress));
         IS_BMP_OK(MemdevSelectGunAbottonDisable = createMemdev(pathSelectGunAbottonDisable));
         IS_BMP_OK(MemdevSelectGunBbottonDisable = createMemdev(pathSelectGunBbottonDisable));
-    
+
         //选模式
         IS_BMP_OK(Memdevselectpatternelectricnumber = createMemdev(pathselectpatternelectricnumber));
         IS_BMP_OK(Memdevselectpatternfull = createMemdev(pathselectpatternfull));
@@ -702,7 +705,7 @@ int creatememdev(void)
         IS_BMP_OK(Memdevselectpatternunitdu = createMemdev(pathselectpatternunitdu));
         IS_BMP_OK(Memdevselectpatternunitfen = createMemdev(pathselectpatternunitfen));
         IS_BMP_OK(Memdevselectpatternunitno = createMemdev(pathselectpatternunitno));
-        
+
         IS_BMP_OK(Memdevcardinfopleasepluga = createMemdev(pathcardinfopleasepluga));
         IS_BMP_OK(Memdevcardinfopleaseplugb = createMemdev(pathcardinfopleaseplugb));
     }
@@ -713,32 +716,32 @@ int creatememdev(void)
 //    h.y0 = 20;
 //    h.x1 = 70;
 //    h.y1 = 70;
-//    GUI_SetColor(GUI_BLACK);    
+//    GUI_SetColor(GUI_BLACK);
 //    GUI_FillRect(0, 0, 90, 90);
-//    GUI_SetColor(0xAAAAAA);                       
+//    GUI_SetColor(0xAAAAAA);
 //    GUI_FillRoundedRect(20, 20, 70, 70, 3);
 //    GUI_SetColor(GUI_BLACK);
 //    GUI_SetFont(&fontwryhcg36e);
 //    GUI_SetBkColor(0xAAAAAA);
-//    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+//    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER);
 //    GUI_MEMDEV_Select(0);
-//    
+//
 //    MemdevManagerQuitButtonPress = GUI_MEMDEV_CreateEx(0, 0, 90, 90, GUI_MEMDEV_NOTRANS);
 //    GUI_MEMDEV_Select(MemdevManagerQuitButtonPress);
 //    h.x0 = 20;
 //    h.y0 = 20;
 //    h.x1 = 70;
 //    h.y1 = 70;
-//    GUI_SetColor(GUI_BLACK);    
+//    GUI_SetColor(GUI_BLACK);
 //    GUI_FillRect(0,0,90,90);
-//    GUI_SetColor(GUI_RED);                       
+//    GUI_SetColor(GUI_RED);
 //    GUI_FillRoundedRect(20, 20, 70, 70, 3);
 //    GUI_SetColor(GUI_BLACK);
 //    GUI_SetFont(&fontwryhcg30e);
 //    GUI_SetBkColor(GUI_RED);
-//    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER); 
+//    GUI_DispStringInRect("X", &h, GUI_TA_VCENTER | GUI_TA_HCENTER);
 //    GUI_MEMDEV_Select(0);
-    
+
     //下面一共40个文件
     IS_BMP_OK(Memdevhomegunlookinfo = createMemdev(pathhomegunlookinfo));
     IS_BMP_OK(Memdevhomegunscancode = createMemdev(pathhomegunscancode));
@@ -753,19 +756,19 @@ int creatememdev(void)
     IS_BMP_OK(Memdevhomesignal5 = createMemdev(pathhomesignal5));
     IS_BMP_OK(MemdevhomeRfidStateY = createMemdev(pathhomeRfidStateY));
     IS_BMP_OK(MemdevhomeRfidStateN = createMemdev(pathhomeRfidStateN));
-    
-    
+
+
     IS_BMP_OK(Memdevhomesignallogined = createMemdev(pathhomesignalligined));
     IS_BMP_OK(Memdevhomesignalnotlogined = createMemdev(pathhomesignalnotlogined));
-    
+
     IS_BMP_OK(Memdevhomechargedoneinfo = createMemdev(pathhomechargedoneinfo));
     IS_BMP_OK(Memdevhomecharginginfo = createMemdev(pathhomecharginginfo));
     IS_BMP_OK(Memdevhomechargehelp = createMemdev(pathhomechargehelp));
     IS_BMP_OK(Memdevhomechargehelppress = createMemdev(pathhomechargehelppress));
     IS_BMP_OK(Memdevhomehelpinfo = createMemdev(pathhomehelpinfo));
-        
-   
-    
+
+
+
     //提示信息页图片
     //Memdevchargedoneinfo = createMemdev(pathchargedoneinfo));
     //Memdevcharginginfo = createMemdev(pathcharginginfo));
@@ -786,7 +789,7 @@ int creatememdev(void)
     IS_BMP_OK(Memdevcardinforeadystart = createMemdev(pathcardinforeadystart));
     IS_BMP_OK(MemdevcardinfoQuit = createMemdev(pathcardinfoquit));
     IS_BMP_OK(MemdevcardinfoQuitPress = createMemdev(pathcardinfoquitpress));
-    
+
     IS_BMP_OK(MemdevcardinfoEquipmentFailureNoStart = createMemdev(pathcardinfoEquipmentFailureNoStart));
     IS_BMP_OK(MemdevcardinfoPlugOk = createMemdev(pathcardinfoPlugOk));
     IS_BMP_OK(MemdevcardinfoPwdLimted = createMemdev(pathcardinfoPwdLimted));
@@ -802,11 +805,11 @@ int creatememdev(void)
 //    Memdevcardinforeadycharging = createMemdev(pathcardinforeadycharging));
 //    Memdevcardinfoget = createMemdev(pathcardinfoget));
 //    Memdevcardinfoplug = createMemdev(pathcardinfoplug));
-    //Memdevcardinfounregister = createMemdev(pathcardinfounregister); ) 
-    
+    //Memdevcardinfounregister = createMemdev(pathcardinfounregister); )
+
 //密码页
     IS_BMP_OK(MemdevPwdPromptPicture = createMemdev(pathPwdPromptPicture));
     IS_BMP_OK(MemdevPwdInputBox = createMemdev(pathPwdInputBox));
-    
+
     return 1;
 }

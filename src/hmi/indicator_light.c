@@ -8,7 +8,8 @@ typedef enum
     State_blue_keep_on,
     State_red_blue_replace,
     State_red_flicker,
-    State_red_keep_on
+    State_red_keep_on,
+    State_yellow_keep_on
 }LED_State;
 
 LED_State led_state;
@@ -223,10 +224,10 @@ static void signal_error(CON_t *pCON, int i)
 {
 
 #if EVSE_USING_NET
-//	if((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Link) != defSignalEVSE_State_Network_Link)
-//	{
-//		led_state = State_red_blue_replace;
-//	}
+    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
+	{
+		led_state = State_yellow_keep_on;
+	}
 #endif
     if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
     pCON->status.ulSignalFault != 0 ||
@@ -340,6 +341,9 @@ static void ledShow(int j)
             break;
         case State_red_keep_on:
             led_ctrl(i+1, led_red, keep_on);
+            break;
+        case State_yellow_keep_on:
+            led_ctrl(i + 1, led_yellow, keep_on);
             break;
         }
     }

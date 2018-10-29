@@ -5,7 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ppp/ppp.h"
-
+#include "evse_config.h"
+#ifdef EVSE_USING_GUI
+#include "lcd/lcddrv.h"
+#endif
 DR_MODEM_e Quectel_quit(void *pvModem)
 {
     char reply[MAX_COMMAND_LEN + 1] = { 0 };
@@ -368,12 +371,12 @@ DR_MODEM_e Quectel_init(void *pvModem)
     //898600MFSSYYGXXXXXXP
     //89： 国际编号
     //86： 国家编号，86：中国
-    //00： 运营商编号，00：中国移动
+    //00： 运营商编号，00/02/04：中国移动
     //中国联通
     //898601YY8SSXXXXXXXXP
     //89： 国际编号
     //86： 国家编号，86：中国
-    //01： 运营商编号，01：中国联通
+    //01： 运营商编号，01/06/09：中国联通
     //中国电信
     //898603YYXMHHHXXXXXXP
     //89：国际编号
@@ -382,9 +385,13 @@ DR_MODEM_e Quectel_init(void *pvModem)
     switch(pModem->info.strICCID[5])
     {
     case '0'://中国移动
+    case '2'://中国移动
+    case '4'://中国移动
         printf_modem("中国移动\n");
         break;
     case '1'://中国联通
+    case '6'://中国联通
+    case '9'://中国联通
         printf_modem("中国联通\n");
         break;
     case '3'://中国电信
@@ -398,7 +405,11 @@ DR_MODEM_e Quectel_init(void *pvModem)
         switch (pModem->info.strICCID[5])
         {
         case '0'://中国移动
+        case '2'://中国移动
+        case '4'://中国移动
         case '1'://中国联通
+        case '6'://中国联通
+        case '9'://中国联通
             break;
         case '3'://中国电信
             while(1)
@@ -428,8 +439,12 @@ DR_MODEM_e Quectel_init(void *pvModem)
         switch (pModem->info.strICCID[5])
         {
         case '0'://中国移动
+        case '2'://中国移动
+        case '4'://中国移动
             break;
         case '1'://中国联通
+        case '6'://中国联通
+        case '9'://中国联通
             sprintf(pModem->info.strAPN, "UNINET");
             break;
         case '3'://中国电信
@@ -458,8 +473,12 @@ DR_MODEM_e Quectel_init(void *pvModem)
     {
         switch (pModem->info.strICCID[5])
         {
-        case '0': //中国移动
-        case '1': //中国联通
+        case '0'://中国移动
+        case '2'://中国移动
+        case '4'://中国移动
+        case '1'://中国联通
+        case '6'://中国联通
+        case '9'://中国联通
             sprintf(pModem->info.pppAuthUser, "test");
             sprintf(pModem->info.pppAuthPass, "test");
             break;
