@@ -475,7 +475,7 @@ ErrorCode_t RemoteIF_RecvRemoteCtrl(EVSE_t *pEVSE, echProtocol_t *pProto, CON_t 
                 pCON->order.ulLimitTime = 0;
                 pCON->order.dLimitPower = 0;
 #endif
-                pCON->order.ucStartType = 5;//Remote无卡
+                pCON->order.ucStartType = defOrderStartType_Remote; //Remote无卡
                 
                 pCON->appoint.status = 1;
             }

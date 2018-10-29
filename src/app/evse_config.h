@@ -69,6 +69,10 @@
 #define defStoreLogCyc              5000      //无故障时间, 开始存储Log
 #define defStoreOrderCyc            5000      //无订单时间, 开始存储Order
 
+/* 单位：s */
+#define defStartChargeTimeOut_s     20
+#define defStopChargeTimeOut_s      20
+
 #define defMonitorTempPeriod        10  //(℃)
 #define defMonitorVoltPeriod        10  //(V)
 #define defMonitorCurrPeriod        1.1 //(倍)           //when rate is 32 then up is 32 + 3.2 //(A)

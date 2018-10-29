@@ -506,7 +506,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     else
                     {
-                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 20)
+                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > defStartChargeTimeOut_s)
                         {
                             pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_FAIL;
                         }
@@ -520,7 +520,7 @@ void vTaskEVSERemote(void *pvParameters)
                     }
                     else
                     {
-                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > 20)
+                        if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > defStopChargeTimeOut_s)
                         {
                             pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_FAIL;
                         }

@@ -67,7 +67,7 @@ void vTaskEVSEData(void *pvParameters)
                                              pdTRUE, pdFALSE, 0);
             if((uxBitsData & defEventBitOrderTmp) == defEventBitOrderTmp)
             {
-                pCON->order.ucStartType = 4; //有卡
+                pCON->order.ucStartType = defOrderStartType_Card;  //有卡
                 pCON = CONGetHandle(pRFIDDev->order.ucCONID);
                 pCON->order.statOrder = STATE_ORDER_TMP;
             }
@@ -96,6 +96,27 @@ void vTaskEVSEData(void *pvParameters)
                 if((uxBitsCharge & defEventBitCONStartOK) == defEventBitCONStartOK)
                 {
                     pCON->order.statOrder = STATE_ORDER_MAKE;
+                    break;
+                }
+                switch (pCON->order.ucStartType)
+                {
+                case defOrderStartType_Card:
+                    if (time(NULL) - pCON->order.statRemoteProc.card.timestamp > defStartChargeTimeOut_s)
+                    {
+                        pCON->order.statOrder = STATE_ORDER_IDLE;
+                        break;
+                    }
+                    break;
+                case defOrderStartType_Remote:
+                    if (time(NULL) - pCON->order.statRemoteProc.rmt_ctrl.timestamp > defStartChargeTimeOut_s)
+                    {
+                        pCON->order.statOrder = STATE_ORDER_IDLE;
+                        break;
+                    }
+                    break;
+                default:
+                    pCON->order.statOrder = STATE_ORDER_IDLE;
+                    break;
                 }
                 break;
             case STATE_ORDER_MAKE:
