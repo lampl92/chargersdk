@@ -532,13 +532,23 @@ void vTaskEVSERemote(void *pvParameters)
                     break;
                 case REMOTECTRL_FAIL:
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);//bugfix：扫码后启动充电失败未清除认证标志，导致下一辆可充电车直接充电
-                    if ((pCON->status.ulSignalState & defSignalCON_State_Plug) != defSignalCON_State_Plug)
+                    if ((pCON->status.ulSignalState & defSignalCON_State_Working) == defSignalCON_State_Working)
+                    {
+                        RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 1);//1, 已经开机
+                    }
+                    else if ((pCON->status.ulSignalState & defSignalCON_State_Standby) != defSignalCON_State_Standby ||
+                                pRFIDDev->state != STATE_RFID_NOID ||
+                                pCON->order.statOrder != STATE_ORDER_IDLE)
+                    {
+                        RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 2);//2, 不是待机状态
+                    }
+                    else if ((pCON->status.ulSignalState & defSignalCON_State_Plug) != defSignalCON_State_Plug)
                     {
                         RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 3);//3, 枪未连接
                     }
                     else
                     {
-                        RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 4);//4， 其他错误
+                        RemoteIF_SendRemoteCtrl(pEVSE, pechProto, pCON, 0, 4);//4, 其他错误
                     }
                     pCON->order.statRemoteProc.rmt_ctrl.stat = REMOTECTRL_IDLE;
                     break;
