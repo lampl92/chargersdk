@@ -740,8 +740,8 @@ static int makeCmdStatusBodyCtx(void *pEObj, void *pCObj, uint8_t *pucMsgBodyCtx
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[3];
-    //有功功率 无功功率 xx.xxxx
-    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingPower * 10000));
+    //有功功率 无功功率 xx.xxxx(w)
+    ultmpNetSeq.ulVal = htonl((uint32_t)(pCON->status.dChargingPower * 1000 * 10000));
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[0];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[1];
     pucMsgBodyCtx_dec[ulMsgBodyCtxLen_dec++] = ultmpNetSeq.ucVal[2];
