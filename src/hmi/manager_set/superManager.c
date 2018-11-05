@@ -78,7 +78,7 @@ static const GUI_WIDGET_CREATE_INFO _aDialogCreateTest[] = {
     { BUTTON_CreateIndirect, "gunB_end", ID_BUTTON_23, 635, 23, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "restart", ID_BUTTON_24, 35, 119, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "pswdReset", ID_BUTTON_25, 235, 119, 130, 50, 0, 0x0, 0 },
-    { BUTTON_CreateIndirect, "test6", ID_BUTTON_26, 435, 119, 130, 50, 0, 0x0, 0 },
+    { BUTTON_CreateIndirect, "SetWhiteList", ID_BUTTON_26, 435, 119, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "test7", ID_BUTTON_27, 635, 119, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "test8", ID_BUTTON_28, 35, 215, 130, 50, 0, 0x0, 0 },
     { BUTTON_CreateIndirect, "test9", ID_BUTTON_29, 235, 215, 130, 50, 0, 0x0, 0 },

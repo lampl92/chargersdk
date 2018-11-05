@@ -161,6 +161,7 @@ WM_HWIN CreateChargeDone(void);
 WM_HWIN CreateManagerInfoAnalog(WM_HWIN srcHwin);
 WM_HWIN CreateManagerInfoStatus(WM_HWIN srcHwin);
 WM_HWIN CreateManagerLogDate(WM_HWIN srcHwin);
+WM_HWIN CreateManagerWhiteUser();
 //WM_HWIN CreateManagerAlarmLog();
 WM_HWIN CreateManagerSysSet(WM_HWIN srcHwin);
 WM_HWIN CreateManagerConSet(WM_HWIN srcHwin);

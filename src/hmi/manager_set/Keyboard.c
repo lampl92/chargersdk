@@ -1175,6 +1175,52 @@ static void _cbBk(WM_MESSAGE * pMsg)
     }
 }
 
+
+/** @brief 增加黑白名单到文件, 不会覆盖
+ *
+ * @param path uint8_t*
+ * @param strID uint8_t*
+ * @return int
+ *
+ */
+static int BnWAddListCfg(char *path, char *strID)
+{
+    cJSON *jsArrayObj;
+    cJSON *jsArrayItem;
+    ErrorCode_t errcode;
+    uint16_t usTotalList;
+    int i;
+    int res = 1;
+
+    errcode = ERR_NO;
+
+    /*json解析*/
+    jsArrayObj = GetCfgObj(path, &errcode);
+    if (jsArrayObj == NULL || errcode != ERR_NO)
+    {
+        res = 0;
+        return res;
+    }
+    usTotalList = cJSON_GetArraySize(jsArrayObj);
+    for (i = 0; i < usTotalList; i++)
+    {
+        jsArrayItem = cJSON_GetArrayItem(jsArrayObj, i);
+        if (strcmp(jsArrayItem->valuestring, strID) == 0)
+        {
+            res = 1;
+            return res; //要追加的卡号已经存在于配置中
+        }
+    }
+    cJSON_AddItemToArray(jsArrayObj, cJSON_CreateString(strID));
+
+    errcode = SetCfgObj(path, jsArrayObj, 0);
+    if (errcode != ERR_NO)
+    {
+        res = 0;
+    }
+    return res;
+}
+
 /** @brief
  *对输入的值检测合法性，合法进行设置动作，保存;非法返回
  * @param
@@ -1182,7 +1228,6 @@ static void _cbBk(WM_MESSAGE * pMsg)
  * @return
  *  0：数据合法，并且保存成功;1：数据非法;2：保存不成功;
  */
-
 static uint8_t Value_Check()
 {
     uint8_t result_input[128] = {0};
@@ -1647,6 +1692,20 @@ static uint8_t Value_Check()
             break;
         }
         break;
+    case WHITE_LIST:
+        if (strlen(result_input) == 0)
+        {
+            //            BUTTON_SetTextColor(_aahButtonOk, BUTTON_CI_UNPRESSED, GUI_BLACK);
+            //            BUTTON_SetText(_aahButtonOk, "确定");
+            MULTIEDIT_EnableBlink(hMulti, 500, 1);     //开启光标,周期500ms
+            MULTIEDIT_SetInsertMode(hMulti, 1);       //开启插入模式
+            MULTIEDIT_SetFont(hMulti, &SIF24_Font);
+            MULTIEDIT_SetText(hMulti, "");
+            WM_SetFocus(hMulti);
+            return VALUE_ERROR;
+        }
+        BnWAddListCfg(pathBlackList, result_input);
+        break;
     }
     return VALUE_OK_SAV;
 }
@@ -1831,7 +1890,7 @@ void Keypad_GetValue(uint8_t optios, char *varname)
     keypad_dev.ypos = 150;
     keypad_dev.width = 780;
     keypad_dev.height = 320;
-    keypad_dev.padtype = ENGLISH_KEYPAD;				//默认为英文键盘
+    keypad_dev.padtype = NUMBER_KEYPAD; 				//默认为数字键盘
     keypad_dev.signpad_flag = 0;
     keypad_dev.signpad_num = 2;
     keypad_dev.inputlen = 0;

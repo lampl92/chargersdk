@@ -1896,6 +1896,9 @@
     <ClCompile Include="..\..\..\src\drivers\device\src\modem_quectel.c">
       <Filter>Source files\drivers\device\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\hmi\manager_set\whiteUser.c">
+      <Filter>Source files\hmi\manager_set</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
@@ -3399,9 +3402,6 @@
       <Filter>Header files\drivers\hal\STM32F4xx_HAL_Driver\Inc\Legacy</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\device\inc\led.h">
-      <Filter>Header files\drivers\device\inc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\drivers\device\inc\gprs_m26.h">
       <Filter>Header files\drivers\device\inc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\drivers\device\inc\card_m1.h">
