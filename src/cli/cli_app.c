@@ -3,6 +3,7 @@
 #include <time.h>
 #include "sys_types.h"
 #include "tinysh.h"
+#include "PictureProcess.h"
 
 extern void testBnWList(void);
 
@@ -90,6 +91,31 @@ tinysh_cmd_t cli_reboot_cmd =
     "reboot system",
     0,
     cli_reboot_fnt,
+    "<cr>",
+    0,
+    0
+};
+
+void cli_photo_fnt(int argc, char **argv)
+{
+    if (argc == 2)
+    {
+        char name_buf[64] = { 0 };
+        printf_safe("\nplease wait,done i will prompt\n");
+        sprintf(name_buf, "nand/download/%s.bmp", argv[1]);
+        create_bmppicture(name_buf, 0, 0, 800, 480);
+        printf_safe("\n%s ok!\n",name_buf);
+    }
+    
+}
+
+tinysh_cmd_t cli_photo_cmd =
+{
+    0,
+    "photo",
+    "photo create",
+    0,
+    cli_photo_fnt,
     "<cr>",
     0,
     0

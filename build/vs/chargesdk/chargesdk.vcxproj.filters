@@ -1899,6 +1899,12 @@
     <ClCompile Include="..\..\..\src\hmi\manager_set\whiteUser.c">
       <Filter>Source files\hmi\manager_set</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\GUI_BMP_Serialize.c">
+      <Filter>Source files\middlewares\STemWin\BMP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\middlewares\STemWin\BMP\PictureProcess.c">
+      <Filter>Source files\middlewares\STemWin\BMP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\drivers\hal\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_mmc.h">
@@ -4693,6 +4699,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\app\mem_addr.h">
       <Filter>Source files\app</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\middlewares\STemWin\BMP\PictureProcess.h">
+      <Filter>Source files\middlewares\STemWin\BMP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
