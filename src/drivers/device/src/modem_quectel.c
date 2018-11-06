@@ -285,7 +285,7 @@ DR_MODEM_e Quectel_open(void *pvModem)
     DR_MODEM_e ret;
 
     int timeout = 0;
-    int timeoutMax = 10;
+    int timeoutMax = 20;
 
     GPRS_reset;
 
