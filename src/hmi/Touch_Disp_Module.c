@@ -160,7 +160,7 @@ void Signal_Show()//(WM_MESSAGE *pMsg,uint16_t textid3)
 */
 int getSignalIntensity()
 {
-    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
+    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Link) != defSignalEVSE_State_Network_Link)
     {
         return 0;
     }

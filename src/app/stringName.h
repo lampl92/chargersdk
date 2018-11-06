@@ -160,6 +160,10 @@
 #define pathhomesignal3                          "nand/resource/homesignal3.dta"
 #define pathhomesignal4                          "nand/resource/homesignal4.dta"
 #define pathhomesignal5                          "nand/resource/homesignal5.dta"
+#define pathhomeCloudStateY                      "nand/resource/homeCloudStateY.dta"
+#define pathhomeCloudStateN                      "nand/resource/homeCloudStateN.dta"
+#define pathhomeMeterStateY                      "nand/resource/homeMeterStateY.dta"
+#define pathhomeMeterStateN                      "nand/resource/homeMeterStateN.dta"
 #define pathhomeRfidStateY                       "nand/resource/homeRfidStateY.dta"
 #define pathhomeRfidStateN                       "nand/resource/homeRfidStateN.dta"
 

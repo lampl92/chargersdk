@@ -78,11 +78,11 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             extern int nums_picture;
             if (pEVSE->info.ucTotalCON == 1)
             {
-                system_start_percent =(int)(100.0*( nums_picture-5.0)/46.0);
+                system_start_percent =(int)(100.0*( nums_picture-6.0)/49.0);
             }
             else
             {
-                system_start_percent = (int)(100.0*( nums_picture-5.0) / 70.0);
+                system_start_percent = (int)(100.0*( nums_picture-7.0) / 72.0);
             }
             sprintf(temp_buf, "%d%%", system_start_percent);
             TEXT_SetText(WM_GetDialogItem(pMsg->hWin, ID_TEXT_0), temp_buf); 

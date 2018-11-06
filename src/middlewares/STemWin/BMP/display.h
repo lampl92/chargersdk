@@ -184,6 +184,10 @@ extern GUI_MEMDEV_Handle Memdevhomesignal2;
 extern GUI_MEMDEV_Handle Memdevhomesignal3;
 extern GUI_MEMDEV_Handle Memdevhomesignal4;
 extern GUI_MEMDEV_Handle Memdevhomesignal5;
+extern GUI_MEMDEV_Handle MemdevhomeCloudStateY;
+extern GUI_MEMDEV_Handle MemdevhomeCloudStateN;
+extern GUI_MEMDEV_Handle MemdevhomeMeterStateY;
+extern GUI_MEMDEV_Handle MemdevhomeMeterStateN;
 extern GUI_MEMDEV_Handle MemdevhomeRfidStateY;
 extern GUI_MEMDEV_Handle MemdevhomeRfidStateN;
 

@@ -46,8 +46,12 @@
 #define gunstateby  79 //枪B状态图标y位置
 #define signalx  753 //信号位置x
 #define signaly  5 //信号位置y
-#define Rfidx    695//刷卡版状态位置x
-#define Rfidy    1//刷卡版状态位置x
+#define Cloudx   704
+#define Cloudy  0
+#define Meterx  666
+#define Metery  0
+#define Rfidx    628//刷卡版状态位置x
+#define Rfidy    0//刷卡版状态位置x
 #define infoAx 119 //A枪充电信息位置x
 #define infoAy 125 //A枪充电信息位置y
 #define infoBx 462 //B枪充电信息位置x
@@ -75,7 +79,7 @@ static GUNState_E homegunstate[2];
 
 static const GUI_WIDGET_CREATE_INFO _aDialogCreate[] = {
     { WINDOW_CreateIndirect, "Home", ID_WINDOW_0, 0, 0, 800, 480, 0, 0x0, 0 },
-    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 417, 7, 235, 30, TEXT_CF_HCENTER, 0x0, 0 },
+    { TEXT_CreateIndirect, "datetimetext", ID_TEXT_0, 375, 7, 235, 30, TEXT_CF_HCENTER, 0x0, 0 },
     { TEXT_CreateIndirect, "netConnectText", ID_TEXT_10, 700, 45, 90, 30, TEXT_CF_RIGHT | TEXT_CF_TOP, 0x0, 0 },
     { BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 112, 345, 230, 45, 0, 0x0, 0 },
     //{ BUTTON_CreateIndirect, "gun1infobutton", ID_BUTTON_0, 112, 79, 230, 345-79+45, 0, 0x0, 0 },
@@ -164,6 +168,9 @@ static void updategunState(WM_MESSAGE * pMsg)//枪状态刷新函数
 
 static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
 {
+    CON_t *pCON,*pCON1;
+    pCON = CONGetHandle(0);
+    pCON1 = CONGetHandle(1);
     if ((ifconfig.info.ucAdapterSel == 2) || (ifconfig.info.ucAdapterSel == 3) || (ifconfig.info.ucAdapterSel == 4))
     {
         SignalIntensity = getSignalIntensity();
@@ -192,7 +199,7 @@ static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
     }
     else if (ifconfig.info.ucAdapterSel == 1)
     {
-        if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) == defSignalEVSE_State_Network_Logined)
+        if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Link) == defSignalEVSE_State_Network_Link)
         {
             GUI_MEMDEV_WriteAt(Memdevhomesignallogined, signalx, signaly);
         }
@@ -201,6 +208,8 @@ static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
             GUI_MEMDEV_WriteAt(Memdevhomesignalnotlogined, signalx, signaly);
         }
     }
+    
+    
     if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID)
     {
         GUI_MEMDEV_WriteAt(MemdevhomeRfidStateN, Rfidx, Rfidy);
@@ -208,6 +217,26 @@ static void updatesignal(WM_MESSAGE * pMsg)//信号状态刷新函数
     else
     {
         GUI_MEMDEV_WriteAt(MemdevhomeRfidStateY, Rfidx, Rfidy);
+    }
+    
+    
+    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) == defSignalEVSE_State_Network_Logined)
+    {
+        GUI_MEMDEV_WriteAt(MemdevhomeCloudStateY, Cloudx, Cloudy);
+    }
+    else
+    {
+        GUI_MEMDEV_WriteAt(MemdevhomeCloudStateN, Cloudx, Cloudy);
+    }
+    
+    if (((pCON->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter) || \
+        ((pCON1->status.ulSignalFault & defSignalCON_Fault_Meter) == defSignalCON_Fault_Meter))
+    {
+        GUI_MEMDEV_WriteAt(MemdevhomeMeterStateN, Meterx, Metery);
+    }
+    else
+    {
+        GUI_MEMDEV_WriteAt(MemdevhomeMeterStateY, Meterx, Metery);
     }
 }
 
