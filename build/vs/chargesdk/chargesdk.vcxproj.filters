@@ -4705,7 +4705,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin540_CM4_OS_GCC_ot_ARGB.a">
+    <Library Include="..\..\..\src\middlewares\STemWin\Lib\STemWin540_CM4_OS_GCC.a">
       <Filter>Source files\middlewares\STemWin\Lib</Filter>
     </Library>
   </ItemGroup>
