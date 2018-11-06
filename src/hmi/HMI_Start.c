@@ -122,16 +122,16 @@ void MainTask(void)
         WM_MULTIBUF_Enable(1);
         GUI_UC_SetEncodeUTF8();
         
-        createfont();
-        CreateManagerWhiteUser();
+//        createfont();
+//        CreateManagerWhiteUser();
         
-//        createStartUpMemdev();    
-//        startUpWin = CreatestartUpDLG();
-//        xTaskCreate(vTask_read_data, "vTask_read_data", 1024 * 20, NULL, 4, &xHandleTaskReadData);
-//        if (get_bmp_check_tmp() == 3)
-//        {
-//            vTaskSuspend(NULL);
-//        }
+        createStartUpMemdev();    
+        startUpWin = CreatestartUpDLG();
+        xTaskCreate(vTask_read_data, "vTask_read_data", 1024 * 20, NULL, 4, &xHandleTaskReadData);
+        if (get_bmp_check_tmp() == 3)
+        {
+            vTaskSuspend(NULL);
+        }
         
         
 //        memoryfree = GUI_ALLOC_GetNumUsedBlocks();

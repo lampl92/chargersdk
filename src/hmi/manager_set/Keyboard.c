@@ -1704,7 +1704,9 @@ static uint8_t Value_Check()
             WM_SetFocus(hMulti);
             return VALUE_ERROR;
         }
-        BnWAddListCfg(pathBlackList, result_input);
+        BnWAddListCfg(pathWhiteList, result_input);
+        extern WM_HWIN _hWinManagerWhiteUser;
+        WM_SendMessageNoPara(_hWinManagerWhiteUser, MSG_UPDATEWHITELIST);
         break;
     }
     return VALUE_OK_SAV;
@@ -1890,7 +1892,7 @@ void Keypad_GetValue(uint8_t optios, char *varname)
     keypad_dev.ypos = 150;
     keypad_dev.width = 780;
     keypad_dev.height = 320;
-    keypad_dev.padtype = NUMBER_KEYPAD; 				//默认为数字键盘
+    keypad_dev.padtype = ENGLISH_KEYPAD;    				//默认为数字键盘
     keypad_dev.signpad_flag = 0;
     keypad_dev.signpad_num = 2;
     keypad_dev.inputlen = 0;

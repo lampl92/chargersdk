@@ -87,6 +87,8 @@
 #define MSG_JUMPStatePwd                  (GUI_ID_USER + 0x65)
 #define MSG_JUMPUpdateSystem                (GUI_ID_USER + 0x66)
 
+#define MSG_UPDATEWHITELIST (GUI_ID_USER + 0x67)
+
 
 
 

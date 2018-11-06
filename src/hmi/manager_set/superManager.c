@@ -325,7 +325,7 @@ static void _cbDialogTest(WM_MESSAGE * pMsg) {
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-
+                CreateManagerWhiteUser();
                 // USER END
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
@@ -339,7 +339,7 @@ static void _cbDialogTest(WM_MESSAGE * pMsg) {
             switch(NCode) {
             case WM_NOTIFICATION_CLICKED:
                 // USER START (Optionally insert code for reacting on notification message)
-
+                
                 // USER END
                 GUI_EndDialog(pMsg->hWin, 0);
                 break;
