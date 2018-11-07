@@ -78,7 +78,10 @@ u8 bsp_RTC_Init(void)
     RTC_Handler.Instance = RTC;
     RTC_Handler.Init.HourFormat = RTC_HOURFORMAT_24; //RTC设置为24小时格式
     RTC_Handler.Init.AsynchPrediv = 0X7F;         //RTC异步分频系数(1~0X7F)
+#if RTC_USE_LSE
     RTC_Handler.Init.SynchPrediv = 0XFF;          //RTC同步分频系数(0~7FFF)
+#else    RTC_Handler.Init.SynchPrediv = 0x1EC2;
+#endif
     RTC_Handler.Init.OutPut = RTC_OUTPUT_DISABLE;
     RTC_Handler.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
     RTC_Handler.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
@@ -106,14 +109,19 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
 
     __HAL_RCC_PWR_CLK_ENABLE();//使能电源时钟PWR
     HAL_PWR_EnableBkUpAccess();//取消备份区域写保护
-
+#if RTC_USE_LSE
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE; //LSE配置
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
     RCC_OscInitStruct.LSEState = RCC_LSE_ON;                //RTC使用LSE
     HAL_RCC_OscConfig(&RCC_OscInitStruct);
+#endif
 
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC; //外设为RTC
-    PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSE; //RTC时钟源为LSE
+#if RTC_USE_LSE
+    PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;  //RTC时钟源为LSE
+#else
+    PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_HSE_DIV25;  //RTC时钟源为LSE
+#endif
     HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct);
 
     __HAL_RCC_RTC_ENABLE();//RTC时钟使能
