@@ -68,6 +68,7 @@ error_t net_ppp_init(void *pvnet_dev)
     netSetUartDriver(interface, &stm32f4x9UartDriver);
 
     xEventGroupSetBits(xHandleEventTCP, defEventBitPPPModemInit);
+    xEventGroupClearBits(xHandleEventTCP, defEventBitPPPDiagOK);//刚通知初始化怎么可能拨号成功呢, 防止意外流程.
     xBits = xEventGroupWaitBits(xHandleEventTCP, defEventBitPPPDiagOK, pdTRUE, pdTRUE, 30000);
     if ((xBits & defEventBitPPPDiagOK) == defEventBitPPPDiagOK)
     {
