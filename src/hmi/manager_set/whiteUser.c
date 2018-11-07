@@ -90,7 +90,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             LISTVIEW_AddRow(hItem, NULL);
             LISTVIEW_SetItemText(hItem, 0, i, jsArrayItem->valuestring);
         }
-		
+        cJSON_Delete(jsArrayObj);
         break;
     case WM_NOTIFY_PARENT:
         Id    = WM_GetId(pMsg->hWinSrc);
@@ -153,6 +153,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
                     LISTVIEW_AddRow(hItem, NULL);
                     LISTVIEW_SetItemText(hItem, 0, i, jsArrayItem->valuestring);
                 }
+                cJSON_Delete(jsArrayObj);
                 WM_InvalidateWindow(pMsg->hWin);
                 break;
             case WM_NOTIFICATION_RELEASED:
@@ -199,6 +200,7 @@ static void _cbDialog(WM_MESSAGE * pMsg) {
             LISTVIEW_AddRow(hItem, NULL);
             LISTVIEW_SetItemText(hItem, 0, i, jsArrayItem->valuestring);
         }
+        cJSON_Delete(jsArrayObj);
         WM_InvalidateWindow(pMsg->hWin);
         break;
     default:
