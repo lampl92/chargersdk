@@ -224,10 +224,10 @@ static void signal_error(CON_t *pCON, int i)
 {
 
 #if EVSE_USING_NET
-    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
-	{
-		led_state = State_yellow_keep_on;
-	}
+//    if ((pEVSE->status.ulSignalState & defSignalEVSE_State_Network_Logined) != defSignalEVSE_State_Network_Logined)
+//	{
+//		led_state = State_yellow_keep_on;
+//	}
 #endif
     if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
     pCON->status.ulSignalFault != 0 ||
