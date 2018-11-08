@@ -128,7 +128,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
     /*Configure GPIO pins : PC14 PC15 */
     GPIO_InitStruct.Pin =  GPIO_PIN_14 | GPIO_PIN_15;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
     
