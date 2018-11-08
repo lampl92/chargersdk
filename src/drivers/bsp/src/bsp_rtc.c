@@ -6,6 +6,8 @@
 #include "taskcreate.h"
 #include <time.h>
 
+#define RTC_USE_LSE 0
+
 RTC_HandleTypeDef RTC_Handler;  //RTC句柄
 time_t time_dat;
 
@@ -80,7 +82,8 @@ u8 bsp_RTC_Init(void)
     RTC_Handler.Init.AsynchPrediv = 0X7F;         //RTC异步分频系数(1~0X7F)
 #if RTC_USE_LSE
     RTC_Handler.Init.SynchPrediv = 0XFF;          //RTC同步分频系数(0~7FFF)
-#else    RTC_Handler.Init.SynchPrediv = 0x1EC2;
+#else
+    RTC_Handler.Init.SynchPrediv = 0x1EC0;
 #endif
     RTC_Handler.Init.OutPut = RTC_OUTPUT_DISABLE;
     RTC_Handler.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
@@ -110,10 +113,26 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *hrtc)
     __HAL_RCC_PWR_CLK_ENABLE();//使能电源时钟PWR
     HAL_PWR_EnableBkUpAccess();//取消备份区域写保护
 #if RTC_USE_LSE
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE; //LSE配置
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE; //配置LSE
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
     RCC_OscInitStruct.LSEState = RCC_LSE_ON;                //RTC使用LSE
     HAL_RCC_OscConfig(&RCC_OscInitStruct);
+#else
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE;  //配置LSE
+    RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+    RCC_OscInitStruct.LSEState = RCC_LSE_OFF;                 //关闭LSE
+    HAL_RCC_OscConfig(&RCC_OscInitStruct);
+    
+    GPIO_InitTypeDef GPIO_InitStruct;
+    __HAL_RCC_GPIOC_CLK_ENABLE();
+    /*Configure GPIO pins : PC14 PC15 */
+    GPIO_InitStruct.Pin =  GPIO_PIN_14 | GPIO_PIN_15;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+    
+    HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14 | GPIO_PIN_15, GPIO_PIN_RESET);
 #endif
 
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC; //外设为RTC
