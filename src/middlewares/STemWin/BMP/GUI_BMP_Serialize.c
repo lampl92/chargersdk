@@ -100,7 +100,7 @@ void myGUI_BMP_SerializeEx(GUI_CALLBACK_VOID_U8_P *pfSerialize, int x0, int y0, 
     {
         U32 Color;
         Color = GUI_Index2Color(i);
-        Color = ((Color >> 16) & 255) | (Color & 0xff00) | ((Color & 0xff) << 16);
+//        Color = ((Color >> 16) & 255) | (Color & 0xff00) | ((Color & 0xff) << 16);
         _SendU32(pfSerialize, Color, p);
     }
     /* Write pixels */
@@ -116,9 +116,9 @@ void myGUI_BMP_SerializeEx(GUI_CALLBACK_VOID_U8_P *pfSerialize, int x0, int y0, 
             {
                 U16 Color16 = 0;
                 U32 Color = LCD_GetPixelColor(x0 + x, y0 + y);
-                int b = ((Color >> 16) * 31 + 127) / 255;
+                int r = ((Color >> 16) * 31 + 127) / 255;
                 int g = (((Color >> 8) & 255) * 31 + 127) / 255;
-                int r = ((Color & 255) * 31 + 127) / 255;
+                int b = ((Color & 255) * 31 + 127) / 255;
 
                 Color16 = (r << 10) | (g << 5) | b; /* 16 bpp Bitmaps in windows are 555: rrrrrgggggbbbbb */
                 _SendU16(pfSerialize, Color16, p);
