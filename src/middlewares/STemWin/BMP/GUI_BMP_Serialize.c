@@ -120,40 +120,8 @@ void myGUI_BMP_SerializeEx(GUI_CALLBACK_VOID_U8_P *pfSerialize, int x0, int y0, 
                 int g = (((Color >> 8) & 255) * 31 + 127) / 255;
                 int r = ((Color & 255) * 31 + 127) / 255;
 
-                //尝试后16位
-                //低字节的前5位用来表示B(BLUE)
-                //低字节的后三位+高字节的前三位用来表示G(Green)
-                //高字节的后5位用来表示R(RED)
-                //         int b = Color & 0xF8;
-                //          int g = (Color & 0x07) | ((Color & 0xE000)>>10);
-                //          int r = (Color & 0x1F00) >> 8;
-
-                //          void CPixelRGB565::SideEffectColorChanged(void)
-                //          {
-                //              CBasePixel::SideEffectColorChanged();
-                //
-                //              const unsigned int bits565[] = { 0xF800, 0x07E0, 0x001F };  // RGB
-                //              // Caculate the mask bits
-                //              unsigned int  wMask, wTemp;
-                //              wTemp  = unsigned int(m_TargetB / 256. * 32);
-                //              wMask  = wTemp & bits565[2];
-                //              wTemp  = unsigned int(m_TargetG / 256. * 64);
-                //              wTemp  = wTemp << 5;
-                //              wMask += wTemp & bits565[1];
-                //              wTemp  = unsigned int(m_TargetR / 256. * 32);
-                //              wTemp  = wTemp << 11;
-                //              wMask += wTemp & bits565[0];
-                //              // Store the high byte and low byte seperately
-                //              m_Mask[0] = wMask & 0xff;
-                //              wMask     = wMask >> 8;
-                //              m_Mask[1] = wMask & 0xff;
-                //          }
-                //0xF800, 0x07E0, 0x001F
-
                 Color16 = (r << 10) | (g << 5) | b; /* 16 bpp Bitmaps in windows are 555: rrrrrgggggbbbbb */
-                //Color16 = ((Color >> 19 & 31) << 11) | ((Color >> 10 & 63) << 5) | (Color >> 3 & 31);
                 _SendU16(pfSerialize, Color16, p);
-                //_SendU32(pfSerialize, Color, p);
             }
         }
         /* Align pointer to next U32 */
