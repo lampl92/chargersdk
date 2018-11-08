@@ -1911,7 +1911,7 @@ void Keypad_GetValue(uint8_t optios, char *varname)
     FRAMEWIN_SetDefaultTextAlign(GUI_TA_HCENTER);
 
     	//创建FRAME窗口
-    hFrame = FRAMEWIN_CreateEx(0, 0, 800, 480, WM_HBKWIN, WM_CF_SHOW, 0, 0, "北京动力源科技股份有限公司", _cbFrame);
+    hFrame = FRAMEWIN_CreateEx(0, 0, 800, 480, WM_HBKWIN, WM_CF_SHOW, 0, 0, "充电桩管理", _cbFrame);
     FRAMEWIN_SetTextColor(hFrame, GUI_RED);
     FRAMEWIN_SetFont(hFrame, &SIF24_Font);
     FRAMEWIN_SetClientColor(hFrame, GUI_WHITE);
@@ -2005,7 +2005,7 @@ void Keypad_GetValueTest(uint8_t optios, uint8_t id, WM_HWIN hwin, WM_HWIN _hbkW
     FRAMEWIN_SetDefaultTextAlign(GUI_TA_HCENTER);
 
     	//创建FRAME窗口
-    hFrame = FRAMEWIN_CreateEx(0, 0, 800, 480, WM_HBKWIN, WM_CF_SHOW, 0, 0, "北京动力源科技股份有限公司", _cbFrame);
+    hFrame = FRAMEWIN_CreateEx(0, 0, 800, 480, WM_HBKWIN, WM_CF_SHOW, 0, 0, "充电桩管理", _cbFrame);
     FRAMEWIN_SetTextColor(hFrame, GUI_RED);
     FRAMEWIN_SetFont(hFrame, &SIF24_Font);
     FRAMEWIN_SetClientColor(hFrame, GUI_WHITE);
