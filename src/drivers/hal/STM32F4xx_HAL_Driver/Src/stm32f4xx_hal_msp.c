@@ -282,8 +282,9 @@ void MX_GPIO_Init(void)
     __HAL_RCC_GPIOG_CLK_ENABLE();
     __HAL_RCC_GPIOH_CLK_ENABLE();
     __HAL_RCC_GPIOI_CLK_ENABLE();
-    /*Configure GPIO pins : PC14 PC0 PC3 PC9 */
-    GPIO_InitStruct.Pin =  GPIO_PIN_0 | GPIO_PIN_3 | GPIO_PIN_9 | GPIO_PIN_14;
+    
+    /*Configure GPIO pins : PC0 PC3 */
+    GPIO_InitStruct.Pin =  GPIO_PIN_0 | GPIO_PIN_3;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
