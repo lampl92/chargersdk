@@ -290,9 +290,9 @@ static void netStateFTPServer(net_device_t *net_dev)
 static void netStateErr(net_device_t *net_dev)
 {
     inc_reconnect_time();
-    vTaskDelay(delay_ms);
     net_dev->close_hard(net_dev);
     netChangeState(net_dev, NET_STATE_INIT);
+    vTaskDelay(delay_ms);
 }
 
 void ifconfig_change_for_ftp(void)
