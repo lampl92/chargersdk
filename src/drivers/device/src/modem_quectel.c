@@ -522,7 +522,7 @@ DR_MODEM_e Quectel_init(void *pvModem)
         }
         modem_delayms(1000);
     } while (1);
-#if 0
+#if 1
     timeout = 0;
     do
     {
@@ -530,7 +530,7 @@ DR_MODEM_e Quectel_init(void *pvModem)
         if (timeout > timeoutMax)
         {
             timeout = 0;
-            return DR_MODEM_TIMEOUT;
+            return DR_MODEM_OK;//DR_MODEM_TIMEOUT
         }
         ret = Quectel_CREG(pModem);
         if (ret == DR_MODEM_OK)
@@ -552,7 +552,7 @@ DR_MODEM_e Quectel_init(void *pvModem)
         if (timeout > timeoutMax)
         {
             timeout = 0;
-            return DR_MODEM_TIMEOUT;
+            return DR_MODEM_OK;//DR_MODEM_TIMEOUT
         }
         ret = Quectel_CGREG(pModem);
         if (ret == DR_MODEM_OK)
