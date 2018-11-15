@@ -67,6 +67,7 @@ void TP_Write_Byte(uint8_t num)
         TCLK = 0;
         bsp_DelayUS(1);
         TCLK = 1;   //上升沿有效
+        bsp_DelayUS(1);
     }
 }
 //SPI读数据
@@ -79,6 +80,7 @@ uint16_t TP_Read_AD(uint8_t CMD)
     uint16_t Num = 0;
     TCLK = 0;   //先拉低时钟
     TDIN = 0;   //拉低数据线
+    bsp_DelayUS(1);
     TCS = 0;    //选中触摸屏IC
     TP_Write_Byte(CMD);//发送命令字
     bsp_DelayUS(100);//ADS7846的转换时间最长为6us
@@ -90,9 +92,10 @@ uint16_t TP_Read_AD(uint8_t CMD)
     for(count = 0; count < 16; count++) //读出16位数据,只有高12位有效
     {
         Num <<= 1;
-        TCLK = 0; //下降沿有效
+        TCLK = 0; 
         bsp_DelayUS(1);
         TCLK = 1;
+        bsp_DelayUS(1);
         if(DOUT)
         {
             Num++;
@@ -100,6 +103,7 @@ uint16_t TP_Read_AD(uint8_t CMD)
     }
     Num >>= 4;  //只有高12位有效.
     TCS = 1;    //释放片选
+    vTaskDelay(1);
     return(Num);
 }
 //读取一个坐标值(x或者y)
