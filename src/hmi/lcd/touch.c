@@ -102,8 +102,8 @@ uint16_t TP_Read_AD(uint8_t CMD)
         }
     }
     Num >>= 4;  //只有高12位有效.
+    bsp_DelayUS(5);
     TCS = 1;    //释放片选
-    vTaskDelay(1);
     return(Num);
 }
 //读取一个坐标值(x或者y)
