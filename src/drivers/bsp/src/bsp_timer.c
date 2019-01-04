@@ -5,7 +5,21 @@
 
 extern void Error_Handler(void);
 extern void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-uint16_t ref_timer;
+static uint8_t pwm_samp_timer, pwm_samp_flag, pwm_samp_timer_cp2, pwm_samp_flag_cp2;
+static uint16_t flat_pwm_change, flat_pwm_change_cp2;
+uint16_t timer_relay_ms;
+extern uint16_t pwm_r_1, pwm_g_1, pwm_b_1, pwm_r_2, pwm_g_2, pwm_b_2;
+TIM_HandleTypeDef TIM3_Handler;
+TIM_HandleTypeDef TIM3_Handler;
+TIM_HandleTypeDef TIM2_Handler;
+TIM_OC_InitTypeDef TIM2_CH1Handler;
+TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
+TIM_HandleTypeDef htim5;
+TIM_HandleTypeDef htim6;
+TIM_HandleTypeDef htim8;
 void MX_TIM2_Init(void)
 {
     TIM_ClockConfigTypeDef sClockSourceConfig;
@@ -41,7 +55,7 @@ void MX_TIM2_Init(void)
     }
 
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
-    sConfigOC.Pulse = 1000;
+    sConfigOC.Pulse = 1;
     sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
     sConfigOC.OCFastMode = TIM_OCFAST_ENABLE;
     if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
@@ -119,8 +133,8 @@ void MX_TIM4_Init(void)
     }
 
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
-    sConfigOC.Pulse = 500;
-    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+    sConfigOC.Pulse = 1;
+    sConfigOC.OCPolarity = TIM_OCPOLARITY_LOW;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
     if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
     {
@@ -201,6 +215,7 @@ void MX_TIM8_Init(void)
 }
 void TIM_SetTIM2Compare1(unsigned int compare)
 {
+    static uint16_t pwm;
     if (pwm == compare)
     {
         ;
@@ -215,19 +230,21 @@ void TIM_SetTIM2Compare1(unsigned int compare)
 
 void TIM_SetTIM4Compare1(unsigned int compare)
 {
-    if (pwm == compare)
+    static uint16_t pwm4;
+    if (pwm4 == compare)
     {
         ;
     }
     else
     {
-        flat_pwm_change = 1;
-        TIM4->CCR1 = compare;
-        pwm = compare;
+        flat_pwm_change_cp2 = 1;
+        TIM4->CCR2 = compare;
+        pwm4 = compare;
     }
 }
 void TIM_SetTIM3Compare1(unsigned int compare)
 {
+    static uint16_t pwm_relay2;
     if (pwm_relay2 == compare)
     {
         ;
@@ -240,6 +257,7 @@ void TIM_SetTIM3Compare1(unsigned int compare)
 }
 void TIM_SetTIM8Compare1(unsigned int compare)
 {
+    static uint16_t pwm_relay1;
     if (pwm_relay1 == compare)
     {
         ;
@@ -252,63 +270,53 @@ void TIM_SetTIM8Compare1(unsigned int compare)
 }
 void TIM2_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM2_IRQn 0 */
-
-  /* USER CODE END TIM2_IRQn 0 */
     HAL_TIM_IRQHandler(&htim2);
     pwm_samp_timer = 0;
     pwm_samp_flag = 1;
-
-    /* USER CODE BEGIN TIM2_IRQn 1 */
-
-      /* USER CODE END TIM2_IRQn 1 */
 }
-//void TIM3_IRQHandler (void)//0.1ms
-//{
-  //yy_test=get_va();
- // RS485_Receive_Data(&RS485_RX_MODBUS,&RS485_RX_MODBUS_CNT);
 
- // HAL_TIM_IRQHandler(&htim6);
-
-//}
 void TIM4_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM4_IRQn 0 */
-
-  /* USER CODE END TIM4_IRQn 0 */
     HAL_TIM_IRQHandler(&htim4);
-    /* USER CODE BEGIN TIM4_IRQn 1 */
-
-      /* USER CODE END TIM4_IRQn 1 */
+    pwm_samp_timer_cp2 = 0;
+    pwm_samp_flag_cp2 = 1;
 }
-void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
+void TIM5_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM5_IRQn 0 */
-  /* USER CODE END TIM5_IRQn 0 */
+    static uint16_t delay_breath;
+
     HAL_TIM_IRQHandler(&htim5);
-    delay_ms++;
-    pwm_ms++;
     pwm_r_1++;
     pwm_r_2++;
     pwm_g_1++;
     pwm_g_2++;
     pwm_b_1++;
     pwm_b_2++;
-    timer_ms++;
     delay_breath++;
     pwm_samp_timer++;
-    // ref_timer = Get_State_relay();
+    pwm_samp_timer_cp2++;
     if (flat_pwm_change == 1)
     {
         pwm_samp_timer = 0;
         flat_pwm_change = 0;
     }
-    if ((pwm_samp_flag == 1)&&(pwm_samp_timer >= 3))
+    if (flat_pwm_change_cp2 == 1)
+    {
+        pwm_samp_timer_cp2 = 0;
+        flat_pwm_change_cp2 = 0;
+    }
+    if ((pwm_samp_flag == 1) && (pwm_samp_timer >= 2))
     {
         RUN_ON;
-        get_CP1();
+        calc_CP1();
         pwm_samp_timer = 0;
         pwm_samp_flag = 0;
+    }
+    if ((pwm_samp_flag_cp2 == 1) && (pwm_samp_timer_cp2 >= 2))
+    {
+        calc_CP2();
+        pwm_samp_timer_cp2 = 0;
+        pwm_samp_flag_cp2 = 0;
         RUN_OFF;
     }
     if (delay_breath >= 200)
@@ -329,18 +337,7 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
         {
             flag_pwm_out_n = 1;
         }
-//Open_gun_1();
         timer_relay_ms = 0;
-    }
-    if (timer_ms >= 1000)
-    {
-        timer_ms = 0;
-        timer_s++;
-    }
-    if (timer_s >= 60)
-    {
-        timer_s = 0;
-        timer_min++;
     }
     if (flag_pwm_out_n == 1)
     {
@@ -349,10 +346,6 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
     if (flag_pwm_out_l == 1)
     {
         Power_out_l_pwm_ctrl();
-    }
-    if (pwm_ms >= 200)
-    {
-        pwm_ms = 0;
     }
     if (pwm_r_1 >= 100)
     {
@@ -378,11 +371,7 @@ void TIM5_IRQHandler(void)//100¦ÌS½øÈëÒ»´Î
     {
         pwm_b_2 = 0;
     }
-#ifndef EVSE_DEBUG
+#ifndef EVSE_DEVBOARD
     led_output();
 #endif
-  //get_samp_point();
-  /* USER CODE BEGIN TIM5_IRQn 1 */
-
-  /* USER CODE END TIM5_IRQn 1 */
 }

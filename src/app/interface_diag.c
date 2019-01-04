@@ -9,24 +9,6 @@
 #include "evse_config.h"
 #include "evse_globals.h"
 
-
-#define defDiag_EVSE_Temp_War   (defSignalEVSE_Alarm_AC_A_Temp_War | \
-                                 defSignalEVSE_Alarm_AC_B_Temp_War | \
-                                 defSignalEVSE_Alarm_AC_C_Temp_War | \
-                                 defSignalEVSE_Alarm_AC_N_Temp_War )
-#define defDiag_EVSE_Temp_Cri   (defSignalEVSE_Alarm_AC_A_Temp_Cri | \
-                                 defSignalEVSE_Alarm_AC_B_Temp_Cri | \
-                                 defSignalEVSE_Alarm_AC_C_Temp_Cri | \
-                                 defSignalEVSE_Alarm_AC_N_Temp_Cri )
-#define defDiag_CON_Temp_War   ( defSignalCON_Alarm_AC_A_Temp_War | \
-                                 defSignalCON_Alarm_AC_B_Temp_War | \
-                                 defSignalCON_Alarm_AC_C_Temp_War | \
-                                 defSignalCON_Alarm_AC_N_Temp_War )
-#define defDiag_CON_Temp_Cri   ( defSignalCON_Alarm_AC_A_Temp_Cri | \
-                                 defSignalCON_Alarm_AC_B_Temp_Cri | \
-                                 defSignalCON_Alarm_AC_C_Temp_Cri | \
-                                 defSignalCON_Alarm_AC_N_Temp_Cri )
-
 typedef enum
 {
     VOLT_OK,
@@ -38,7 +20,12 @@ typedef enum
     CURR_OK,
     CURR_UPPER,
 } HandleCurr_t;
-
+typedef enum
+{
+    FREQ_OK,
+    FREQ_LOWER,
+    FREQ_UPPER
+} HandleFreq_t;
 /** @brief 比较温度
  *
  * @param temp double   获取到的温度
@@ -119,6 +106,23 @@ static HandleCurr_t HandleCurr(double curr, double ratecurr)
     return currstat;
 }
 
+static HandleFreq_t HandleFreq(double freq, double lower, double upper)
+{
+    HandleFreq_t freqstat;
+    if (freq >= lower && freq <= upper)
+    {
+        freqstat = FREQ_OK;
+    }
+    else if (freq > upper)
+    {
+        freqstat = FREQ_UPPER;
+    }
+    else if (freq < lower)
+    {
+        freqstat = FREQ_LOWER;
+    }
+    return freqstat;
+}
 /** @brief 电压判断 北汽需求 P10 f)过压保护 g)欠压保护
  *
  * @param pCON CON_t*
@@ -183,7 +187,11 @@ void DiagVoltageError(CON_t *pCON)
             xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             if(pCON->state == STATE_CON_CHARGING)
             {
-                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "DiagVolt");
+                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "DiagVoltSetRelayOff");
+                if (pCON->info.ucSocketType == defSocketTypeB)
+                {
+                    THROW_ERROR(id, pCON->status.SetBTypeSocketLock(pCON, SWITCH_OFF), ERR_LEVEL_CRITICAL, "DiagVoltSetLockOff");
+                }
             }
             /********************************/
             /** @todo (rgw#1#): 向系统告警 */
@@ -243,6 +251,7 @@ void DiagVoltageError(CON_t *pCON)
         case VOLT_LOWER:
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_VoltUp;
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_VoltLow;
+            break;
         case VOLT_UPPER:
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_VoltUp;
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_VoltLow;
@@ -261,10 +270,14 @@ void DiagVoltageError(CON_t *pCON)
             xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONVoltOK);
             if(pCON->state == STATE_CON_CHARGING)
             {
-                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "DiagVolt");
+                THROW_ERROR(id, pCON->status.SetRelay(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "DiagVoltSetRelayOn");
+                if (pCON->info.ucSocketType == defSocketTypeB)
+                {
+                    THROW_ERROR(id, pCON->status.SetBTypeSocketLock(pCON, SWITCH_ON), ERR_LEVEL_CRITICAL, "DiagVoltSetLockOn");
+                }
             }
             /********************************/
-            /** @todo (rgw#1#): 系统恢复   */
+            /** 系统恢复   */
             /********************************/
             pCON->status.xVoltStat = STATE_VOLT_OK;
         }
@@ -347,6 +360,7 @@ void DiagCurrentError(CON_t *pCON)
                 xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONCurrOK);
                 break;
             case CURR_UPPER:
+                pCON->status.SetCPSwitch(pCON, SWITCH_ON);//过流可能是由于修改的额定电流，先按照修改的额定电流设定一次CP
                 pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrUp_Dummy",
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,
@@ -369,7 +383,6 @@ void DiagCurrentError(CON_t *pCON)
             if((uxBitsException & defEventBitExceptionCurrTimer) == defEventBitExceptionCurrTimer)
             {
                 xTimerDelete(pCON->status.xHandleTimerCurr, 100);
-                THROW_ERROR(id, pCON->status.SetLoadPercent(pCON, 50), ERR_LEVEL_WARNING, "DiagCurr SetLoad");
                 pCON->status.xHandleTimerCurr = xTimerCreate("TimerCON_CurrUp_Fix",
                                                   defDiagCurrDummyCyc,
                                                   pdFALSE,
@@ -435,7 +448,8 @@ void DiagCurrentError(CON_t *pCON)
             uxBitsCharge = xEventGroupGetBits(pCON->status.xHandleEventCharge);
             if((uxBitsCharge & defEventBitCONPlugOK) != defEventBitCONPlugOK)
             {
-                pCON->status.xCurrStat = STATE_CURR_INIT;
+                if (currstat != CURR_UPPER)
+                    pCON->status.xCurrStat = STATE_CURR_INIT;
             }
             break;
         default:
@@ -449,24 +463,20 @@ void DiagCurrentError(CON_t *pCON)
  * @return void
  *
  */
-void DiagTempError(CON_t *pCON)
+void DiagEVSETempError(EVSE_t *pEVSE)
 {
+    CON_t *pCON;
+    int i;
     ErrorLevel_t templevel;
     ErrorLevel_t templevel_EVSE_A;
     ErrorLevel_t templevel_EVSE_B;
     ErrorLevel_t templevel_EVSE_C;
     ErrorLevel_t templevel_EVSE_N;
-    ErrorLevel_t templevel_CON_A;
-    ErrorLevel_t templevel_CON_B;
-    ErrorLevel_t templevel_CON_C;
-    ErrorLevel_t templevel_CON_N;
-    int id;
-    id = pCON->info.ucCONID;
 
     {
         templevel_EVSE_A = HandleTemp(pEVSE->status.dAC_A_Temp_IN,
-            pCON->info.dACTempLowerLimits,
-            pCON->info.dACTempUpperLimits);
+            pEVSE->info.dACTempLowerLimits,
+            pEVSE->info.dACTempUpperLimits);
         switch (templevel_EVSE_A)
         {
         case ERR_LEVEL_OK:
@@ -487,8 +497,8 @@ void DiagTempError(CON_t *pCON)
     }
     {
         templevel_EVSE_B = HandleTemp(pEVSE->status.dAC_B_Temp_IN,
-            pCON->info.dACTempLowerLimits,
-            pCON->info.dACTempUpperLimits);
+            pEVSE->info.dACTempLowerLimits,
+            pEVSE->info.dACTempUpperLimits);
         switch (templevel_EVSE_B)
         {
         case ERR_LEVEL_OK:
@@ -509,8 +519,8 @@ void DiagTempError(CON_t *pCON)
     }
     {
         templevel_EVSE_C = HandleTemp(pEVSE->status.dAC_C_Temp_IN,
-            pCON->info.dACTempLowerLimits,
-            pCON->info.dACTempUpperLimits);
+            pEVSE->info.dACTempLowerLimits,
+            pEVSE->info.dACTempUpperLimits);
         switch (templevel_EVSE_C)
         {
         case ERR_LEVEL_OK:
@@ -531,8 +541,8 @@ void DiagTempError(CON_t *pCON)
     }
     {
         templevel_EVSE_N = HandleTemp(pEVSE->status.dAC_N_Temp_IN,
-            pCON->info.dACTempLowerLimits,
-            pCON->info.dACTempUpperLimits);
+            pEVSE->info.dACTempLowerLimits,
+            pEVSE->info.dACTempUpperLimits);
         switch (templevel_EVSE_N)
         {
         case ERR_LEVEL_OK:
@@ -551,6 +561,37 @@ void DiagTempError(CON_t *pCON)
             break;
         }
     }
+    for(i = 0; i < pEVSE->info.ucTotalCON; i++)
+    {  
+        pCON = CONGetHandle(i);
+        if ((pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_Cri) != 0)
+        {   //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitEVSETempOK);
+        }
+        else if ((pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_War) != 0)
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitEVSETempOK);
+        }
+        else
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitEVSETempOK);
+        }
+    }
+}
+/** @brief B型插座温度与进线温度检测
+ *
+ * @param pCON CON_t*
+ * @return void
+ *
+ */
+void DiagCONTempError(CON_t *pCON)
+{
+    ErrorLevel_t templevel;
+    ErrorLevel_t templevel_CON_A;
+    ErrorLevel_t templevel_CON_B;
+    ErrorLevel_t templevel_CON_C;
+    ErrorLevel_t templevel_CON_N;
+
     {
         templevel_CON_A = HandleTemp(pCON->status.dACLTemp,
             pCON->info.dACTempLowerLimits,
@@ -601,28 +642,6 @@ void DiagTempError(CON_t *pCON)
             break;
         }
     }
-    
-    {  
-        if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_Cri) != 0 ||
-            (pCON->status.ulSignalAlarm & defDiag_CON_Temp_Cri) != 0)
-        {
-            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-            ThrowErrorCode(id, ERR_CON_ACTEMP_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
-        }
-        else if ((pEVSE->status.ulSignalAlarm & defDiag_EVSE_Temp_War) != 0 ||
-          (pCON->status.ulSignalAlarm & defDiag_CON_Temp_War) != 0)
-        {
-            pCON->status.SetLoadPercent(pCON, 50);
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        }
-        else
-        {
-            pCON->status.SetLoadPercent(pCON, 100);
-            xEventGroupClearBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
-        }
-    }
 
     if(pCON->info.ucSocketType == defSocketTypeB)
     {
@@ -633,24 +652,16 @@ void DiagTempError(CON_t *pCON)
         switch(templevel)
         {
         case ERR_LEVEL_OK:
-            pCON->status.SetLoadPercent(pCON, 100);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_War;
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
             break;
         case ERR_LEVEL_WARNING:
-            pCON->status.SetLoadPercent(pCON, 50);
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp1_War;
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_Cri;
             break;
         case ERR_LEVEL_CRITICAL:
-            //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
-            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp1_War;
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp1_Cri;
-            ThrowErrorCode(id, ERR_CON_BTEMP1_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
             break;
         default:
             break;
@@ -664,24 +675,16 @@ void DiagTempError(CON_t *pCON)
         switch(templevel)
         {
         case ERR_LEVEL_OK:
-            pCON->status.SetLoadPercent(pCON, 100);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
             break;
         case ERR_LEVEL_WARNING:
-            pCON->status.SetLoadPercent(pCON, 50);
-            xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempW);
-            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp2_War;
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
             break;
         case ERR_LEVEL_CRITICAL:
-            //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
-            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONSocketTempOK);
             pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
             pCON->status.ulSignalAlarm |= defSignalCON_Alarm_SocketTemp2_Cri;
-            ThrowErrorCode(id, ERR_CON_BTEMP2_DECT_FAULT, ERR_LEVEL_CRITICAL, "DiagTemp");
             break;
         default:
             break;
@@ -696,6 +699,21 @@ void DiagTempError(CON_t *pCON)
         pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_War;
         pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_SocketTemp2_Cri;
     }
+    
+    {  
+        if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_Cri) != 0)
+        {   //控制模块控制充电桩停机，断开AC输出，并跳转S1开关，CP信号保持高电平输出
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        }
+        else if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) != 0)
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        }
+        else
+        {
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONACTempOK);
+        }
+    }
 }
 /** @brief 频率判断
  *
@@ -705,18 +723,156 @@ void DiagTempError(CON_t *pCON)
  */
 void DiagFreqError(CON_t *pCON)
 {
+    HandleFreq_t freqstat;
+    EventBits_t uxBitsException;
+    int id;
+    
+    uxBitsException = 0;
+    id = pCON->info.ucCONID;
 
-    if(pCON->status.dChargingFrequence >= defMonitorFreqLower - defMonitorFreqPeriod &&
-            pCON->status.dChargingFrequence <= defMonitorFreqUpper + defMonitorFreqPeriod )
+    freqstat = HandleFreq(pCON->status.dChargingFrequence,
+        defMonitorFreqLower,
+        defMonitorFreqUpper);
+
+    switch (pCON->status.xFreqStat)
     {
-        xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
-        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_A_Freq_Cri;
-    }
-    else
-    {
-        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
-        pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_A_Freq_Cri;
-    }
+    case STATE_FREQ_OK:
+        pCON->status.ulSignalAlarm &= ~defSignalCON_Alarm_AC_Freq_Cri;
+        switch (freqstat)
+        {
+        case FREQ_OK:
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+            break;
+        case FREQ_LOWER:
+            pCON->status.xHandleTimerFreq = xTimerCreate("TimerCON_FreqLow_Dummy",
+                defDiagFreqDummyCyc,
+                pdFALSE,
+                (void *)id,
+                vFreqTimerCB);
+            xTimerStart(pCON->status.xHandleTimerFreq, 100);
+            pCON->status.xFreqStat = STATE_FREQ_LOWER_Dummy;
+            break;
+        case FREQ_UPPER:
+            pCON->status.xHandleTimerFreq = xTimerCreate("TimerCON_FreqUp_Dummy",
+                defDiagFreqDummyCyc,
+                pdFALSE,
+                (void *)id,
+                vFreqTimerCB);
+            xTimerStart(pCON->status.xHandleTimerFreq, 100);
+            pCON->status.xFreqStat = STATE_FREQ_UPPER_Dummy;
+            break;
+        default:
+            break;
+        }
+        break;
+    case STATE_FREQ_LOWER_Dummy:
+    case STATE_FREQ_UPPER_Dummy:
+        uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
+            defEventBitExceptionFreqTimer,
+            pdTRUE,
+            pdFALSE,
+            0);
+        if ((uxBitsException & defEventBitExceptionFreqTimer) == defEventBitExceptionFreqTimer)
+        {
+            xTimerDelete(pCON->status.xHandleTimerFreq, 100);
+            xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+            if (pCON->status.xFreqStat == STATE_FREQ_LOWER_Dummy)
+            {
+                pCON->status.xFreqStat = STATE_FREQ_LOWER;
+            }
+            if (pCON->status.xFreqStat == STATE_FREQ_UPPER_Dummy)
+            {
+                pCON->status.xFreqStat = STATE_FREQ_UPPER;
+            }
+        }
+        else
+        {
+            switch (freqstat)
+            {
+            case FREQ_OK:
+                xTimerDelete(pCON->status.xHandleTimerFreq, 100);
+                pCON->status.xFreqStat = STATE_FREQ_OK;
+                break;
+            case FREQ_LOWER:
+                if (pCON->status.xFreqStat == STATE_FREQ_UPPER_Dummy)
+                {
+                    xTimerReset(pCON->status.xHandleTimerFreq, 0);
+                    pCON->status.xFreqStat = STATE_FREQ_LOWER_Dummy;
+                }
+                break;
+            case FREQ_UPPER:
+                if (pCON->status.xFreqStat == STATE_FREQ_LOWER_Dummy)
+                {
+                    xTimerReset(pCON->status.xHandleTimerFreq, 0);
+                    pCON->status.xFreqStat = STATE_FREQ_UPPER_Dummy;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+        break;
+    case STATE_FREQ_LOWER:
+    case STATE_FREQ_UPPER:
+        freqstat = HandleFreq(pCON->status.dChargingFrequence,
+            defMonitorFreqLower + defMonitorFreqPeriod,
+            defMonitorFreqUpper - defMonitorFreqPeriod);
+        switch (freqstat)
+        {
+        case FREQ_OK://49.5~50.5
+            pCON->status.xHandleTimerFreq = xTimerCreate("TimerCON_FreqOK_Dummy",
+                defDiagFreqDummyCyc,
+                pdFALSE,
+                (void *)id,
+                vFreqTimerCB);
+            xTimerStart(pCON->status.xHandleTimerFreq, 100);
+            pCON->status.xFreqStat = STATE_FREQ_OK_Dummy;
+            break;
+        case FREQ_LOWER:
+        case FREQ_UPPER:
+            pCON->status.ulSignalAlarm |= defSignalCON_Alarm_AC_Freq_Cri;
+            break;
+        default:
+            break;
+        }
+        break;
+    case STATE_FREQ_OK_Dummy:
+        uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException,
+            defEventBitExceptionFreqTimer,
+            pdTRUE,
+            pdFALSE,
+            0);
+        if ((uxBitsException & defEventBitExceptionFreqTimer) == defEventBitExceptionFreqTimer)
+        {
+            xTimerDelete(pCON->status.xHandleTimerFreq, 100);
+            xEventGroupSetBits(pCON->status.xHandleEventCharge, defEventBitCONFreqOK);
+            pCON->status.xFreqStat = STATE_FREQ_OK;
+        }
+        else
+        {
+            freqstat = HandleFreq(pCON->status.dChargingFrequence,
+                defMonitorFreqLower + defMonitorFreqPeriod,
+                defMonitorFreqUpper - defMonitorFreqPeriod);
+            switch (freqstat)
+            {
+            case FREQ_OK://49.5~50.5
+                break;
+            case FREQ_LOWER:
+                xTimerDelete(pCON->status.xHandleTimerFreq, 100);
+                pCON->status.xFreqStat = STATE_FREQ_LOWER;
+                break;
+            case FREQ_UPPER:
+                xTimerDelete(pCON->status.xHandleTimerFreq, 100);
+                pCON->status.xFreqStat = STATE_FREQ_UPPER;
+                break;
+            default:
+                break;
+            }
+        }
+        break;
+    default:
+        break;
+    }/* end of switch(pCON->status.xFreqStat) */
 }
 void DiagPlugError(CON_t *pCON)
 {

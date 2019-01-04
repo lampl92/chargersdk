@@ -11,6 +11,7 @@
       <Vfork>false</Vfork>
       <Syscalls />
     </CatchpointConfiguration>
+    <MaskInterruptsWhileStepping>false</MaskInterruptsWhileStepping>
     <MemoryWindowPreferences>
       <MemoryWindowPreferences>
         <ExpressionHistory>

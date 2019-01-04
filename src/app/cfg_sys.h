@@ -27,12 +27,12 @@ typedef struct
     uint8_t sys_cfg;
     uint8_t blacklist_cfg;
     uint8_t whitelist_cfg;
-    double chargesdk_bin_crc32;
+    uint32_t chargesdk_bin_crc32;
 }UpgradeFlag_t;
 typedef struct 
 {
     uint8_t use_gprs; // 0:无网络 2:2G 3:3G
-    uint8_t use_meter; //1:内部计量  2:外部计量
+    uint8_t use_meter; //1:内部计量  2:单相电表 3：三相电表  4：other电表，需配置
     uint8_t use_rfid; // 1:使用rfid
     uint8_t use_gui; //1:使用GUI
 }ModuleSelect_t;
@@ -40,6 +40,7 @@ typedef struct
 typedef struct
 {
     char strVersion[64 + 1];
+    char strBootldrCrc32[64 + 1];
     uint32_t ulDispSleepTime_s;
     Calibrate_t xCalibrate;
     UpgradeFlag_t xUpFlag;

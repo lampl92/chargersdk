@@ -15,30 +15,31 @@
 #include "interface.h"
 #include "cli_main.h"
 #include "timercallback.h"
-#include "gprs_m26.h"
 #include "bsp.h"
 #include "modem.h"
-
-
+#include "GUI_backstage.h"
+#include "touchtimer.h"
 /*---------------------------------------------------------------------------/
 / 任务栈大小
 /---------------------------------------------------------------------------*/
-#define defSTACK_TaskInit                   (1024*10)
+#define defSTACK_TaskInit                   (1024*10)      
 #define defSTACK_TaskCLI                    (1024 * 50)
 //#define defSTACK_TaskGUI                    (1024*10)
 #define defSTACK_TaskGUI                    (1024*20)
+#define defSTACK_TaskGUIBS                 (1024)
+#define defSTACK_TaskGuidingLights          512
 //#define defSTACK_TaskTouch                  512
 #define defSTACK_TaskTouch                  1024
 #define defSTACK_TaskOTA                    512
-#define defSTACK_TaskPPP                    (1024*10)
+//#define defSTACK_TaskPPP                    (1024*10)
 #define defSTACK_TaskTCPClient               (1024*10)
 #define defSTACK_TaskRemoteCmdProc          (1024*10)
 
 #define defSTACK_TaskEVSERemote             (1024*10)
-#define defSTACK_TaskEVSERFID               512
-#define defSTACK_TaskEVSECharge             512
-#define defSTACK_TaskEVSEMonitor            512
-#define defSTACK_TaskEVSEDiag               512
+#define defSTACK_TaskEVSERFID               (1024*5)
+#define defSTACK_TaskEVSECharge             (1024*5)
+#define defSTACK_TaskEVSEMonitor            (1024*5)
+#define defSTACK_TaskEVSEDiag               (1024*5)
 #define defSTACK_TaskEVSEData               (1024*50)
 
 
@@ -47,24 +48,26 @@
 /*---------------------------------------------------------------------------/
 / 任务优先级
 /---------------------------------------------------------------------------*/
-//优先级规则为系统任务优先级低，OTA > 充电任务 > 故障处理 > 系统监视 > 刷卡与通信 > 数据处理与系统任务
+//优先级规则为系统任务优先级低，OTA > 故障处理 > 充电任务   > 系统监视 > 刷卡与通信 > 数据处理与系统任务
+#define defPRIORITY_TaskInit                31
 #define defPRIORITY_TaskOTA                 31/* 最高*/
 
-#define defPRIORITY_TaskEVSECharge          27
-#define defPRIORITY_TaskEVSEDiag            25
+#define defPRIORITY_TaskEVSEDiag            27
+#define defPRIORITY_TaskEVSECharge          25
 #define defPRIORITY_TaskEVSEMonitor         23
 //#define configTIMER_TASK_PRIORITY     ( defined in FreeRTOSConfig.h ) 22
 #define defPRIORITY_TaskEVSERFID            20
 #define defPRIORITY_TaskEVSERemote          18
 #define defPRIORITY_TaskEVSEData            16
 
-#define defPRIORITY_TaskPPP                 14
+//#define defPRIORITY_TaskPPP                 14
 #define defPRIORITY_TaskTCPClient           12
 #define defPRIORITY_TaskRemoteCmdProc       19
 
-#define defPRIORITY_TaskInit                10
 #define defPRIORITY_TaskTouch               6
 #define defPRIORITY_TaskGUI                 4   //不能高,GUI任务时间太长,会影响硬件响应
+#define defPRIORITY_TaskGuidingLights       4
+#define defPRIORITY_TaskGUIBS               5
 #define defPRIORITY_TaskCLI                 16  //1. 原优先级2，修改16保证执行添加订单时订单存储被高优先级任务打断。2017年12月15日
 
 //#define TCPIP_THREAD_PRIO         13 //defined in lwipopts.h
@@ -76,9 +79,10 @@
 const char *TASKNAME_INIT           = "TaskInit";
 const char *TASKNAME_CLI            = "TaskCLI";
 const char *TASKNAME_GUI            = "TaskGUI";
+const char *TASKNAME_GuidingLights  = "TaskGuidingLights";
+const char *TASKNAME_GUIBS          = "TaskGUIBS";
 const char *TASKNAME_Touch          = "TaskTouch";
 const char *TASKNAME_OTA            = "TaskOTA";
-const char *TASKNAME_PPP            = "TaskPPP";
 const char *TASKNAME_TCP_CLIENT     = "TaskTCPClient";
 const char *TASKNAME_RemoteCmdProc  = "TaskRemoteCmdProc" ;
 
@@ -95,9 +99,10 @@ const char *TASKNAME_EVSEData       = "TaskEVSEData";
 void vTaskInit(void *pvParameters);
 void vTaskCLI(void *pvParameters);
 void vTaskGUI(void *pvParameters);
+void vTaskGuidingLights(void *pvParameters);
+void vTaskGUIBS(void *pvParameters);
 void vTaskTouch(void *pvParameters);
 void vTaskOTA(void *pvParameters);
-void vTaskPPP(void *pvParameters);
 void vTaskTCPClient(void *pvParameters);
 void vTaskRemoteCmdProc(void *pvParameters);
 
@@ -111,27 +116,28 @@ void vTaskEVSEData(void *pvParameters);
 /*---------------------------------------------------------------------------/
 / 任务句柄
 /---------------------------------------------------------------------------*/
-static TaskHandle_t xHandleTaskInit = NULL;
-static TaskHandle_t xHandleTaskCLI = NULL;
-static TaskHandle_t xHandleTaskGUI = NULL;
-static TaskHandle_t xHandleTaskTouch = NULL;
-static TaskHandle_t xHandleTaskOTA = NULL;
-static TaskHandle_t xHandleTaskPPP = NULL;
-static TaskHandle_t xHandleTaskTCPClient = NULL;
-static TaskHandle_t xHandleTaskRemoteCmdProc = NULL;
+TaskHandle_t xHandleTaskInit = NULL;
+TaskHandle_t xHandleTaskCLI = NULL;
+TaskHandle_t xHandleTaskGUI = NULL;
+TaskHandle_t xHandleTaskGuidingLights = NULL;
+TaskHandle_t xHandleTaskGUIBS = NULL;
+TaskHandle_t xHandleTaskTouch = NULL;
+TaskHandle_t xHandleTaskOTA = NULL;
+TaskHandle_t xHandleTaskTCPClient = NULL;
+TaskHandle_t xHandleTaskRemoteCmdProc = NULL;
 
-static TaskHandle_t xHandleTaskEVSERemote = NULL;
-static TaskHandle_t xHandleTaskEVSERFID = NULL;
-static TaskHandle_t xHandleTaskEVSECharge = NULL;
-static TaskHandle_t xHandleTaskEVSEMonitor = NULL;
-static TaskHandle_t xHandleTaskEVSEDiag = NULL;
-static TaskHandle_t xHandleTaskEVSEData = NULL;
+TaskHandle_t xHandleTaskEVSERemote = NULL;
+TaskHandle_t xHandleTaskEVSERFID = NULL;
+TaskHandle_t xHandleTaskEVSECharge = NULL;
+TaskHandle_t xHandleTaskEVSEMonitor = NULL;
+TaskHandle_t xHandleTaskEVSEDiag = NULL;
+TaskHandle_t xHandleTaskEVSEData = NULL;
 /*---------------------------------------------------------------------------/
 / 任务间通信
 /---------------------------------------------------------------------------*/
 SemaphoreHandle_t xMutexTimeStruct;
-SemaphoreHandle_t xMutexNandHW;
-SemaphoreHandle_t  xprintfMutex = NULL;
+SemaphoreHandle_t xMeterMutex = NULL;
+SemaphoreHandle_t xTempMutex = NULL;
 
 
 EventGroupHandle_t xHandleEventTimerCBNotify = NULL;
@@ -140,12 +146,14 @@ EventGroupHandle_t xHandleEventDiag = NULL;
 EventGroupHandle_t xHandleEventRemote = NULL;
 EventGroupHandle_t xHandleEventHMI  = NULL;
 EventGroupHandle_t xHandleEventTCP   = NULL;
-
+EventGroupHandle_t xHandleEventSys   = NULL;
 //下面的Event在相应结构体中定义
 //pRFIDDev->xHandleEventGroupRFID
 //pCON->status.xHandleEventCharge;
 //pCON->status.xHandleEventException;
 //队列
+QueueHandle_t xHandleQueueRfidPkg = NULL;
+QueueHandle_t xHandleQueueUserChargeCondition = NULL;
 QueueHandle_t xHandleQueueOrders = NULL;
 QueueHandle_t xHandleQueueErrorPackage = NULL;
 //Timer句柄
@@ -158,38 +166,25 @@ TimerHandle_t xHandleTimerRFID = NULL;
 TimerHandle_t xHandleTimerDataRefresh = NULL;
 TimerHandle_t xHandleTimerRemoteHeartbeat = NULL;
 TimerHandle_t xHandleTimerRemoteStatus    = NULL;
+TimerHandle_t xHandleTimerStoreLog    = NULL;
+TimerHandle_t xHandleTimerStoreOrder    = NULL;
 //con中还定义了几个定时器，xHandleTimerVolt，xHandleTimerCurr，xHandleTimerCharge分别在使用时进行初始化
 //Mutex
 void vTaskInit(void *pvParameters)
 {
     AppObjCreate();
     sys_Init();
-#if 1
     EVSEinit();
     SysTaskCreate();
     AppTaskCreate();
-    
-    pModem = DevModemCreate();
-
-    modem_open(pModem);
-    modem_init(pModem);
-    Modem_Poll(pModem);//这是任务
-#else
+#ifdef RELEASE
+    IWDG_Init(IWDG_PRESCALER_64, 2500); //64/32*2500=5s
+#endif
     while (1)
     {
-        yaffs2_main();
+        IWDG_Feed();
         vTaskDelay(1000);
     }
-#endif
-
-//    pWIFI = DevWifiCreate();
-//    strcpy(pWIFI->info.strSSID, "rgw");
-//    strcpy(pWIFI->info.strPWD,"abc666def8");
-//    pWIFI->xMutex = xSemaphoreCreateMutex();
-//
-//    wifi_open(pWIFI);
-//    wifi_init(pWIFI);
-//    Wifi_Poll(pWIFI);
 }
 void vTaskCLI(void *pvParameters)
 {
@@ -199,6 +194,17 @@ void vTaskCLI(void *pvParameters)
 void vTaskGUI(void *pvParameters)
 {
     MainTask();
+}
+
+void vTaskGuidingLights(void *pvParameters)
+{
+    extern void ledcontrl();
+    ledcontrl();
+}
+
+void vTaskGUIBS(void *pvParameters)
+{
+    GBSTask();
 }
 
 void vTaskTouch(void *pvParameters)
@@ -219,20 +225,23 @@ void SysTaskCreate (void)
 {
     xTaskCreate( vTaskCLI, TASKNAME_CLI, defSTACK_TaskCLI, NULL, defPRIORITY_TaskCLI, &xHandleTaskCLI );
 #if EVSE_USING_GUI
+    xTaskCreate(vTaskGUIBS, TASKNAME_GUIBS, defSTACK_TaskGUIBS, NULL, defPRIORITY_TaskGUIBS, &xHandleTaskGUIBS);
+    xTaskCreate(vTaskGuidingLights, TASKNAME_GuidingLights, defSTACK_TaskGuidingLights, NULL, defPRIORITY_TaskGuidingLights, &xHandleTaskGuidingLights);
+    xTaskCreate(vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch);
     xTaskCreate( vTaskGUI, TASKNAME_GUI, defSTACK_TaskGUI, NULL, defPRIORITY_TaskGUI, &xHandleTaskGUI );
-    xTaskCreate( vTaskTouch, TASKNAME_Touch, defSTACK_TaskTouch, NULL, defPRIORITY_TaskTouch, &xHandleTaskTouch );
 #endif
     xTaskCreate( vTaskOTA, TASKNAME_OTA, defSTACK_TaskOTA, NULL, defPRIORITY_TaskOTA, &xHandleTaskOTA );
-
-    //xTaskCreate( vTaskPPP, TASKNAME_PPP, defSTACK_TaskPPP, NULL, defPRIORITY_TaskPPP, &xHandleTaskPPP );
-    //xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
+#if EVSE_USING_NET
+    xTaskCreate( vTaskTCPClient, TASKNAME_TCP_CLIENT, defSTACK_TaskTCPClient, NULL, defPRIORITY_TaskTCPClient, &xHandleTaskTCPClient );
     xTaskCreate( vTaskRemoteCmdProc, TASKNAME_RemoteCmdProc, defSTACK_TaskRemoteCmdProc, (void *)pechProto, defPRIORITY_TaskRemoteCmdProc, &xHandleTaskRemoteCmdProc);
-
+#endif
 }
 
 void AppTaskCreate (void)
 {
+#if EVSE_USING_NET
     xTaskCreate( vTaskEVSERemote, TASKNAME_EVSERemote, defSTACK_TaskEVSERemote, NULL, defPRIORITY_TaskEVSERemote, &xHandleTaskEVSERemote );
+#endif
     xTaskCreate( vTaskEVSERFID, TASKNAME_EVSERFID, defSTACK_TaskEVSERFID, NULL, defPRIORITY_TaskEVSERFID, &xHandleTaskEVSERFID );
     xTaskCreate( vTaskEVSECharge, TASKNAME_EVSECharge, defSTACK_TaskEVSECharge, NULL, defPRIORITY_TaskEVSECharge, &xHandleTaskEVSECharge );
     xTaskCreate( vTaskEVSEMonitor, TASKNAME_EVSEMonitor, defSTACK_TaskEVSEMonitor, NULL, defPRIORITY_TaskEVSEMonitor, &xHandleTaskEVSEMonitor );
@@ -245,8 +254,8 @@ void AppTaskCreate (void)
 void AppObjCreate (void)
 {
     xMutexTimeStruct = xSemaphoreCreateMutex();
-    xMutexNandHW = xSemaphoreCreateMutex();
-    xprintfMutex = xSemaphoreCreateMutex();
+    xMeterMutex = xSemaphoreCreateMutex();
+    xTempMutex = xSemaphoreCreateMutex();
     
     xHandleEventTimerCBNotify = xEventGroupCreate();
     xHandleEventData = xEventGroupCreate();
@@ -254,10 +263,12 @@ void AppObjCreate (void)
     xHandleEventRemote = xEventGroupCreate();
     xHandleEventHMI = xEventGroupCreate();
     xHandleEventTCP = xEventGroupCreate();
+    xHandleEventSys = xEventGroupCreate();
 
-
-    xHandleQueueOrders = xQueueCreate(2, sizeof(OrderData_t));
-    xHandleQueueErrorPackage = xQueueCreate(100, sizeof(ErrorPackage_t));
+    xHandleQueueRfidPkg = xQueueCreate(defMaxCON, sizeof(RfidQPkg_t));
+    xHandleQueueUserChargeCondition = xQueueCreate(defMaxCON, sizeof(UserChargeCondition_t));
+    xHandleQueueOrders = xQueueCreate(defMaxCON, sizeof(OrderData_t));
+    xHandleQueueErrorPackage = xQueueCreate(50, sizeof(ErrorPackage_t));
 
     xHandleTimerTemp = xTimerCreate("TimerTemp", defMonitorTempCyc, pdTRUE, (void *)defTIMERID_Temp, vCONTimerCB);
     xHandleTimerLockState = xTimerCreate("TimerLockState", defMonitorLockStateCyc, pdTRUE, (void *)defTIMERID_LockState, vCONTimerCB);
@@ -270,6 +281,8 @@ void AppObjCreate (void)
     xHandleTimerDataRefresh = xTimerCreate("TimerDataRefresh", defMonitorDataRefreshCyc, pdTRUE, (void *)defTIMERID_DATAREFRESH, vEVSETimerCB);
     xHandleTimerRemoteHeartbeat = xTimerCreate("TimerHeartbeat", defRemoteHeartbeatCyc, pdTRUE, (void *)defTIMERID_RemoteHeartbeat, vEVSETimerCB);
     xHandleTimerRemoteStatus = xTimerCreate("TimerRemoteStatus", defRemoteStatusCyc, pdTRUE, (void *)defTIMERID_RemoteStatus, vEVSETimerCB);
+    xHandleTimerStoreLog = xTimerCreate("TimerStoreLog", defStoreLogCyc, pdFALSE, (void *)defTIMERID_StoreLog, vEVSETimerCB);
+    xHandleTimerStoreOrder = xTimerCreate("TimerStoreOrder", defStoreOrderCyc, pdFALSE, (void *)defTIMERID_StoreOrder, vEVSETimerCB);
 
     xTimerStart(xHandleTimerTemp, 0);
     xTimerStart(xHandleTimerLockState, 0);
@@ -277,8 +290,46 @@ void AppObjCreate (void)
     xTimerStart(xHandleTimerChargingData, 0);
     xTimerStart(xHandleTimerEVSEState, 0);
 #if EVSE_USING_RFID
-    xTimerStart(xHandleTimerRFID, 0);
+    //xTimerStart(xHandleTimerRFID, 0);//已经放到taskrfid中使能
 #endif
     xTimerStart(xHandleTimerDataRefresh, 0);
     //TimerHeartbeat远程服务器连接后开启定时器
 }
+
+void taskappSuspend(void)
+{
+    vTaskSuspend(xHandleTaskEVSERemote);
+    vTaskSuspend(xHandleTaskEVSERFID);
+    vTaskSuspend(xHandleTaskEVSECharge);
+    vTaskSuspend(xHandleTaskEVSEMonitor);
+    vTaskSuspend(xHandleTaskEVSEDiag);
+    vTaskSuspend(xHandleTaskEVSEData);
+    vTaskSuspend(xHandleTaskRemoteCmdProc);
+    taskmonitorChildSuspend();
+#if EVSE_USING_GUI
+//    extern TaskHandle_t xHandleTaskReadPic;
+//    if (xHandleTaskReadPic != NULL)
+//        vTaskSuspend(xHandleTaskReadPic);
+    //vTaskSuspend(xHandleTaskGUI);
+    vTaskSuspend(xHandleTaskGUIBS);
+    vTaskSuspend(xHandleTaskTouch);
+    vTaskSuspend(xHandleTaskGuidingLights);
+#endif
+}
+
+void taskappResume(void)
+{
+    vTaskResume(xHandleTaskEVSERemote);
+    vTaskResume(xHandleTaskEVSERFID);
+    vTaskResume(xHandleTaskEVSECharge);
+    vTaskResume(xHandleTaskEVSEMonitor);
+    vTaskResume(xHandleTaskEVSEDiag);
+    vTaskResume(xHandleTaskEVSEData);
+    vTaskResume(xHandleTaskRemoteCmdProc);
+    vTaskResume(xHandleTaskGUIBS);
+    vTaskResume(xHandleTaskTouch);
+    vTaskResume(xHandleTaskGuidingLights);
+    taskmonitorChildResume();
+}
+
+

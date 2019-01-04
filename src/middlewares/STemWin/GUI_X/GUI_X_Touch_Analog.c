@@ -41,7 +41,7 @@ File        : GUI_TOUCH_X.C
 Purpose     : Config / System dependent externals for GUI
 ---------------------------END-OF-HEADER------------------------------
 */
-
+#include "GUI_backstage.h"
 #include "GUI.h"
 #include "bsp.h"
 #include "lcddrv.h"
@@ -49,7 +49,13 @@ Purpose     : Config / System dependent externals for GUI
 #include "touchtimer.h"
 
 #define CALEBRATE_DEBUG 0
-#define CALEBRATE_TIME  500
+#define CALEBRATE_TIME  860
+
+#define DOWN_VALID		2	/* 按下30ms 后, 开始统计ADC */
+
+//第0位为进入校准标志位
+//第1位为背光标志位
+uint16_t flag_specially = 0;
 
 volatile static uint16_t adc_x = 0, adc_y = 0;
 static uint8_t step = 0;
@@ -57,6 +63,10 @@ GUI_PID_STATE State = { 0 };
 static uint8_t _pidFlag = 0;
 static uint16_t _pidCount = 0;
 static uint32_t _AsmtCount = 0;//进入广告时间计数
+static uint8_t s_count = 0;//按键消抖
+
+
+//static uint32_t _pointpause = 0;//
 
 extern uint16_t calebrate_done;
 
@@ -66,25 +76,74 @@ void GUI_TOUCH_X_ActivateX(void)
     {
         if (PEN == 0)// && (TP_Read_XY2(&tp_dev.x[0],&tp_dev.y[0])))//有触摸并且结果有效
         {
-            if (TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0]))
+            if (s_count >= DOWN_VALID)
             {
-                _AsmtCount = 0;//一旦触屏则广告时间计数归零
-                _pidFlag = 1;
-                Buzzer_control(1);
-                adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
-                adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
-
-                if (!bittest(winCreateFlag, 2))
+                if (TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0]))
                 {
+                    //Buzzer_control(1);
+                    adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
+                    adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
                     State.x = adc_x;
                     State.y = adc_y;
                     State.Pressed = 1;
                     GUI_TOUCH_StoreStateEx(&State);
                 }
             }
+            else
+            {
+                s_count++;
+            }
         }
         else
         {
+            if (s_count > 0)
+            {
+                if (--s_count == 0)
+                {
+                    State.Pressed = 0;
+                    GUI_TOUCH_StoreStateEx(&State);
+                    s_count = 0;
+                }
+            }
+        }
+    }    
+}
+
+void GUI_TOUCH_X_ActivateX1(void)
+{
+    if ((calebrate_done & 0x01) == 1)//初始化完成
+    {
+        if (PEN == 0)// && (TP_Read_XY2(&tp_dev.x[0],&tp_dev.y[0])))//有触摸并且结果有效
+        {
+            if (TP_Read_XY2(&tp_dev.x[0], &tp_dev.y[0]))
+            {
+                _AsmtCount = 0;//一旦触屏则广告时间计数归零
+                (_pidFlag == 0) ? (_pidFlag = 1) : (_pidFlag = 0);
+               // Buzzer_control(1);
+                if (_pidFlag == 1)
+                {
+                    adc_x = tp_dev.xfac * tp_dev.x[0] + tp_dev.xoff; //将结果转换为屏幕坐标
+                    adc_y = tp_dev.yfac * tp_dev.y[0] + tp_dev.yoff;
+
+                    if (!bittest(winCreateFlag, 2))
+                    {
+                        State.x = adc_x;
+                        State.y = adc_y;
+                        State.Pressed = 1;
+                        GUI_TOUCH_StoreStateEx(&State);
+                    }
+                    
+                }
+            }
+        }
+        else
+        {
+
+            State.x = adc_x;
+            State.y = adc_y;
+            State.Pressed = 0;
+            GUI_TOUCH_StoreStateEx(&State);
+
             if ((cur_win == _hWinHome) || (cur_win == _hWinCharging))
             {
                 _AsmtCount++;
@@ -116,6 +175,7 @@ void GUI_TOUCH_X_ActivateX(void)
                 State.Pressed = 0;
                 GUI_TOUCH_StoreStateEx(&State);
             }
+            _pidFlag = 0;
         }
     }
 }
@@ -127,35 +187,10 @@ void GUI_TOUCH_X_ActivateY(void)
 
 int  GUI_TOUCH_X_MeasureX(void)
 {
-    if (_pidFlag == 1)//检测到有效坐标
+    if (PEN == 0)//检测到有效坐标
     {
-        if ((adc_x < ErrMultiEdit_Size.xpos) || (adc_y < ErrMultiEdit_Size.ypos))
-        {
-            bitset(calebrate_done, 4); //清除故障窗口
-        }
-
-        if ((adc_x >= 0 && adc_x <= 40)&&(adc_y >= 0 && adc_y <= 40))
-        {
-            bitset(calebrate_done, 6);//进入首页
-        }
-
-        if ((adc_x >= 400 && adc_x <= 800) && (adc_y >= 0 && adc_y <= 40))
-        {
-            step = 1;
-        }
-        else if ((adc_x >= 0 && adc_x <= 400) && (adc_y >= 0 && adc_y <= 40)&&(step == 1))
-        {
-            step = 2;
-            if (!bittest(calebrate_done, 8))
-            {
-                bitset(calebrate_done, 7);//管理员
-            }
-        }
-        else
-        {
-            step = 0;
-        }
-
+        _AsmtCount = 0;//一旦触屏则广告时间计数归零
+        bitclr(flag_specially, 1);
         _pidCount++;
 #if CALEBRATE_DEBUG
         printf_safe("_pid_count = %d  ", _pidCount);
@@ -169,19 +204,31 @@ int  GUI_TOUCH_X_MeasureX(void)
 #if CALEBRATE_DEBUG
             printf_safe("\n进入校准模式!\n");
 #endif
-            bitset(calebrate_done, 5);//校准
-            bitclr(calebrate_done, 0);//
+            bitset(flag_specially, 0);//校准
 
-            _pidFlag = 0;
-            Buzzer_control(0);
-            State.Pressed = 0;
-            GUI_TOUCH_StoreStateEx(&State);
+           // Buzzer_control(0);
+           // State.Pressed = 0;
+            //GUI_TOUCH_StoreStateEx(&State);
             break;
         }
     }
     else
-    {
+    {       
         _pidCount = 0;
+        if (gbsstate == StateHome)
+        {
+            _AsmtCount++;
+            if (_AsmtCount > xSysconf.ulDispSleepTime_s * 50)
+            {
+                _AsmtCount = xSysconf.ulDispSleepTime_s * 50 + 1;
+                bitset(flag_specially, 1);//flag_specially的第1位为广告页
+            }
+        }
+        else
+        {
+            _AsmtCount = 0;
+            bitclr(flag_specially, 1);
+        }
     }
 
     return adc_x;

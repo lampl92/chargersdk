@@ -12,8 +12,8 @@
 #include "event_groups.h"
 #include "evse_globals.h"
 #include "taskcreate.h"
-#include "modem.h"
-//#include "lwip_init.h"
+#include "interface_network.h"
+#include "evse_debug.h"
 
 void vTaskRemoteCmdProc(void *pvParameters)
 {
@@ -26,12 +26,14 @@ void vTaskRemoteCmdProc(void *pvParameters)
     uint32_t ulRecvCmdCount;
     EventBits_t uxBitsTCP;
     int res;
+    int i_deb;
 
     pProto = (echProtocol_t *)pvParameters;
     cs = gdsl_list_cursor_alloc(pProto->plechSendCmd);
     cr = gdsl_list_cursor_alloc(pProto->plechRecvCmd);
     while (1)
     {
+//        cli_tasklist_fnt();
 //        printf_safe("send elem = %d\n", gdsl_list_get_size(pProto->plechSendCmd));
 //        printf_safe("recv elem = %d\n", gdsl_list_get_size(pProto->plechRecvCmd));
 //        printf_safe("\n");
@@ -87,36 +89,35 @@ void vTaskRemoteCmdProc(void *pvParameters)
                 /* 1. 判断协议是否发送 */
                 if (pechProtoElem->status == 0)
                 {
-                    printf_safe("ProtocolProc: SendCmd %02X [%d]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
-                    modem_enQue(pechProtoElem->pbuff, pechProtoElem->len);
+                    printf_protolog("SendCmd %d[0x%02X]\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
+                    netSend(pechProtoElem->pbuff, pechProtoElem->len);
+                    {//debug
+                        printf_protodetail3("\nTCP Send: ");
+                        for (i_deb = 0; i_deb < pechProtoElem->len; i_deb++)
+                        {
+                            printf_protodetail3("%02X ", pechProtoElem->pbuff[i_deb]);
+                        }
+                        printf_protodetail3("\n"); 
+                    }
                     pechProtoElem->status = 1;
                     pechProtoElem->trycount++;
                 }
-                /* 2. 已发送，判断发送情况*/
+                /* 2. 已发送，判断发送情况*///由于要根据枪ID判断删除命令，已经将发送处理放到协议接收（inerface_remote.c）中处理
                 if (pechProtoElem->status == 1)
                 {
-                    /* 判断命令字，
-                       如果是请求命令，则等待主机回复
-                       如果是回复命令，则直接超时删除
-                    */
-                    uxBitsTCP = xEventGroupWaitBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd,
-                        defEventBitProtoCmdHandled,
-                        pdTRUE,
-                        pdTRUE,
-                        0);
-                    if ((uxBitsTCP & defEventBitProtoCmdHandled) == defEventBitProtoCmdHandled)
-                    {
-                        gdsl_list_cursor_delete(cs);//请求命令收到平台回复并已处理, 删除命令
-                        printf_safe("ProtoProc: SendCmd %02X [%d] Delete\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
-                        continue;
-                    }
+//                    /* 预留:判断命令字，
+//                       如果是请求命令，则等待主机回复
+//                       如果是回复命令，则直接超时删除
+//                    */
                 }
                 /* 3. 判断超时 ，超时后置状态为0，再次进行发送*/
                 if ((time(NULL) - pechProtoElem->timestamp) > pechProtoElem->timeout_s)
                 {
                     if (pechProtoElem->trycount >= pechProtoElem->trycountmax)
                     {
+                        xEventGroupSetBits(pProto->pCMD[pechProtoElem->cmd_id]->xHandleEventCmd, defEventBitProtoCmdDataTimeout);
                         gdsl_list_cursor_delete(cs);
+                        printf_protolog("SendCmd %d[0x%02X] Delete\n", pechProtoElem->cmd.usSendCmd, pechProtoElem->cmd.usSendCmd);
                         continue;
                     }
                     pechProtoElem->timestamp = time(NULL);

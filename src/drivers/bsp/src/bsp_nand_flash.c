@@ -5,6 +5,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "taskcreate.h"
+#include "utils.h"
 
 /* 定义调试打印语句，用于排错 */
 #define printf_err	printf_safe
@@ -261,6 +262,56 @@ u32 NAND_ReadID(void)
     id = ((u32)deviceid[1]) << 24 | ((u32)deviceid[2]) << 16 | ((u32)deviceid[3]) << 8 | deviceid[4];
     return id;
 }
+uint8_t g_ucNandUID[8];
+int NAND_ReadUID(void)
+{
+    uint8_t data[64];
+    int stat;
+    ul2uc uid[16];
+    
+    NAND_CMD_AREA = 0xED;  //发送读取ID命令
+    NAND_ADDR_AREA = 0X00;
+    //ID一共有5个字节
+    stat = FMC_NAND_GetStatus();
+    NAND_CMD_AREA = 0x00;  //发送读取命令
+    NAND_ADDR_AREA = 0X00;
+    for(int i = 0 ; i < 64 ; i++)
+    {
+        data[i] = *(vu8 *)Bank_NAND_ADDR;
+    }
+    
+    for (int i = 0; i < 64; i++)
+    {
+        uid[i / 4].ucVal[i % 4] = data[i];
+    }
+    if ((uid[0].ulVal ^ uid[4].ulVal) == 0xffffffff && 
+        (uid[1].ulVal ^ uid[5].ulVal) == 0xffffffff)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            g_ucNandUID[i] = uid[i / 4].ucVal[i % 4];
+        }
+        return 0;
+    }
+    else
+    {
+        if ((uid[8].ulVal ^ uid[12].ulVal) == 0xffffffff && 
+            (uid[9].ulVal ^ uid[13].ulVal) == 0xffffffff)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                g_ucNandUID[i] = uid[i / 4].ucVal[i % 4];
+            }
+            return 0;
+        }
+        else
+        {
+            memset(g_ucNandUID, 0, 8);
+            return -1;
+        }
+    }
+    
+}
 /*
 *********************************************************************************************************
 *	函 数 名: FMC_NAND_PageCopyBack
@@ -282,10 +333,7 @@ static uint8_t FMC_NAND_PageCopyBack(uint32_t _ulSrcPageNo, uint32_t _ulTarPageN
         printf_err("Error : FMC_NAND_PageCopyBackEx(src=%d, tar=%d) \r\n", _ulSrcPageNo, _ulTarPageNo);
         return NAND_FAIL;
     }
-#if USE_FreeRTOS
-    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
-    {
-#endif
+
         NAND_CMD_AREA = NAND_CMD_COPYBACK_A;
 
         	/* 发送源页地址 ， 对于 HY27UF081G2A
@@ -351,15 +399,10 @@ static uint8_t FMC_NAND_PageCopyBack(uint32_t _ulSrcPageNo, uint32_t _ulTarPageN
         	/* 检查操作状态 */
         if (FMC_NAND_GetStatus() == NAND_READY)
         {
-#if USE_FreeRTOS
-            xSemaphoreGive(xMutexNandHW);
-#endif
+
             return NAND_OK;
         }
-#if USE_FreeRTOS
-        xSemaphoreGive(xMutexNandHW);
-    }
-#endif
+
     printf_err("Error: FMC_NAND_PageCopyBack(%d, %d)\r\n", _ulSrcPageNo, _ulTarPageNo);
     return NAND_FAIL;
 }
@@ -394,10 +437,7 @@ static uint8_t FMC_NAND_PageCopyBackEx(uint32_t _ulSrcPageNo,
         printf_err("Error A18 not same:  FMC_NAND_PageCopyBackEx(src=%d, tar=%d) \r\n", _ulSrcPageNo, _ulTarPageNo);
         return NAND_FAIL;
     }
-#if USE_FreeRTOS
-    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
-    {
-#endif
+
         NAND_CMD_AREA = NAND_CMD_COPYBACK_A;
 
         	/* 发送源页地址 ， 对于 HY27UF081G2A
@@ -473,15 +513,10 @@ static uint8_t FMC_NAND_PageCopyBackEx(uint32_t _ulSrcPageNo,
         	/* 检查操作状态 */
         if (FMC_NAND_GetStatus() == NAND_READY)
         {
-#if USE_FreeRTOS
-            xSemaphoreGive(xMutexNandHW);
-#endif
+
             return NAND_OK;
         }
-#if USE_FreeRTOS
-        xSemaphoreGive(xMutexNandHW);
-    }
-#endif
+
     printf_err("Error: FMC_NAND_PageCopyBackEx(src=%d, tar=%d, offset=%d, size=%d)\r\n",
         _ulSrcPageNo,
         _ulTarPageNo,
@@ -506,10 +541,7 @@ static uint8_t FMC_NAND_PageCopyBackEx(uint32_t _ulSrcPageNo,
 static uint8_t FMC_NAND_WritePage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16_t _usAddrInPage, uint16_t _usByteCount)
 {
     uint16_t i;
-#if USE_FreeRTOS
-    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
-    {
-#endif
+
     	/* 发送页写命令 */
         NAND_CMD_AREA = NAND_CMD_WRITE0;
 
@@ -554,9 +586,7 @@ static uint8_t FMC_NAND_WritePage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16_
         /* 检查操作状态 */
         if (FMC_NAND_GetStatus() == NAND_READY)
         {
-#if USE_FreeRTOS
-            xSemaphoreGive(xMutexNandHW);
-#endif
+
         		/* 读出数据进行校验 */
 #ifdef WRITE_PAGE_VERIFY_EN
             FMC_NAND_ReadPage(s_ucTempBuf, _ulPageNo, _usAddrInPage, _usByteCount);
@@ -572,10 +602,7 @@ static uint8_t FMC_NAND_WritePage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16_
 		
             return NAND_OK;
         }
-#if USE_FreeRTOS
-        xSemaphoreGive(xMutexNandHW);
-    }
-#endif
+
     printf_err("Error2: FMC_NAND_WritePage(page=%d, addr=%d, count=%d)\r\n",
         _ulPageNo,
         _usAddrInPage,
@@ -600,10 +627,7 @@ static uint8_t FMC_NAND_WritePage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16_
 static uint8_t FMC_NAND_ReadPage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16_t _usAddrInPage, uint16_t _usByteCount)
 {
     uint16_t i;
-#if USE_FreeRTOS
-    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
-    {
-#endif
+
         /* 发送页面读命令 */
         NAND_CMD_AREA = NAND_CMD_AREA_A;
 
@@ -648,10 +672,7 @@ static uint8_t FMC_NAND_ReadPage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16_t
 		
             _pBuffer[i] = NAND_DATA_AREA;
         }
-#if USE_FreeRTOS
-        xSemaphoreGive(xMutexNandHW);
-    }
-#endif
+
     return NAND_OK;
 }
 
@@ -671,10 +692,7 @@ static uint8_t FMC_NAND_ReadPage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16_t
 static uint8_t FMC_NAND_CompPage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16_t _usAddrInPage, uint16_t _usByteCount)
 {
     uint16_t i;
-#if USE_FreeRTOS
-    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
-    {
-#endif
+
         /* 发送页面读命令 */
         NAND_CMD_AREA = NAND_CMD_AREA_A;
 
@@ -714,16 +732,10 @@ static uint8_t FMC_NAND_CompPage(uint8_t *_pBuffer, uint32_t _ulPageNo, uint16_t
 		
             if (_pBuffer[i] != NAND_DATA_AREA)
             {
-#if USE_FreeRTOS
-                xSemaphoreGive(xMutexNandHW);
-#endif
                 return NAND_FAIL;
             }
         }
-#if USE_FreeRTOS
-        xSemaphoreGive(xMutexNandHW);
-    }
-#endif
+
     return NAND_OK;
 }
 
@@ -850,10 +862,7 @@ static uint8_t FMC_NAND_EraseBlock(uint32_t _ulBlockNo)
 		第4字节： A27  A26  A25  A24  A23  A22  A21  A20
 		第5字节： A28  A29  A30  A31  0    0    0    0
 	*/
-#if USE_FreeRTOS
-    if (xSemaphoreTake(xMutexNandHW, portMAX_DELAY) == pdPASS)
-    {
-#endif
+
 	/* 发送擦除命令 */
         NAND_CMD_AREA = NAND_CMD_ERASE0;
 
@@ -869,10 +878,7 @@ static uint8_t FMC_NAND_EraseBlock(uint32_t _ulBlockNo)
         #endif
 
         NAND_CMD_AREA = NAND_CMD_ERASE1;
-#if USE_FreeRTOS
-        xSemaphoreGive(xMutexNandHW);
-    }
-#endif
+
     return (FMC_NAND_GetStatus());
 }
 
@@ -986,8 +992,8 @@ uint8_t NAND_Init(void)
     FMC_NAND_Reset();			/* 通过复位命令复位NAND Flash到读状态 */
     
     NAND_DelayMS(100);
+    NAND_ReadUID();
 
-    //Status = NAND_BuildLUT();	/* 建立块管理表 LUT = Look up table */
     return Status;
 }
 

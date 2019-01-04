@@ -29,122 +29,114 @@ void vTaskEVSEDiag(void *pvParameters)
     {
 #ifndef DEBUG_NO_TASKDIAG
         /* 处理系统失效故障 */
+#ifdef EVSE_DEBUG_ERRLOG
         xResult = xQueueReceive(xHandleQueueErrorPackage, &errpack, 0);
         if(xResult == pdTRUE)
         {
-#ifdef EVSE_DEBUG
             printf_safe("%X %s(code: %d,level: %d)\n", errpack.ulDevID, strErrorCode[errpack.code], errpack.code, errpack.level);
             printf_safe("   %s\n", errpack.msg);
-#endif
             switch(errpack.code) // ！！！ 这里一定要仔细查看errpack.ulDevID是否可以用作 CONID， 主要是看设备是否是归属于枪还是桩。 ！！！
             {
-            case ERR_RFID_FAULT:
-                for(i = 0; i < ulTotalCON; i++)
-                {
-                    pCON = CONGetHandle(i);
-                    xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionRFID);
-                }
-                break;
-            case ERR_CON_METER_FAULT:
-                pCON = CONGetHandle(errpack.ulDevID);
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionMeter);
-                break;
-            case ERR_CON_CP_FAULT:
-                pCON = CONGetHandle(errpack.ulDevID);
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionCPSwitch);
-                break;
-            case ERR_CON_ACTEMP_DECT_FAULT:
-                pCON = CONGetHandle(errpack.ulDevID);
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionTempSensor);
-                break;
-            case ERR_CON_BTEMP1_DECT_FAULT:
-            case ERR_CON_BTEMP2_DECT_FAULT:
-                pCON = CONGetHandle(errpack.ulDevID);
-                xEventGroupSetBits(pCON->status.xHandleEventException, defEventBitExceptionSocketTempSensor);
-                break;
             default:
                 break;
             }
         }
+#endif
 
         /* end of 处理系统失效故障 */
         
         for (i = 0; i < ulTotalCON; i++)
         {
             pCON = CONGetHandle(i);
+            /** 未启动时有故障清除认证标志*/
             if ((pCON->status.ulSignalState & defSignalCON_State_Working) != defSignalCON_State_Working)
             {
-                if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) != 0 ||
-                    (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_War) != 0)
+                if ((pEVSE->status.ulSignalFault & defSignalEVSE_Fault_RFID) == defSignalEVSE_Fault_RFID &&
+                    pCON->order.ucStartType == defOrderStartType_Remote)
                 {
-                    //温度警告（非严重告警）算正常，不进行处理
+                    if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
+                        pCON->status.ulSignalFault != 0 ||
+                        (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
+                        (pEVSE->status.ulSignalFault & ~defSignalEVSE_Fault_RFID) != 0)
+                    {
+                        //其他异常清除认证标志
+                        xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
+                    }
                 }
-                else if (pCON->status.ulSignalAlarm != 0 ||
+                else if ((pCON->status.ulSignalAlarm & ~defSignalGroupCON_Alarm_Temp_War) != 0 ||
                     pCON->status.ulSignalFault != 0 ||
-                    pEVSE->status.ulSignalAlarm != 0 ||
+                    (pEVSE->status.ulSignalAlarm & ~defSignalGroupEVSE_Alarm_Temp_War) != 0 ||
                     pEVSE->status.ulSignalFault != 0)
                 {
-                    //其他异常清除认证标志
+                    //异常清除认证标志
                     xEventGroupClearBits(pCON->status.xHandleEventCharge, defEventBitCONAuthed);
                 }
-            }
-        }
-        
-        /* 处理系统报警 */
-        for(i = 0; i < ulTotalCON; i++)
-        {
-            pCON = CONGetHandle(i);
-            uxBitsException = xEventGroupWaitBits(pCON->status.xHandleEventException, 
-                                                    defEventBitExceptionTempW, 
-                                                    pdTRUE, pdFALSE, 0);
-            if ((uxBitsException & defEventBitExceptionTempW) == defEventBitExceptionTempW)
+            }//end of Not working
+            //发生温度告警（max_temp-10 ~ max_temp）
+            if ((pCON->status.ulSignalAlarm & defSignalGroupCON_Alarm_Temp_War) != 0 ||
+                (pEVSE->status.ulSignalAlarm & defSignalGroupEVSE_Alarm_Temp_War) != 0)
             {
-                if (pCON->state == STATE_CON_CHARGING)
-                {
-                    pCON->status.SetLoadPercent(pCON, 50);
-                }
+                pCON->status.SetLoadPercent(pCON, 70);
             }
-        }
-        /* end of 处理系统报警 */
+            else
+            {
+                pCON->status.SetLoadPercent(pCON, 100);
+            }
+            //发生电流告警
+//            if ((pCON->status.ulSignalAlarm & defSignalCON_Alarm_AC_A_CurrUp_War) != 0)
+//            {
+//                pCON->status.SetLoadPercent(pCON, 70);
+//            }
+//            else
+//            {
+//                pCON->status.SetLoadPercent(pCON, 100);
+//            }
+        }//end of for() id
 
-        /* 诊断各状态 */
+        /* 诊断各状态 CONTemp和ChargingData在Monitor的单独任务中,因此需要单独判断每个CON的diag标志 */
 
         uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagTemp, pdTRUE, pdFALSE, 0);
         if((uxBitsDiag & defEventBitDiagTemp) == defEventBitDiagTemp)
         {
-            for(i = 0; i < ulTotalCON; i++)
-            {
-                pCON = CONGetHandle(i);
-                DiagTempError(pCON);
-            }
+                DiagEVSETempError(pEVSE);
         }
 
-        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagLockState, pdTRUE, pdFALSE, 0);
-        if((uxBitsDiag & defEventBitDiagLockState) == defEventBitDiagLockState)
+        for (i = 0; i < ulTotalCON; i++)
         {
-            for(i = 0; i < ulTotalCON; i++)
+            pCON = CONGetHandle(i);
+            uxBitsDiag = xEventGroupWaitBits(pCON->status.xHandleEventDiag, defEventBitDiagTemp, pdTRUE, pdFALSE, 0);
+            if ((uxBitsDiag & defEventBitDiagTemp) == defEventBitDiagTemp)
             {
-                pCON = CONGetHandle(i);
+                DiagCONTempError(pCON);
+            }
+        }
+        
+        for (i = 0; i < ulTotalCON; i++)
+        {
+            pCON = CONGetHandle(i);
+            uxBitsDiag = xEventGroupWaitBits(pCON->status.xHandleEventDiag, defEventBitDiagLockState, pdTRUE, pdFALSE, 0);
+            if ((uxBitsDiag & defEventBitDiagLockState) == defEventBitDiagLockState)
+            {
                 DiagLockError(pCON);
             }
         }
 
-        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagPlugState, pdTRUE, pdFALSE, 0);
-        if((uxBitsDiag & defEventBitDiagPlugState) == defEventBitDiagPlugState)
+        for(i = 0; i < ulTotalCON; i++)
         {
-            for(i = 0; i < ulTotalCON; i++)
+            pCON = CONGetHandle(i);
+            uxBitsDiag = xEventGroupWaitBits(pCON->status.xHandleEventDiag, defEventBitDiagPlugState, pdTRUE, pdFALSE, 0);
+            if((uxBitsDiag & defEventBitDiagPlugState) == defEventBitDiagPlugState)
             {
-                pCON = CONGetHandle(i);
                 DiagPlugError(pCON);
             }
         }
 
-        uxBitsDiag = xEventGroupWaitBits(xHandleEventDiag, defEventBitDiagChargingData, pdTRUE, pdFALSE, 0);
-        if((uxBitsDiag & defEventBitDiagChargingData) == defEventBitDiagChargingData)
+        for (i = 0; i < ulTotalCON; i++)
         {
-            for(i = 0; i < ulTotalCON; i++)
+            pCON = CONGetHandle(i);
+            uxBitsDiag = xEventGroupWaitBits(pCON->status.xHandleEventDiag, defEventBitDiagChargingData, pdTRUE, pdFALSE, 0);
+            if ((uxBitsDiag & defEventBitDiagChargingData) == defEventBitDiagChargingData)
             {
-                pCON = CONGetHandle(i);
                 DiagVoltageError(pCON);
                 DiagCurrentError(pCON);
                 DiagFreqError(pCON);

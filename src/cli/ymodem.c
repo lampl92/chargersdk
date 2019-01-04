@@ -9,6 +9,7 @@
 
 #include "ymodem.h"
 #include "bsp.h"
+#include "cli_main.h"
 #include <stdlib.h>
 
 #if USE_FreeRTOS
@@ -63,14 +64,14 @@ uint16_t CRC16(unsigned char *q, int len)
 static uint32_t ymod_read(uint8_t *pbuff, uint32_t rlen, uint32_t timeout_ms)
 {
     uint32_t len;
-    len = uart_read_ymodem(UART_PORT_CLI, pbuff, rlen, timeout_ms);
+    len = uart_read_wait(cli_huart, pbuff, rlen, timeout_ms);
     return len;
 }
 static uint32_t ymod_write(uint8_t *pbuff, uint32_t wlen)
 {
     uint32_t len;
     taskENTER_CRITICAL();
-    len = uart_write(UART_PORT_CLI, pbuff, wlen);
+    len = uart_write_fast(cli_huart, pbuff, wlen);
     taskEXIT_CRITICAL();
     return len;
 
@@ -330,7 +331,7 @@ static ymod_err_t _ymod_do_recv(
 
     return _ymod_do_fin(ctx);
 }
-extern SemaphoreHandle_t  xprintfMutex;
+
 ymod_err_t ymod_recv_on_device( struct ymod_ctx *ctx, ymod_callback on_begin, ymod_callback on_data, ymod_callback on_end, int handshake_timeout)
 {
     ymod_err_t res;
@@ -338,17 +339,12 @@ ymod_err_t ymod_recv_on_device( struct ymod_ctx *ctx, ymod_callback on_begin, ym
     ctx->on_begin = on_begin;
     ctx->on_data  = on_data;
     ctx->on_end   = on_end;
-#if USE_FreeRTOS
-    xSemaphoreTake(xprintfMutex, portMAX_DELAY);
-#endif
+
     res = _ymod_do_recv(ctx, handshake_timeout);
     while (res == RT_EOK)
     {
         res = _ymod_do_recv(ctx, 1);
     }
-#if USE_FreeRTOS
-    xSemaphoreGive(xprintfMutex);
-#endif
 
     return res;
 }

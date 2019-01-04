@@ -16,6 +16,12 @@
 #include "evse_config.h"
 #include "order.h"
 
+#define RFID_UARTx          "USART1"
+#define RFID_UART_BAND      115200
+#define RFID_UART_DATA      8
+#define RFID_UART_PARI      'N'
+#define RFID_UART_STOP      1
+
 typedef enum _RFIDState
 {
     STATE_RFID_NOID,             //没有ID
@@ -23,8 +29,10 @@ typedef enum _RFIDState
     STATE_RFID_GOTID,           //获取到ID
     STATE_RFID_OLDID,
     STATE_RFID_NEWID,
+    STATE_RFID_PWD,             //输入密码
     STATE_RFID_GOODID,           //注册帐户
     STATE_RFID_BADID,           //非注册帐户
+    STATE_RFID_PWDFULL,         //密码次数超限
     STATE_RFID_OWE,                 //欠费
     STATE_RFID_HOLD,           //预约状态，还没开始充电
     STATE_RFID_RETURN
@@ -36,6 +44,8 @@ typedef struct _RFIDDevStatus
     uint8_t ucCardID[defCardIDLength];
 	time_t tHoldStateStartTime;
 	uint32_t ulHoldMaxTime_s;
+    uint8_t ucNeedPwd;
+    char strPwd[7];
 
     ErrorCode_t (*GetCardID)(void *pvRFIDDev);
 }RFIDDevStatus_t;
@@ -44,13 +54,25 @@ typedef struct _RFIDDev
 {
     RFIDDevStatus_t status;
     void *com;
+    int uart_handle;
     SemaphoreHandle_t xHandleMutexRFID;
     EventGroupHandle_t xHandleEventGroupRFID;
     RFIDState_t state;
     OrderData_t order;
 }RFIDDev_t;
 
-RFIDDev_t *RFIDDevCreate(void);
+typedef struct _RfidQPkg
+{
+    char strCardID[defCardIDLength + 1];//卡号//在taskrfid中赋值
+    uint8_t ucAccountStatus;    //帐户状态 1：注册卡 2:欠费 0：未注册卡
+    uint8_t ucCardStatus;      //0 普通用户, 1 白名单用户, 2 黑名单用户
+    double  dBalance;           //余额 
+    uint8_t ucCONID;            //
+    RFIDState_t state;
+    uint8_t ucNeedPwd;
+}RfidQPkg_t;
+
+RFIDDev_t *RFIDDevCreate(char *uart_name, uint32_t band, int data_bit, char parity, int stop_bit);
 
 
 

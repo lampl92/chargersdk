@@ -10,17 +10,39 @@
 
 #include "stm32f4xx.h"
 
+#define utils_min(a, b) (((a) < (b)) ? (a) : (b))
+
 char *utils_strdup(const char *s);
 
 uint16_t utils_htons(uint16_t n);
 uint16_t utils_ntohs(uint16_t n);
 uint32_t utils_htonl(uint32_t n);
 uint32_t utils_ntohl(uint32_t n);
-
+uint64_t utils_htonll(uint64_t n);
+uint64_t utils_ntohll(uint64_t n);
+#ifndef htons
 #define htons(x) utils_htons(x)
+#endif
+
+#ifndef ntohs
 #define ntohs(x) utils_ntohs(x)
+#endif
+
+#ifndef htonl
 #define htonl(x) utils_htonl(x)
+#endif
+
+#ifndef ntohl
 #define ntohl(x) utils_ntohl(x)
+#endif
+
+#ifndef htonll
+#define htonll(x) utils_htonll(x)
+#endif
+
+#ifndef ntohll
+#define ntohll(x) utils_ntohll(x)
+#endif
 
 typedef union
 {
@@ -33,10 +55,18 @@ typedef union
 	uint16_t usVal;
 	uint8_t ucVal[2];
 }us2uc;
-uint32_t HexToStr(uint8_t *Hex, uint8_t *Src, int Hexlen);
-uint32_t StrToHex(uint8_t *Str, uint8_t *Hex, int Strlen);
+
+typedef union
+{
+    uint64_t ullVal;
+    uint8_t ucArray[8];
+}ull2uc;
+uint32_t HexToStr(uint8_t *Hex, char *Src, int Hexlen);
+uint32_t StrToHex(const char *Str, uint8_t *Hex, int Strlen);
 int utils_abs(int num);
 
-int GetFileCrc32(uint8_t *path, uint32_t *pulCrc32);
-int GetBufferCrc32(uint8_t *pbuff, uint32_t size, uint32_t *pulCrc32);
+void crc32_init(uint32_t *pulCrc32Table);
+void CalcCrc32(const uint8_t byte, uint32_t *pulCrc32, uint32_t *pulCrc32Table);
+uint32_t StrCrc32ToUint32(char *strCrc32);
+void *utils_memfrob(void *s, size_t n);
 #endif

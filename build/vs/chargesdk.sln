@@ -23,9 +23,11 @@ Global
 		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Release|x86.ActiveCfg = Release|Win32
 		{2E39AC5C-2140-4AB5-B52E-D3D9CFF423B8}.Release|x86.Build.0 = Release|Win32
 		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Debug|STM32.ActiveCfg = Debug|Win32
+		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Debug|STM32.Build.0 = Debug|Win32
 		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Debug|x86.ActiveCfg = Debug|Win32
 		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Debug|x86.Build.0 = Debug|Win32
 		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Release|STM32.ActiveCfg = Release|Win32
+		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Release|STM32.Build.0 = Release|Win32
 		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Release|x86.ActiveCfg = Release|Win32
 		{F0BAF0A2-2509-49F2-88BC-5B7198B92027}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
@@ -33,7 +35,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {14AFE24A-7866-4674-9E80-833779F38CE8}
 		BuildVersion_StartDate = 2000/1/1
+		SolutionGuid = {14AFE24A-7866-4674-9E80-833779F38CE8}
 	EndGlobalSection
 EndGlobal

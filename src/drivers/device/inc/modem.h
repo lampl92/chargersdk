@@ -4,8 +4,21 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 #include "userlib_queue.h"
+#include "retarget.h"
 
-#define MAX_COMMAND_LEN                  5000  /* 最大命令长度 */
+
+#define MODEM_UARTx          "UART5"
+#define MODEM_UART_BAND      115200
+#define MODEM_UART_DATA      8
+#define MODEM_UART_PARI      'N'
+#define MODEM_UART_STOP      1
+extern int modemlog;
+#define printf_modem(...) do{if(modemlog > 0)printf_safe(__VA_ARGS__);}while(0);
+
+#define MAX_COMMAND_LEN              128  /* 最大命令长度 */
+#define TCP_CLIENT_BUFSIZE           4096
+#define QUE_BUFSIZE                  4096
+
 typedef enum
 {
     CPIN_OTHER,
@@ -46,9 +59,17 @@ typedef enum
 
 typedef struct
 {
-    uint8_t strAPN[16+1];
+    char strAPN[16 + 1];
+    char strATD[32 + 1];
+    char pppAuthUser[32 + 1];
+    char pppAuthPass[32 + 1];
+    uint32_t pppACCM;
+    uint32_t pppAuthProto;
     uint8_t ucContext;
     uint8_t ucTPMode;
+    char strICCID[20 + 1];
+    char strManufacturer[32];
+    char strDeviceModule[32];
 } ModemInfo_t;
 
 typedef struct
@@ -57,7 +78,7 @@ typedef struct
     ModemParam_e eNetReg;       //CREG 网络注册信息    REG_LOCAl || REG_ROAMING
     ModemParam_e eGprsReg;      //CGREG GPRS网络注册信息 REG_LOCAl || REG_ROAMING
     uint8_t ucSignalQuality;    //CSQ 信号强度  rssi:0-31，越大越好,  99 信号异常
-    uint8_t strLocIP[15+1];     //本地IP
+    char strLocIP[15+1];     //本地IP
     ModemParam_e eConnect;
     ModemConStat_e statConStat;
 } ModemStatus_t;
@@ -65,8 +86,12 @@ typedef struct
 typedef enum
 {
     DS_MODEM_OFF,
+    DS_MODEM_OPEN,
     DS_MODEM_ON,
     DS_MODEM_ERR,
+    DS_MODEM_PPP_Diag,
+    DS_MODEM_PPP_On,
+#if MODEM_CMD
     DS_MODEM_ACT_PDP,
     DS_MODEM_DEACT_PDP,
 //    DS_MODEM_TRANSPARENT,
@@ -79,6 +104,7 @@ typedef enum
     DS_MODEM_FTP_REGET,
     DS_MODEM_FTP_CHECK,
     DS_MODEM_FTP_ERR
+#endif
 } ModemState_e;
 
 
@@ -90,23 +116,39 @@ typedef struct
     uint32_t readable;
 } ModemFlag_t;
 
+typedef DR_MODEM_e(*modem_ft)(void *pModem);
+    
 typedef struct _dev_modem
 {
     ModemInfo_t info;
     ModemStatus_t status;
     volatile ModemState_e state;
     ModemFlag_t flag;
-    SemaphoreHandle_t xMutex;
-    Queue *pSendQue;
+    int uart_handle;
+    
+    modem_ft open;
+    modem_ft init;
+    modem_ft keyon;
+    modem_ft keyoff;
+    modem_ft diag_PPP;
+    modem_ft act_PDP;
+    modem_ft deact_PDP;
+    DR_MODEM_e(*open_TCP)(void *pModem, char *server_ip, uint16_t port);
+    modem_ft close_TCP;
+    DR_MODEM_e(*open_FTP)(void *pModem, char *server_ip, uint16_t port, char *user, char *pass);
+    DR_MODEM_e(*set_ftp_path)(void *pModem, char *path);
+    DR_MODEM_e(*ftp_get)(void *pModem, char *fname);
+    modem_ft close_FTP;
+    modem_ft soft_reset;
 
 } DevModem_t;
 
 extern DevModem_t *pModem;
 
+void modem_delayms(int ms);
 DevModem_t *DevModemCreate(void);
-DR_MODEM_e modem_open(DevModem_t *pModem);
-DR_MODEM_e modem_init(DevModem_t *pModem);
 void Modem_Poll(DevModem_t *pModem);
-void modem_enQue(uint8_t *pbuff, uint32_t len);
+uint32_t modem_send_at(char *format, ...);
+DR_MODEM_e modem_get_at_reply(char *reply, uint32_t len, const char *key, uint32_t second);
 
 #endif/*_MODEM_H_*/

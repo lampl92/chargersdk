@@ -307,12 +307,12 @@ void LCD_Fast_DrawPoint(uint16_t x,uint16_t y,uint32_t color)
 	LCD->LCD_RAM=color;
 }
 //SSD1963 背光设置
-//pwm:背光等级,0~100.越大越亮.
-void LCD_SSD_BackLightSet(uint8_t pwm)
+//light_pwm:背光等级,0~100.越大越亮.
+void LCD_SSD_BackLightSet(uint8_t light_pwm)
 {
 	LCD_WR_REG(0xBE);	//配置PWM输出
 	LCD_WR_DATA(0x05);	//1设置PWM频率
-	LCD_WR_DATA(pwm*2.55);//2设置PWM占空比
+	LCD_WR_DATA(light_pwm * 2.55); //2设置PWM占空比
 	LCD_WR_DATA(0x01);	//3设置C
 	LCD_WR_DATA(0xFF);	//4设置D
 	LCD_WR_DATA(0x00);	//5设置E
@@ -481,7 +481,7 @@ void LCD_Init(void)
 
 	LCD_Display_Dir(1);		//默认为竖屏
 	//LCD_LED=1;				//点亮背光
-	LCD_Clear(WHITE);
+    LCD_Clear(BLUE);
 }
 //清屏函数
 //color:要清屏的填充色
@@ -626,7 +626,7 @@ void LCD_Draw_Circle(uint16_t x0,uint16_t y0,uint8_t r)
 //num:要显示的字符:" "--->"~"
 //size:字体大小 12/16/24/32
 //mode:叠加方式(1)还是非叠加方式(0)
-void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t size,uint8_t mode)
+void LCD_ShowChar(uint16_t x,uint16_t y,char num,uint8_t size,uint8_t mode)
 {
     uint8_t temp,t1,t;
 	uint16_t y0=y;
@@ -634,10 +634,18 @@ void LCD_ShowChar(uint16_t x,uint16_t y,uint8_t num,uint8_t size,uint8_t mode)
  	num=num-' ';//得到偏移后的值（ASCII字库是从空格开始取模，所以-' '就是对应字符的字库）
 	for(t=0;t<csize;t++)
 	{
+#if FONT_ASC2_1206
 		if(size==12)temp=asc2_1206[num][t]; 	 	//调用1206字体
-		else if(size==16)temp=asc2_1608[num][t];	//调用1608字体
-		else if(size==24)temp=asc2_2412[num][t];	//调用2412字体
-		else if(size==32)temp=asc2_3216[num][t];	//调用3216字体
+#endif
+#if FONT_ASC2_1608
+		if(size==16)temp=asc2_1608[num][t];	//调用1608字体
+#endif
+#if FONT_ASC2_2412
+		if(size==24)temp=asc2_2412[num][t];	//调用2412字体
+#endif
+#if FONT_ASC2_3216
+		if(size==32)temp=asc2_3216[num][t];	//调用3216字体
+#endif
 		else return;								//没有的字库
 		for(t1=0;t1<8;t1++)
 		{
@@ -723,11 +731,12 @@ void LCD_ShowxNum(uint16_t x,uint16_t y,uint32_t num,uint8_t len,uint8_t size,ui
 //width,height:区域大小
 //size:字体大小
 //*p:字符串起始地址
-void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t size,uint8_t *p)
+void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t size,char *p)
 {
 	uint8_t x0=x;
 	width+=x;
 	height+=y;
+    //printf_safe("%s", p);
     while((*p<='~')&&(*p>=' '))//判断是不是非法字符!
     {
         if(x>=width){x=x0;y+=size;}
@@ -736,6 +745,7 @@ void LCD_ShowString(uint16_t x,uint16_t y,uint16_t width,uint16_t height,uint8_t
         x+=size/2;
         p++;
     }
+    //printf_safe("\n");
 }
 
 

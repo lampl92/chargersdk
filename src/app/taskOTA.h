@@ -8,4 +8,6 @@
 #ifndef  __TASKOTA_H
 #define  __TASKOTA_H
 
+int upgrade_bootldr(void);
+
 #endif

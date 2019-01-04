@@ -18,6 +18,7 @@ typedef struct _EVSE
 
 EVSE_t *EVSECreate(void);
 void EVSEinit(void);
+uint8_t isEVSEStandby(void);
 uint8_t isEVSEWorking(void);
 
 #endif

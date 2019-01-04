@@ -19,7 +19,7 @@
  * @return uint8_t 1：在时间段内， 0：不在时间段内
  *
  */
-static uint8_t JudgeTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
+static uint8_t IsTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
 {
     struct tm *ts;
     ts = localtime(&now);
@@ -41,14 +41,14 @@ static uint8_t JudgeTimeInclude(time_t now, uint8_t ucStart, uint8_t ucEnd)
  * @return uint8_t  1：在时间段中  0：不在时间段中
  *
  */
-static uint8_t JudgeSegInclude(time_t now, EchSegTime_t SegTime, uint8_t *ppos)
+static uint8_t IsSegInclude(time_t now, EchSegTime_t SegTime, uint8_t *ppos)
 {
     int i;
     uint8_t isInclude = 0;
 
     for(i = 0; i < SegTime.ucPeriodCont; i++)
     {
-        isInclude = JudgeTimeInclude(now, SegTime.ucStart[i], SegTime.ucEnd[i]);
+        isInclude = IsTimeInclude(now, SegTime.ucStart[i], SegTime.ucEnd[i]);
         if(isInclude == 1)
         {
             *ppos = (uint8_t)i;
@@ -71,13 +71,26 @@ OrderSegState_e JudgeSegState(time_t now, echProtocol_t *pProto, uint8_t *ppos)
     int i;
     for (i = 0; i < defOrderSegMax; i++)
     {
-        if(JudgeSegInclude(now, pProto->info.SegTime[i], ppos) == 1)
+        if(IsSegInclude(now, pProto->info.SegTime[i], ppos) == 1)
         {
             return (OrderSegState_e)i;
         }
     }
     return STATE_SEG_DEFAULT;
 }
+
+double get_current_totalfee(time_t now)
+{
+    uint8_t pos = 0;
+    uint8_t ucSegState;
+    double totalfee;
+    
+    ucSegState = (uint8_t)JudgeSegState(now, pechProto, &pos);
+    totalfee = pechProto->info.dSegEnergyFee[ucSegState] + pechProto->info.dSegServFee[ucSegState];
+ 
+    return totalfee;
+}
+
 ChargePeriodStatus_t *PeriodUpdate(time_t now, CON_t *pCON, OrderSegState_e statOrderSeg)
 {
     ChargePeriodStatus_t *pPeriodStatus;
@@ -97,14 +110,14 @@ ChargePeriodStatus_t *PeriodUpdate(time_t now, CON_t *pCON, OrderSegState_e stat
     pPeriodStatus = &(pCON->order.chargeSegStatus[statOrderSeg][pos]);
     if (pPeriodStatus->tStartTime > 0)
     {
-        pPeriodStatus->dPower = pCON->status.dChargingPower - pPeriodStatus->dStartPower;
+        pPeriodStatus->dEnergy = pCON->status.dChargingEnergy - pPeriodStatus->dStartEnergy;
     }
     else
     {
         //第一次进到这个时段
         pCON->order.pos = pos; //状态转换时已经赋过值了
         pPeriodStatus->tStartTime = now;
-        pPeriodStatus->dStartPower = pCON->status.dChargingPower;
+        pPeriodStatus->dStartEnergy = pCON->status.dChargingEnergy;
     }
     return pPeriodStatus;
 }
@@ -121,8 +134,8 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
     ChargePeriodStatus_t *pPeriodStatus;
     uint8_t pos = 0;//当前时间在时段中的位置
     int i, j;
-    double tmpTotalPower = 0; //用于计算尖峰平谷总电量
-    double tmpTotalPowerFee = 0;
+    double tmpTotalEnergy = 0; //用于计算尖峰平谷总电量
+    double tmpTotalEnergyFee = 0;
     double tmpTotalServFee = 0;
     uint32_t tmpTotalTime = 0;  //用于计算尖峰平谷总充电时间
 
@@ -154,44 +167,44 @@ static void SegmentUpdate(time_t now, CON_t *pCON, OrderState_t statOrder)
     }
     if(statOrder == STATE_ORDER_FINISH)
     {
-        pPeriodStatus->tEndTime = now; //pChargeSegStatus 指针已经在上面的switch中获取，所以这条判断语句位置不能动
+        pPeriodStatus->tEndTime = now; //pPeriodStatus 指针已经在上面的switch中获取，所以这条判断语句位置不能动
     }
 
     /*2. 汇总时段*/
     for (i = 0; i < defOrderSegMax; i++)
     {
-        tmpTotalPower = 0;
+        tmpTotalEnergy = 0;
         tmpTotalTime = 0;
         //  ↓:j    ↓:j                                          ↓:j
         for(j = 0; j < pechProto->info.SegTime[i].ucPeriodCont; j++)
         {
-            tmpTotalPower += pCON->order.chargeSegStatus[i][j].dPower;
+            tmpTotalEnergy += pCON->order.chargeSegStatus[i][j].dEnergy;
             if (pCON->order.chargeSegStatus[i][j].tEndTime != 0) //不为0表示时段已经结束
             {
                 tmpTotalTime += (pCON->order.chargeSegStatus[i][j].tEndTime - pCON->order.chargeSegStatus[i][j].tStartTime);
             }
         }
-        pCON->order.dSegTotalPower[i] = (uint32_t)(tmpTotalPower * 100) / 100.0; //防止sprintf对double精度进行四舍五入
-        pCON->order.dSegTotalPowerFee[i] = tmpTotalPower * pechProto->info.dSegPowerFee[i];
-        pCON->order.dSegTotalServFee[i] = tmpTotalPower * pechProto->info.dSegServFee[i];
+        pCON->order.dSegTotalEnergy[i] = (uint32_t)(tmpTotalEnergy * 100) / 100.0; //防止sprintf对double精度进行四舍五入
+        pCON->order.dSegTotalEnergyFee[i] = tmpTotalEnergy * pechProto->info.dSegEnergyFee[i];
+        pCON->order.dSegTotalServFee[i] = tmpTotalEnergy * pechProto->info.dSegServFee[i];
         pCON->order.ulSegTotalTime[i] = tmpTotalTime;
     }
 
     /*3. 汇总总电量*/
-    tmpTotalPower = 0;
-    tmpTotalPowerFee = 0;
+    tmpTotalEnergy = 0;
+    tmpTotalEnergyFee = 0;
     tmpTotalServFee = 0;
     for (i = 0; i < defOrderSegMax; i++)
     {
-        tmpTotalPower += pCON->order.dSegTotalPower[i];
-        tmpTotalPowerFee += pCON->order.dSegTotalPowerFee[i];
+        tmpTotalEnergy += pCON->order.dSegTotalEnergy[i];
+        tmpTotalEnergyFee += pCON->order.dSegTotalEnergyFee[i];
         tmpTotalServFee += pCON->order.dSegTotalServFee[i];
     }
-    pCON->order.dTotalPower = tmpTotalPower;
-    pCON->order.dTotalPowerFee = (uint32_t)(tmpTotalPowerFee * 100) / 100.0;
+    pCON->order.dTotalEnergy = tmpTotalEnergy;
+    pCON->order.dTotalEnergyFee = (uint32_t)(tmpTotalEnergyFee * 100) / 100.0;
     pCON->order.dTotalServFee = (uint32_t)(tmpTotalServFee * 100) / 100.0;
     /*4. 总费用*/
-    pCON->order.dTotalFee = pCON->order.dTotalPowerFee + pCON->order.dTotalServFee;
+    pCON->order.dTotalFee = pCON->order.dTotalEnergyFee + pCON->order.dTotalServFee;
 }
 
 ErrorCode_t makeOrder(CON_t *pCON)
@@ -211,11 +224,12 @@ ErrorCode_t makeOrder(CON_t *pCON)
         pCON->order.ucCONID = pCON->info.ucCONID;
         pCON->order.dLimitFee = pRFIDDev->order.dLimitFee;
         pCON->order.ulLimitTime = pRFIDDev->order.ulLimitTime;
-        strcpy(pCON->order.strOrderSN, pRFIDDev->order.strOrderSN);
+        pCON->order.dLimitEnergy = pRFIDDev->order.dLimitEnergy;
+        pCON->order.ullOrderSN = pRFIDDev->order.ullOrderSN;
         break;
     case STATE_ORDER_MAKE:
         pCON->order.tStartTime = time(NULL);
-        pCON->order.dStartPower = pCON->status.dChargingPower;
+        pCON->order.dStartEnergy = pCON->status.dChargingEnergy;
         SegmentUpdate(pCON->order.tStartTime, pCON, statOrder);
         break;
     case STATE_ORDER_UPDATE:
@@ -225,6 +239,8 @@ ErrorCode_t makeOrder(CON_t *pCON)
         pCON->order.ucPayType = defOrderPayType_Online;
         pCON->order.tStopTime = time(NULL);
         SegmentUpdate(pCON->order.tStopTime, pCON, statOrder);
+        break;
+    default:
         break;
     }
     return errcode;
@@ -245,7 +261,7 @@ ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder)
         break;
     case STATE_ORDER_MAKE:
         pCON->order.tStartTime = testtime;
-        pCON->order.dStartPower = pCON->status.dChargingPower;
+        pCON->order.dStartEnergy = pCON->status.dChargingEnergy;
         SegmentUpdate(pCON->order.tStartTime, pCON, statOrder);
         break;
     case STATE_ORDER_UPDATE:
@@ -255,6 +271,8 @@ ErrorCode_t testmakeOrder(CON_t *pCON, time_t testtime, OrderState_t statOrder)
         pCON->order.ucPayType = defOrderPayType_Online;
         pCON->order.tStopTime = testtime;
         SegmentUpdate(pCON->order.tStopTime, pCON, statOrder);
+        break;
+    default:
         break;
     }
     return errcode;
@@ -267,4 +285,6 @@ void OrderInit(OrderData_t *pOrder)
     pOrder->statOrderSeg = STATE_SEG_IDLE;
 	pOrder->statRemoteProc.card.stat = CARDCTRL_IDLE;
 	pOrder->statRemoteProc.order.stat = REMOTEOrder_IDLE;
+    pOrder->statRemoteProc.rmt_ctrl.stat = REMOTECTRL_IDLE;
+    pOrder->statRemoteProc.rtdata.stat = REMOTERTData_IDLE;
 }

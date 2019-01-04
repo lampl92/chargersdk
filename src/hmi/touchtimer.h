@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <includes.h>
 #include "siffontcreate.h"
-#include "bmpdisplay.h"
+#include "display.h"
 #include "touch.h"
 #include "utils.h"
 #include "interface.h"
@@ -31,7 +31,7 @@
 #define GUI_MANAGER_YOFF 40     //管理员界面相关配置中每行的宽度
 #define GUI_MANAGER_YSIZE 35    //管理员界面相关配置中每行的edit的宽度
 #define HSCROLL_WIDTH   30  //水平滑轮宽度
-#define WSCROLL_WIDTH   30  //垂直滑轮宽度
+#define WSCROLL_WIDTH   60  //垂直滑轮宽度
 
 /*********************自定义GUI消息的宏******************************
 **
@@ -40,12 +40,21 @@
 #define MSG_CREATERRWIN     (GUI_ID_USER + 0x30)    //创建故障弹窗消息
 #define MSG_DELERRWIN       (GUI_ID_USER + 0x31)    //删除故障窗口消息
 #define MSG_JUMPHOME        (GUI_ID_USER + 0x32)    //跳到HOME页消息
-#define MSG_JUMPCARDINFO    (GUI_ID_USER + 0x33)    //跳到卡片信息页消息
+#define MSG_READYSTART      (GUI_ID_USER + 0x33)    //跳到检测充电条件消息
 #define MSG_JUMPCHAING      (GUI_ID_USER + 0x34)    //跳到充电中页消息
 #define MSG_UPDATEDATA      (GUI_ID_USER + 0x35)    //更新数据
 #define MSG_JUMPCHARGEDONE  (GUI_ID_USER + 0x36)    //跳转充电完成页消息
 #define MSG_JUMPKEYPAD      (GUI_ID_USER + 0x37)    //跳转键盘页来设置变量信息
 #define MSG_DELETEMANAGERWIN (GUI_ID_USER + 0x38)   //管理员的common通知所有page删除自己的win
+
+#define MSG_JUMPSELECTPATTERN (GUI_ID_USER + 0x39)  //调到选择充电方式
+#define MSG_JUMPSELECTGUN   (GUI_ID_USER +0x3a)     //跳到选枪页
+#define MSG_JUMPNetTimeout  (GUI_ID_USER + 0x3b)    //调到网络超时页
+
+#define MSG_JUMPCardconditionNotOk  (GUI_ID_USER + 0x3c)//调到卡条件不足页
+#define MSG_JUMPPleasePlug  (GUI_ID_USER + 0x3d)//跳到请连接插头页
+#define MSG_JUMPChargingOk (GUI_ID_USER + 0x3e)//跳到启动成功页
+#define MSG_JUMPStatePlugTimeout (GUI_ID_USER + 0x3f)
 
 #define MSG_MANAGERSETID0       (GUI_ID_USER + 0x40)
 #define MSG_MANAGERSETID1       (GUI_ID_USER + 0x41)
@@ -63,6 +72,27 @@
 #define MSG_MANAGERSETIDD       (GUI_ID_USER + 0x4D)
 #define MSG_MANAGERSETIDE       (GUI_ID_USER + 0x4E)
 #define MSG_MANAGERSETIDF       (GUI_ID_USER + 0x4F)
+#define MSG_MANAGERSETID10       (GUI_ID_USER + 0x50)
+#define MSG_MANAGERSETID11       (GUI_ID_USER + 0x51)
+#define MSG_MANAGERSETID12       (GUI_ID_USER + 0x52)
+#define MSG_MANAGERSETID13       (GUI_ID_USER + 0x53)
+#define MSG_MANAGERSETID14       (GUI_ID_USER + 0x54)
+#define MSG_MANAGERSETID15       (GUI_ID_USER + 0x55)
+
+#define MSG_UPDATE           (GUI_ID_USER + 0x60) //更新存储设备
+#define MSG_JUMPStateEquipmentFailureNoStart (GUI_ID_USER + 0x61)
+#define MSG_JUMPStateTestPwd                 (GUI_ID_USER + 0x62)
+#define MSG_JUMPStatePwdErrorAgain          (GUI_ID_USER + 0x63)
+#define MSG_JUMPStatePwdFull                  (GUI_ID_USER + 0x64)
+#define MSG_JUMPStatePwd                  (GUI_ID_USER + 0x65)
+#define MSG_JUMPUpdateSystem                (GUI_ID_USER + 0x66)
+
+#define MSG_UPDATEWHITELIST (GUI_ID_USER + 0x67)
+
+
+
+
+
 
 extern uint16_t calebrate_done;
 extern uint8_t winCreateFlag;
@@ -80,7 +110,6 @@ void _cbHomeDialog(WM_MESSAGE *pMsg);
 extern uint8_t current_page;
 extern uint8_t Timer_buf[32];
 extern uint8_t AdvertisementRecordFlag;
-extern uint8_t managerLevel;
 extern GUI_HMEM    qr_hmem;
 extern GUI_QR_INFO QR_info;
 extern WM_HWIN _hWinManagerCommon;
@@ -88,11 +117,12 @@ extern WM_HWIN _hWinManagerInfoAnalog;
 extern WM_HWIN _hWinManagerInfoStatus;
 extern WM_HWIN _hWinManagerLogDate;
 extern WM_HWIN _hWinManagerConSet;
+extern WM_HWIN _hWinManagerConSet1;
 extern WM_HWIN _hWinManagerSysSet;
 extern WM_HWIN _hWinManagerSysInfo;
 extern WM_HWIN _hWinManagerTerminate;
 
-GUI_QR_INFO QR_info;
+extern GUI_QR_INFO QR_info;
 
 enum{
     _HOMEPAGE,
@@ -118,6 +148,7 @@ struct errMultiEdit_size{
 }ErrMultiEdit_Size;
 
 void PutOut_SelAOrB();
+
 WM_HWIN CreateHomePage(void);
 WM_HWIN CreateCardInfoPage(void);
 WM_HWIN CreateChargingPage(void);
@@ -132,12 +163,15 @@ WM_HWIN CreateChargeDone(void);
 WM_HWIN CreateManagerInfoAnalog(WM_HWIN srcHwin);
 WM_HWIN CreateManagerInfoStatus(WM_HWIN srcHwin);
 WM_HWIN CreateManagerLogDate(WM_HWIN srcHwin);
+WM_HWIN CreateManagerWhiteUser();
 //WM_HWIN CreateManagerAlarmLog();
 WM_HWIN CreateManagerSysSet(WM_HWIN srcHwin);
 WM_HWIN CreateManagerConSet(WM_HWIN srcHwin);
+WM_HWIN CreateManagerConSet_1(WM_HWIN srcHwin);
 WM_HWIN CreateManagerSysInfo(WM_HWIN srcHwin);
 WM_HWIN CreateManagerTerminate(WM_HWIN srcHwin);
 WM_HWIN CreateManagerCommon(void);
+WM_HWIN CreateUpdateSystem(void);
 void FrameWin_Init(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1,uint16_t textid2,uint16_t textid3,uint16_t imageBack);
 void Caculate_RTC_Show(WM_MESSAGE *pMsg,uint16_t textid0,uint16_t textid1);
 void FrameWin_Show(WM_HWIN hItem,uint8_t aglin,uint8_t heigh,GUI_FONT *font,uint32_t color,uint8_t *buf);
@@ -148,7 +182,9 @@ void Image_Show(WM_HWIN hItem,uint8_t imageid,U32 filesize);
 void CaliDone_Analy(WM_HWIN hWin);
 uint8_t _deleteWin(WM_HWIN hItem);
 void Err_Analy(WM_HWIN hWin);
-void Led_Show();
+//void Led_Show();
+//void ledShow(int j);
+//void ledcontrl();
 void Errlist_flush(uint8_t *msg_err);
 void Signal_Show();
 int getSignalIntensity();

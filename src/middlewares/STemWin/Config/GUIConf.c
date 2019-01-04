@@ -53,6 +53,7 @@ Purpose     : Display controller initialization
 
 #include <stdlib.h>
 #include "GUI.h"
+#include "mem_addr.h"
 
 /*********************************************************************
 *
@@ -63,7 +64,7 @@ Purpose     : Display controller initialization
 //
 // Define the available number of bytes available for the GUI
 //
-#define GUI_NUMBYTES  (8*1024*1024)
+#define GUI_NUMBYTES  (15*1024*1024)
 #define GUI_BLOCKSIZE 0x80  //块大小
 
 /*********************************************************************8*
@@ -71,7 +72,7 @@ Purpose     : Display controller initialization
 *
 **********************************************************************
 */
-//U32 aMemory[GUI_NUMBYTES / 4] __attribute__ ((at(0XC0300000)));//~0XC0AFFFFF
+//U32 aMemory[GUI_NUMBYTES / 4] __attribute__ ((at(MADDR_GUI_X_CONFIG)));
 /*********************************************************************
 *
 *       GUI_X_Config
@@ -85,7 +86,7 @@ void GUI_X_Config(void) {
   // 32 bit aligned memory area
   //
 
-  static U32 *aMemory = (U32 *)(0xC0300000);//0xC0300000~0xC0AFFFFF
+  static U32 *aMemory = (U32 *)(MADDR_GUI_X_CONFIG);
   //U32 *aMemory = malloc(GUI_NUMBYTES);
   //
   // Assign memory to emWin

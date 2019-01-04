@@ -2,9 +2,10 @@
 #define BSP_SDRAM_H
 
 #include "stm32f4xx.h"
+#include "mem_addr.h"
 
 extern SDRAM_HandleTypeDef SDRAM_Handler;//SDRAM句柄
-#define Bank5_SDRAM_ADDR    ((uint32_t)(0XC0000000)) //SDRAM开始地址
+#define Bank5_SDRAM_ADDR    ((uint32_t)(SDRAM_ADDR_BASE)) //SDRAM开始地址
 
 //SDRAM配置参数
 

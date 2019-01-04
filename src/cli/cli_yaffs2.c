@@ -1,7 +1,8 @@
 #include "yaffsfs.h"
 #include "bsp.h"
 #include "tinysh.h"
-#include "yaffs2msic.h"
+#include "yaffs2misc.h"
+#include "stringName.h"
 
 #define YAFFS_MOUNT_POINT "/nand/"
 #define FILE_PATH "/nand/system/foo.txt"
@@ -101,7 +102,7 @@ tinysh_cmd_t cli_format_cmd =
     0,
     0
 };
-extern void create_system_dir(void);
+extern void create_dir(char *dir);
 int yaffs2_main()
 {
     int output = 0;
@@ -114,7 +115,7 @@ int yaffs2_main()
     printf_safe("\n\n starting test\n");
     yaffs_set_trace(0);
     output = yaffs_mount(YAFFS_MOUNT_POINT);
-    create_system_dir();
+    create_dir(pathSystemDir);
     if (output >= 0) {  
         printf_safe("yaffs mounted: %s\n", YAFFS_MOUNT_POINT); 
     }

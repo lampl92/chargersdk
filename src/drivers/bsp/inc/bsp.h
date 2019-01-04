@@ -29,13 +29,13 @@
 #include "touch.h"
 #include "user_app.h"
 #include "iwdg.h"
+#include "retarget.h"
 
 /* Public function prototypes ------------------------------------------------*/
 void bsp_Init(void);
 void bsp_Idle(void);
 void bsp_Error_Handler(void);
 
-int printf_safe(const char *format, ...);
 void bsp_Error_Handler(void);
 
 #endif

@@ -9,8 +9,29 @@ extern GUI_FONT SIF16_Font;
 extern GUI_FONT SIF24_Font;
 extern GUI_FONT SIF36_Font;
 
-void Create_SIF12(uint8_t *fxpath);
-void Create_SIF16(uint8_t *fxpath);
-void Create_SIF24(uint8_t *fxpath);
-void Create_SIF36(uint8_t *fxpath);
+extern GUI_FONT fontwryhct12aa4;
+extern GUI_FONT fontwryhct16aa4;
+extern GUI_FONT fontwryhct24aa4;
+extern GUI_FONT fontwryhct36aa4;
+
+extern GUI_FONT fontwryhcg12aa4;
+extern GUI_FONT fontwryhcg16aa4;
+extern GUI_FONT fontwryhcg24aa4;
+extern GUI_FONT fontwryhcg36aa4;
+
+extern GUI_FONT fontwryhcg12aa4e;
+extern GUI_FONT fontwryhcg16aa4e;
+extern GUI_FONT fontwryhcg24aa4e;
+extern GUI_FONT fontwryhcg36aa4e;
+
+extern GUI_FONT fontwryhcg12e;
+extern GUI_FONT fontwryhcg16e;
+extern GUI_FONT fontwryhcg24e;
+extern GUI_FONT fontwryhcg30e;
+extern GUI_FONT fontwryhcg36e;
+
+extern GUI_FONT fontwryhcg44e;
+extern GUI_FONT fontwryhcg44aa4e;
+
+void createfont();
 #endif

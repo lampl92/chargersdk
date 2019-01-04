@@ -8,6 +8,7 @@ typedef struct _ftp_proc
     uint32_t ulFTPReGetCnt;
     uint32_t ulFTPReOpenCnt;
     uint32_t ulRecvFileSize;
+    uint32_t precent;
 }ftp_proc_t;
 
 typedef struct
@@ -17,11 +18,11 @@ typedef struct
     char strPassword[64 + 1];
     char strNewFileName[64 + 1];
     char strNewVersion[64 + 1];
+    uint32_t fsize;
     uint16_t usPort;
     uint8_t ucDownloadStart;
     uint8_t ucDownloadStatus;
     ErrorCode_t(*GetFtpCfg)(void *pvFtp, void *pvCfgObj);
-    ErrorCode_t(*SetFtpCfg)(uint8_t *jnItemString, void *pvCfgParam, uint8_t type);
     ftp_proc_t ftp_proc;
 }EchFtpCfg_t;
 

@@ -1,6 +1,6 @@
 /**
 * @file buzzer.c
-* @brief ·äÃùÆ÷Çı¶¯£¬¾ß±¸³£¿ªºÍPWM¿ØÖÆÁ½ÖÖÄ£Ê½
+* @brief èœ‚é¸£å™¨é©±åŠ¨ï¼Œå…·å¤‡å¸¸å¼€å’ŒPWMæ§åˆ¶ä¸¤ç§æ¨¡å¼
 * @author rgw
 * @version v1.0
 * @date 2017-01-23
@@ -8,4 +8,15 @@
 #include "bsp.h"
 #include "buzzer.h"
 
-//Ö»ÊµÏÖ²Ù×÷£¬¾ßÌå·äÃùÆ÷Çı¶¯µ¥¶ÀÊµÏÖ
+void buzzer(int n, int t1, int t2)
+{
+    for (int i = 0; i < n; i++)
+    {
+        Buzzer_control(1);
+        bsp_DelayMS(t1);
+        Buzzer_control(0);
+        bsp_DelayMS(t1);
+    }
+    bsp_DelayMS(t2);
+}
+//åªå®ç°æ“ä½œï¼Œå…·ä½“èœ‚é¸£å™¨é©±åŠ¨å•ç‹¬å®ç°

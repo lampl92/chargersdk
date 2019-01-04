@@ -8,8 +8,11 @@
 #ifndef  __TASKCREATE_H
 #define  __TASKCREATE_H
 
-#include "includes.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
+#include "event_groups.h"
 #include "timercallback.h"
+#include "taskmonitor.h"
 
 #define defTIMERID_Temp             0
 #define defTIMERID_LockState        1
@@ -21,6 +24,8 @@
 #define defTIMERID_RemoteHeartbeat  8
 #define defTIMERID_RemoteStatus     9
 #define defTIMERID_RemoteRTData     10
+#define defTIMERID_StoreLog         11
+#define defTIMERID_StoreOrder       12
 
 extern const char *TASKNAME_CLI;
 extern const char *TASKNAME_GUI;
@@ -33,9 +38,26 @@ extern const char *TASKNAME_EVSEMonitor;
 extern const char *TASKNAME_EVSEDiag;
 extern const char *TASKNAME_EVSEData;
 
+extern TaskHandle_t xHandleTaskInit;
+extern TaskHandle_t xHandleTaskCLI;
+extern TaskHandle_t xHandleTaskGUI;
+extern TaskHandle_t xHandleTaskGuidingLights;
+extern TaskHandle_t xHandleTaskGUIBS;
+extern TaskHandle_t xHandleTaskTouch;
+extern TaskHandle_t xHandleTaskOTA;
+extern TaskHandle_t xHandleTaskTCPClient;
+extern TaskHandle_t xHandleTaskRemoteCmdProc;
+
+extern TaskHandle_t xHandleTaskEVSERemote;
+extern TaskHandle_t xHandleTaskEVSERFID;
+extern TaskHandle_t xHandleTaskEVSECharge;
+extern TaskHandle_t xHandleTaskEVSEMonitor;
+extern TaskHandle_t xHandleTaskEVSEDiag;
+extern TaskHandle_t xHandleTaskEVSEData;
+
 extern SemaphoreHandle_t xMutexTimeStruct;
-extern SemaphoreHandle_t xMutexNandHW;
-extern SemaphoreHandle_t xprintfMutex;
+extern SemaphoreHandle_t xMeterMutex;
+extern SemaphoreHandle_t xTempMutex;
 
 extern EventGroupHandle_t xHandleEventTimerCBNotify;
 extern EventGroupHandle_t xHandleEventData;
@@ -43,13 +65,18 @@ extern EventGroupHandle_t xHandleEventDiag;
 extern EventGroupHandle_t xHandleEventRemote;
 extern EventGroupHandle_t xHandleEventHMI;
 extern EventGroupHandle_t xHandleEventTCP;
+extern EventGroupHandle_t xHandleEventSys;
 
 extern TimerHandle_t xHandleTimerChargingData;
 extern TimerHandle_t xHandleTimerRemoteHeartbeat;
 extern TimerHandle_t xHandleTimerRemoteStatus;
 extern TimerHandle_t xHandleTimerRemoteRTData;
 extern TimerHandle_t xHandleTimerRFID;
+extern TimerHandle_t xHandleTimerStoreLog;
+extern TimerHandle_t xHandleTimerStoreOrder;
 
+extern QueueHandle_t xHandleQueueRfidPkg;
+extern QueueHandle_t xHandleQueueUserChargeCondition;
 extern QueueHandle_t xHandleQueueOrders;
 extern QueueHandle_t xHandleQueueErrorPackage;
 
@@ -58,4 +85,5 @@ void SysTaskCreate (void);
 void AppTaskCreate (void);
 void AppObjCreate(void);
 
+void taskappSuspend(void);
 #endif

@@ -8,8 +8,10 @@
 #define LOGIN_PASSWD    0
 #define SYSSET_VALUE    1
 #define CONSET_VALUE    2
+#define WHITE_LIST      3
 //下述定义为输入数据合法性检测返回值
 #define VALUE_OK_SAV 0
+#define VALUE_OK_SAV_SUPER 3
 #define VALUE_ERROR 1
 #define VALUE_OK_UNSAV 2
 
